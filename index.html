@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ZeusBet | Cassino Virtual</title>
+
+<meta name="description" content="ZeusBet — uma experiência premium de jogos virtuais, diversão e entretenimento.">
+
+<style>
+:root {
+  --gold: #f5c542;
+  --gold-light: #ffe99a;
+  --bg: #080808;
+  --panel: #141414;
+  --text: #ffffff;
+  --muted: #aaa;
+  --border: rgba(245,197,66,.25);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button, input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+header {
+  background: rgba(8,8,8,.96);
+  border-bottom: 1px solid var(--border);
+  padding: 17px 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  color: var(--gold);
+  font-size: 27px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.logo span {
+  color: white;
+}
+
+.logo small {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 5px;
+  text-align: center;
+  color: var(--gold-light);
+}
+
+nav {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 13px;
+  transition: .2s;
+}
+
+nav a:hover {
+  color: var(--gold);
+}
+
+.balance {
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.hero {
+  padding: 70px 20px;
+  text-align: center;
+  background:
+    radial-gradient(ellipse at center, #33250b 0%, #141006 32%, #080808 72%);
+  border-bottom: 1px solid var(--border);
+}
+
+.hero .crown {
+  font-size: 50px;
+  margin-bottom: 12px;
+}
+
+.hero h1 {
+  font-size: clamp(35px, 7vw, 66px);
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  text-shadow: 0 0 25px rgba(245,197,66,.2);
+}
+
+.hero h2 {
+  margin: 12px 0;
+  font-size: 18px;
+}
+
+.hero p {
+  color: var(--muted);
+  max-width: 600px;
+  margin: 0 auto 25px;
+  line-height: 1.7;
+}
+
+.btn {
+  display: inline-block;
+  border: 0;
+  border-radius: 7px;
+  padding: 13px 22px;
+  background: linear-gradient(135deg, #ffe99a, #d5a51b);
+  color: #171000;
+  font-weight: 900;
+  text-decoration: none;
+  transition: transform .2s, box-shadow .2s;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 25px rgba(245,197,66,.25);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+}
+
+main {
+  width: min(1200px, 92%);
+  margin: 0 auto;
+}
+
+.notice {
+  margin: 25px 0;
+  padding: 15px;
+  border: 1px solid var(--border);
+  background: #151209;
+  border-radius: 8px;
+  color: #e5d8ad;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.section {
+  padding: 38px 0 10px;
+}
+
+.section-title {
+  color: var(--gold);
+  font-size: 25px;
+  margin-bottom: 10px;
+}
+
+.section-subtitle {
+  color: var(--muted);
+  margin-bottom: 22px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.search-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.search-row input {
+  flex: 1;
+  min-width: 200px;
+  background: #151515;
+  border: 1px solid #333;
+  color: white;
+  padding: 13px;
+  border-radius: 7px;
+  outline: none;
+}
+
+.search-row input:focus {
+  border-color: var(--gold);
+}
+
+.categories {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+
+.category {
+  padding: 10px 15px;
+  border-radius: 20px;
+  background: #171717;
+  color: #ddd;
+  border: 1px solid #333;
+}
+
+.category.active,
+.category:hover {
+  color: #111;
+  background: var(--gold);
+  border-color: var(--gold);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.card {
+  background: linear-gradient(145deg, #191919, #0e0e0e);
+  border: 1px solid #282828;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: .25s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: var(--gold);
+  box-shadow: 0 10px 30px rgba(0,0,0,.4);
+}
+
+.card-art {
+  min-height: 155px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 67px;
+  background:
+    radial-gradient(circle at center, #49340e, #181208 70%);
+  border-bottom: 1px solid var(--border);
+}
+
+.card-body {
+  padding: 18px;
+}
+
+.card h3 {
+  margin-bottom: 8px;
+  font-size: 18px;
+}
+
+.card p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+  min-height: 38px;
+  margin-bottom: 15px;
+}
+
+.card .btn {
+  width: 100%;
+  text-align: center;
+  padding: 11px;
+}
+
+.tag {
+  display: inline-block;
+  font-size: 10px;
+  color: var(--gold);
+  border: 1px solid var(--border);
+  padding: 5px 8px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.empty {
+  color: var(--muted);
+  padding: 25px 0;
+  display: none;
+}
+
+.game-box {
+  display: none;
+  background: #111;
+  border: 1px solid var(--gold);
+  border-radius: 12px;
+  padding: 25px;
+  margin: 30px 0;
+  text-align: center;
+}
+
+.game-box h3 {
+  color: var(--gold);
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+.game-box p {
+  color: var(--muted);
+  margin: 10px 0;
+  line-height: 1.6;
+}
+
+.game-display {
+  font-size: 48px;
+  letter-spacing: 8px;
+  margin: 20px 0;
+}
+
+.game-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
+.game-actions button {
+  padding: 12px 18px;
+}
+
+.result {
+  color: var(--gold-light) !important;
+  font-weight: bold;
+  min-height: 25px;
+}
+
+.external-note {
+  border: 1px solid #333;
+  background: #111;
+  padding: 18px;
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+footer {
+  margin-top: 55px;
+  border-top: 1px solid var(--border);
+  padding: 35px 5%;
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+footer strong {
+  color: var(--gold);
+}
+
+footer a {
+  color: var(--gold);
+}
+
+@media (max-width: 750px) {
+  header {
+    justify-content: center;
+    text-align: center;
+  }
+
+  nav {
+    justify-content: center;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .card-art {
+    min-height: 120px;
+    font-size: 48px;
+  }
+
+  .card-body {
+    padding: 12px;
+  }
+
+  .card h3 {
+    font-size: 15px;
+  }
+
+  .hero {
+    padding: 50px 18px;
+  }
+}
+
+@media (max-width: 420px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card-art {
+    min-height: 145px;
+  }
+
+  .logo {
+    font-size: 23px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <a href="#" class="logo" style="text-decoration:none">
+    ⚡ ZEUS<span>BET</span>
+    <small>JOGOS VIRTUAIS</small>
+  </a>
+
+  <nav>
+    <a href="#inicio">Início</a>
+    <a href="#jogos">Jogos</a>
+    <a href="#creditos">Créditos</a>
+    <a href="#externos">Links externos</a>
+  </nav>
+
+  <div class="balance">
+    🪙 <span id="saldoTopo">1000</span> créditos virtuais
+  </div>
+</header>
+
+<section class="hero" id="inicio">
+  <div class="crown">👑</div>
+  <h1>ZEUSBET</h1>
+  <h2>O poder dos jogos está aqui</h2>
+  <p>
+    Entre no universo ZeusBet e explore jogos demonstrativos
+    em uma experiência com visual premium, efeitos e diversão.
+  </p>
+  <a href="#jogos" class="btn">EXPLORAR JOGOS ⚡</a>
+</section>
+
+<main>
+
+  <div class="notice">
+    <strong>ℹ️ Ambiente demonstrativo:</strong>
+    esta página utiliza créditos fictícios, sem valor monetário.
+    Não há depósitos, saques ou apostas com dinheiro real.
+    Os jogos abaixo são minijogos originais para demonstração.
+  </div>
+
+  <section class="section" id="creditos">
+    <h2 class="section-title">🪙 Seus créditos virtuais</h2>
+    <p class="section-subtitle">
+      Você começa com 1.000 créditos fictícios para testar os minijogos.
+      Eles não podem ser comprados, transferidos ou convertidos em dinheiro.
+    </p>
+
+    <div class="card" style="padding:20px">
+      <h3>Saldo demonstrativo</h3>
+      <div style="font-size:32px;color:var(--gold);margin:15px 0">
+        🪙 <span id="saldo">1000</span>
+      </div>
+      <button class="btn btn-outline" onclick="reiniciarSaldo()">
+        REINICIAR DEMONSTRAÇÃO
+      </button>
+    </div>
+  </section>
+
+  <section class="section" id="jogos">
+    <h2 class="section-title">🎮 Biblioteca de jogos</h2>
+    <p class="section-subtitle">
+      Escolha um jogo demonstrativo e divirta-se.
+    </p>
+
+    <div class="search-row">
+      <input
+        type="search"
+        id="pesquisa"
+        placeholder="🔎 Buscar jogo..."
+        aria-label="Buscar jogo"
+      >
+    </div>
+
+    <div class="categories">
+      <button class="category active" data-cat="todos">Todos</button>
+      <button class="category" data-cat="slots">Slots</button>
+      <button class="category" data-cat="cartas">Cartas</button>
+      <button class="category" data-cat="sorte">Sorte</button>
+    </div>
+
+    <div class="grid" id="listaJogos">
+
+      <article class="card" data-cat="slots" data-name="slots relampago">
+        <div class="card-art">⚡</div>
+        <div class="card-body">
+          <span class="tag">DEMONSTRAÇÃO</span>
+          <h3>Slots Relâmpago</h3>
+          <p>Gire os símbolos e veja o resultado do minijogo.</p>
+          <button class="btn" onclick="abrirJogo('slots')">
+            JOGAR DEMO
+          </button>
+        </div>
+      </article>
+
+      <article class="card" data-cat="sorte" data-name="roleta dourada">
+        <div class="card-art">🎡</div>
+        <div class="card-body">
+          <span class="tag">DEMONSTRAÇÃO</span>
+          <h3>Roleta Dourada</h3>
+          <p>Faça uma escolha e descubra o resultado aleatório.</p>
+          <button class="btn" onclick="abrirJogo('roleta')">
+            JOGAR DEMO
+          </button>
+        </div>
+      </article>
+
+      <article class="card" data-cat="cartas" data-name="cartas de zeus">
+        <div class="card-art">🃏</div>
+        <div class="card-body">
+          <span class="tag">DEMONSTRAÇÃO</span>
+          <h3>Cartas de Zeus</h3>
+          <p>Retire uma carta virtual neste minijogo de sorte.</p>
+          <button class="btn" onclick="abrirJogo('cartas')">
+            JOGAR DEMO
+          </button>
+        </div>
+      </article>
+
+      <article class="card" data-cat="sorte" data-name="dado divino">
+        <div class="card-art">🎲</div>
+        <div class="card-body">
+          <span class="tag">DEMONSTRAÇÃO</span>
+          <h3>Dado Divino</h3>
+          <p>Lance um dado virtual e descubra o número sorteado.</p>
+          <button class="btn" onclick="abrirJogo('dados')">
+            JOGAR DEMO
+          </button>
+        </div>
+      </article>
+
+      <article class="card" data-cat="slots" data-name="tesouro olimpico">
+        <div class="card-art">🏆</div>
+        <div class="card-body">
+          <span class="tag">DEMONSTRAÇÃO</span>
+          <h3>Tesouro Olímpico</h3>
+          <p>Um minijogo de símbolos com temática mitológica.</p>
+          <button class="btn" onclick="abrirJogo('tesouro')">
+            JOGAR DEMO
+          </button>
+        </div>
+      </article>
+
+      <article class="card" data-cat="sorte" data-name="numero da sorte">
+        <div class="card-art">🔮</div>
+        <div class="card-body">
+          <span class="tag">DEMONSTRAÇÃO</span>
+          <h3>Número da Sorte</h3>
+          <p>Descubra qual número aparecerá na sua rodada.</p>
+          <button class="btn" onclick="abrirJogo('numero')">
+            JOGAR DEMO
+          </button>
+        </div>
+      </article>
+
+    </div>
+
+    <p class="empty" id="semResultados">
+      Nenhum jogo encontrado. Tente outra pesquisa.
+    </p>
+  </section>
+
+  <section class="game-box" id="areaJogo">
+    <h3 id="tituloJogo">Jogo demonstrativo</h3>
+    <p id="descricaoJogo"></p>
+
+    <div class="game-display" id="displayJogo">⚡ 👑 ⚡</div>
+
+    <p id="resultado" class="result" aria-live="polite">
+      Pronto para jogar?
+    </p>
+
+    <div class="game-actions">
+      <button class="btn" id="botaoJogar" onclick="jogar()">
+        JOGAR RODADA
+      </button>
+
+      <button class="btn btn-outline" onclick="fecharJogo()">
+        FECHAR JOGO
+      </button>
+    </div>
+
+    <p style="font-size:11px">
+      Minijogo demonstrativo. Resultados aleatórios não representam
+      probabilidades ou retornos de jogos comerciais.
+    </p>
+  </section>
+
+  <section class="section" id="externos">
+    <h2 class="section-title">🌐 Plataformas externas</h2>
+    <p class="section-subtitle">
+      Área reservada para links de jogos e entretenimento de terceiros.
+    </p>
+
+    <div class="external-note">
+      Os links externos ainda não foram configurados.
+      Antes de adicionar um endereço, verifique a identidade do operador,
+      a segurança do site, as condições de uso e a legislação aplicável.
+
+      <br><br>
+
+      <strong style="color:var(--gold)">
+        Como adicionar um link:
+      </strong>
+
+      <br>
+
+      No código, substitua este aviso por um link para uma página
+      legítima que você tenha verificado. Não use endereços inventados
+      nem apresente plataformas como autorizadas sem confirmação.
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">👑 O universo ZeusBet</h2>
+    <p class="section-subtitle">
+      Uma interface experimental para reunir jogos demonstrativos,
+      explorar novos minijogos e construir uma experiência de entretenimento.
+    </p>
+  </section>
+
+</main>
+
+<footer>
+  <strong>⚡ ZEUSBET</strong><br>
+  Plataforma demonstrativa de entretenimento virtual.<br>
+  Todos os créditos apresentados são fictícios e não possuem
+  valor monetário.<br>
+  Este projeto não oferece apostas com dinheiro real.<br><br>
+  © <span id="ano"></span> ZeusBet — Todos os direitos reservados.
+</footer>
+
+<script>
+let saldo = 1000;
+let jogoAtual = "";
+let categoriaAtual = "todos";
+
+const saldoTopo = document.getElementById("saldoTopo");
+const saldoElemento = document.getElementById("saldo");
+const areaJogo = document.getElementById("areaJogo");
+const tituloJogo = document.getElementById("tituloJogo");
+const descricaoJogo = document.getElementById("descricaoJogo");
+const displayJogo = document.getElementById("displayJogo");
+const resultado = document.getElementById("resultado");
+
+document.getElementById("ano").textContent =
+  new Date().getFullYear();
+
+function atualizarSaldo() {
+  saldoElemento.textContent = saldo;
+  saldoTopo.textContent = saldo;
+}
+
+function reiniciarSaldo() {
+  saldo = 1000;
+  atualizarSaldo();
+
+  resultado.textContent =
+    "Saldo demonstrativo reiniciado.";
+
+  displayJogo.textContent = "⚡ 👑 ⚡";
+}
+
+function abrirJogo(nome) {
+  jogoAtual = nome;
+
+  const jogos = {
+    slots: {
+      titulo: "⚡ Slots Relâmpago",
+      descricao: "Clique para gerar três símbolos virtuais.",
+      display: "⚡ 👑 ⚡"
+    },
+    roleta: {
+      titulo: "🎡 Roleta Dourada",
+      descricao: "Gire a roleta demonstrativa.",
+      display: "🎡"
+    },
+    cartas: {
+      titulo: "🃏 Cartas de Zeus",
+      descricao: "Retire uma carta aleatória.",
+      display: "🂠"
+    },
+    dados: {
+      titulo: "🎲 Dado Divino",
+      descricao: "Lance o dado virtual.",
+      display: "🎲"
+    },
+    tesouro: {
+      titulo: "🏆 Tesouro Olímpico",
+      descricao: "Combine símbolos neste minijogo.",
+      display: "🏆 ⚡ 👑"
+    },
+    numero: {
+      titulo: "🔮 Número da Sorte",
+      descricao: "Gere um número aleatório de 1 a 10.",
+      display: "🔮"
+    }
+  };
+
+  const jogo = jogos[nome];
+
+  tituloJogo.textContent = jogo.titulo;
+  descricaoJogo.textContent = jogo.descricao;
+  displayJogo.textContent = jogo.display;
+  resultado.textContent = "Pronto para jogar?";
+  areaJogo.style.display = "block";
+
+  areaJogo.scrollIntoView({
+    behavior: "smooth",
+    block: "center"
+  });
+}
+
+function fecharJogo() {
+  areaJogo.style.display = "none";
+  jogoAtual = "";
+}
+
+function jogar() {
+  if (!jogoAtual) return;
+
+  // Cada rodada usa créditos exclusivamente fictícios.
+  const custo = 10;
+
+  if (saldo < custo) {
+    resultado.textContent =
+      "Créditos insuficientes. Reinicie a demonstração para testar novamente.";
+    return;
+  }
+
+  saldo -= custo;
+
+  if (jogoAtual === "slots" || jogoAtual === "tesouro") {
+    const simbolos = jogoAtual === "slots"
+      ? ["⚡", "👑", "💎", "🍀", "⭐"]
+      : ["🏆", "⚡", "👑", "💎", "🌟"];
+
+    const a = simbolos[Math.floor(Math.random() * simbolos.length)];
+    const b = simbolos[Math.floor(Math.random() * simbolos.length)];
+    const c = simbolos[Math.floor(Math.random() * simbolos.length)];
+
+    displayJogo.textContent = `${a} ${b} ${c}`;
+
+    if (a === b && b === c) {
+      resultado.textContent =
+        "Três símbolos iguais! Você ganhou 30 créditos fictícios.";
+      saldo += 30;
+    } else if (a === b || b === c || a === c) {
+      resultado.textContent =
+        "Dois símbolos iguais! Você ganhou 15 créditos fictícios.";
+      saldo += 15;
+    } else {
+      resultado.textContent =
+        "Fim da rodada. Tente novamente com créditos virtuais.";
+    }
+
+  } else if (jogoAtual === "roleta") {
+    const opcoes = [
+      { nome: "DOURADO", simbolo: "🟡" },
+      { nome: "ROXO", simbolo: "🟣" },
+      { nome: "VERMELHO", simbolo: "🔴" },
+      { nome: "PRETO", simbolo: "⚫" },
+      { nome: "VERDE", simbolo: "🟢" }
+    ];
+
+    const sorteio = opcoes[
+      Math.floor(Math.random() * opcoes.length)
+    ];
+
+    displayJogo.textContent = sorteio.simbolo;
+    resultado.textContent =
+      "Resultado demonstrativo: " + sorteio.nome + ".";
+      
+  } else if (jogoAtual === "cartas") {
+    const cartas = [
+      "A♠", "K♥", "Q♦", "J♣", "10♠",
+      "9♥", "8♦", "7♣", "6♠", "5♥"
+    ];
+
+    const carta = cartas[
+      Math.floor(Math.random() * cartas.length)
+    ];
+
+    displayJogo.textContent = carta;
+    resultado.textContent =
+      "Sua carta virtual foi " + carta + ".";
+
+  } else if (jogoAtual === "dados") {
+    const numero = Math.floor(Math.random() * 6) + 1;
+    const faces = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
+
+    displayJogo.textContent = faces[numero - 1];
+    resultado.textContent =
+      "O dado virtual mostrou " + numero + ".";
+
+  } else if (jogoAtual === "numero") {
+    const numero = Math.floor(Math.random() * 10) + 1;
+
+    displayJogo.textContent = numero;
+    resultado.textContent =
+      "Seu número aleatório foi " + numero + ".";
+  }
+
+  atualizarSaldo();
+}
+
+// Pesquisa de jogos.
+document.getElementById("pesquisa").addEventListener(
+  "input",
+  filtrarJogos
+);
+
+document.querySelectorAll(".category").forEach(botao => {
+  botao.addEventListener("click", () => {
+    document.querySelectorAll(".category").forEach(item => {
+      item.classList.remove("active");
+    });
+
+    botao.classList.add("active");
+    categoriaAtual = botao.dataset.cat;
+    filtrarJogos();
+  });
+});
+
+function filtrarJogos() {
+  const termo = document.getElementById("pesquisa")
+    .value.toLowerCase().trim();
+
+  const cards = document.querySelectorAll("#listaJogos .card");
+  let encontrados = 0;
+
+  cards.forEach(card => {
+    const nome = card.dataset.name;
+    const categoria = card.dataset.cat;
+
+    const correspondeNome = nome.includes(termo);
+    const correspondeCategoria =
+      categoriaAtual === "todos" ||
+      categoria === categoriaAtual;
+
+    const mostrar = correspondeNome && correspondeCategoria;
+
+    card.style.display = mostrar ? "" : "none";
+
+    if (mostrar) encontrados++;
+  });
+
+  document.getElementById("semResultados").style.display =
+    encontrados === 0 ? "block" : "none";
+}
+
+atualizarSaldo();
+</script>
+
+</body>
+</html>
