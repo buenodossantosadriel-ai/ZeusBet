@@ -1,19 +1,17 @@
 <!DOCTYPE html><html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>ZeusBet | Diversão e Entretenimento</title>  <meta name="description" content="ZeusBet — entretenimento digital com visual premium, personagens e experiências demonstrativas.">  <meta name="theme-color" content="#080808">  <!-- Fonte do site -->  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">  <style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080808">  <title>ZeusBet | Universo de Entretenimento</title>  <meta name="description" content="ZeusBet: um universo de personagens fantásticos e experiências demonstrativas.">  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">  <style>
     :root {
       --gold: #f5c451;
-      --gold-light: #ffe9a3;
-      --gold-dark: #9e711b;
-      --black: #080808;
-      --panel: #121212;
-      --panel-light: #1b1b1b;
-      --white: #ffffff;
-      --muted: #b4b4b4;
-      --green: #42d392;
-      --red: #ff6666;
+      --gold-light: #ffe8a1;
+      --bg: #080808;
+      --panel: #151515;
+      --muted: #b8b8b8;
+      --green: #8ff0b9;
+      --red: #ffb0b0;
     }
 
     * {
@@ -27,14 +25,14 @@
     }
 
     body {
-      background: var(--black);
-      color: var(--white);
-      font-family: 'Poppins', sans-serif;
       min-height: 100vh;
+      color: white;
+      background:
+        radial-gradient(ellipse at top, #211a0c, #080808 55%);
+      font-family: 'Poppins', sans-serif;
     }
 
-    button,
-    input {
+    button, input {
       font: inherit;
     }
 
@@ -43,8 +41,7 @@
     }
 
     button:focus-visible,
-    input:focus-visible,
-    a:focus-visible {
+    input:focus-visible {
       outline: 2px solid var(--gold-light);
       outline-offset: 3px;
     }
@@ -53,34 +50,30 @@
       display: none !important;
     }
 
-    .gold-text {
+    .gold {
       color: var(--gold);
     }
 
-    /* CABEÇALHO */
-
     header {
-      width: 100%;
-      min-height: 78px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      min-height: 76px;
       padding: 15px 6%;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
-      background: rgba(8, 8, 8, 0.96);
-      border-bottom: 1px solid rgba(245, 196, 81, 0.24);
-      position: sticky;
-      top: 0;
-      z-index: 50;
+      gap: 15px;
+      background: rgba(8, 8, 8, .97);
+      border-bottom: 1px solid #493817;
       backdrop-filter: blur(12px);
     }
 
     .logo {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 25px;
-      font-weight: 800;
-      letter-spacing: 1px;
       color: var(--gold);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
       text-decoration: none;
       white-space: nowrap;
     }
@@ -92,93 +85,86 @@
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 10px;
+      justify-content: flex-end;
+      gap: 9px;
     }
 
-    .header-user {
+    #headerUser {
+      max-width: 180px;
       color: var(--muted);
-      font-size: 12px;
-      max-width: 170px;
+      font-size: 11px;
       overflow-wrap: anywhere;
     }
 
-    /* BOTÕES */
-
     .btn {
-      border: none;
+      border: 0;
       border-radius: 9px;
-      padding: 11px 17px;
-      font-size: 13px;
+      padding: 12px 16px;
+      font-size: 12px;
       font-weight: 700;
-      transition: 0.2s;
+      transition: .2s;
     }
 
     .btn-gold {
-      color: #171006;
-      background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
-      box-shadow: 0 4px 18px rgba(245, 196, 81, 0.13);
+      color: #1a1204;
+      background: linear-gradient(135deg, var(--gold-light), #bf8a20);
     }
 
     .btn-gold:hover {
-      transform: translateY(-2px);
       filter: brightness(1.1);
+      transform: translateY(-1px);
     }
 
     .btn-outline {
       color: var(--gold);
       background: transparent;
-      border: 1px solid var(--gold-dark);
+      border: 1px solid #806323;
     }
 
     .btn-outline:hover {
-      background: rgba(245, 196, 81, 0.09);
+      background: rgba(245, 196, 81, .08);
     }
 
     .btn-full {
       width: 100%;
     }
 
-    /* APRESENTAÇÃO */
-
     .hero {
-      min-height: 430px;
-      padding: 70px 6%;
+      min-height: 410px;
+      padding: 65px 6%;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 35px;
-      overflow: hidden;
-      position: relative;
       background:
-        radial-gradient(ellipse at 85% 50%, rgba(160, 110, 18, 0.22), transparent 42%),
-        linear-gradient(135deg, #111111, #080808 65%);
-      border-bottom: 1px solid rgba(245, 196, 81, 0.16);
+        radial-gradient(ellipse at 85% 50%, rgba(170, 120, 20, .2), transparent 42%),
+        linear-gradient(130deg, #171717, #080808 65%);
+      border-bottom: 1px solid #302718;
     }
 
     .hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: 680px;
+      max-width: 690px;
     }
 
     .eyebrow {
       display: inline-block;
-      color: var(--gold);
-      border: 1px solid rgba(245, 196, 81, 0.4);
-      background: rgba(245, 196, 81, 0.07);
-      border-radius: 50px;
       padding: 7px 13px;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 2px;
       margin-bottom: 20px;
+      border: 1px solid #806323;
+      border-radius: 30px;
+      color: var(--gold);
+      font-size: 10px;
+      letter-spacing: 2px;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Orbitron', sans-serif;
     }
 
     .hero h1 {
-      font-family: 'Orbitron', sans-serif;
-      font-size: clamp(34px, 5vw, 61px);
-      line-height: 1.15;
-      margin-bottom: 20px;
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 1.2;
+      margin-bottom: 18px;
     }
 
     .hero h1 span {
@@ -186,101 +172,85 @@
     }
 
     .hero p {
-      color: #c3c3c3;
       max-width: 570px;
-      font-size: 15px;
+      color: #c5c5c5;
+      font-size: 14px;
       line-height: 1.9;
-      margin-bottom: 27px;
+      margin-bottom: 25px;
     }
 
     .hero-actions {
       display: flex;
-      gap: 12px;
       flex-wrap: wrap;
+      gap: 11px;
     }
 
     .hero-emblem {
-      width: 245px;
-      height: 245px;
       flex-shrink: 0;
-      border: 2px solid rgba(245, 196, 81, 0.5);
-      border-radius: 50%;
+      width: 210px;
+      height: 210px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 115px;
-      background: radial-gradient(circle, #392b10, #14110a 60%, #080808);
-      box-shadow: 0 0 65px rgba(245, 196, 81, 0.12);
+      border: 2px solid #806323;
+      border-radius: 50%;
+      background: radial-gradient(circle, #463515, #151109 65%, #080808);
+      box-shadow: 0 0 60px rgba(245, 196, 81, .12);
+      font-size: 95px;
       animation: float 4s ease-in-out infinite;
     }
 
     @keyframes float {
-      0%, 100% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-10px);
-      }
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
     }
-
-    /* AVISO */
 
     .notice {
       margin: 25px 6% 0;
-      padding: 14px 17px;
-      border: 1px solid rgba(245, 196, 81, 0.25);
-      background: rgba(245, 196, 81, 0.05);
-      color: #d2d2d2;
-      font-size: 12px;
-      line-height: 1.8;
+      padding: 14px 16px;
+      border: 1px solid #57451f;
       border-radius: 10px;
+      background: rgba(245, 196, 81, .05);
+      color: #d2d2d2;
+      font-size: 11px;
+      line-height: 1.8;
     }
 
-    /* SEÇÕES */
-
     .section {
-      padding: 55px 6%;
+      padding: 50px 6%;
     }
 
     .section-heading {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 20px;
-      margin-bottom: 27px;
+      margin-bottom: 25px;
     }
 
     .section-heading h2 {
-      font-family: 'Orbitron', sans-serif;
-      font-size: clamp(21px, 3vw, 30px);
-      margin-bottom: 8px;
+      font-size: clamp(21px, 3vw, 29px);
+      margin-bottom: 9px;
     }
 
     .section-heading p {
-      font-size: 13px;
       color: var(--muted);
-      line-height: 1.7;
+      font-size: 12px;
+      line-height: 1.8;
     }
 
-    /* AUTENTICAÇÃO */
+    /* CADASTRO E LOGIN */
 
     .auth-section {
-      max-width: 600px;
-      margin: 25px auto;
-      padding: 0 20px;
+      max-width: 560px;
+      padding: 0 18px;
+      margin: 35px auto;
     }
 
     .auth-card {
-      background: linear-gradient(145deg, #181818, #0d0d0d);
-      border: 1px solid rgba(245, 196, 81, 0.35);
-      border-radius: 18px;
-      padding: 30px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      padding: 28px;
+      background: linear-gradient(145deg, #1b1b1b, #101010);
+      border: 1px solid #6c5120;
+      border-radius: 17px;
     }
 
     .auth-card h2 {
-      font-family: 'Orbitron', sans-serif;
       color: var(--gold);
       font-size: 23px;
       margin-bottom: 10px;
@@ -288,9 +258,9 @@
 
     .auth-card > p {
       color: var(--muted);
-      font-size: 13px;
+      font-size: 12px;
       line-height: 1.8;
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
 
     .form-group {
@@ -299,19 +269,18 @@
 
     .form-group label {
       display: block;
-      font-size: 12px;
       margin-bottom: 7px;
-      color: #e4e4e4;
+      color: #ddd;
+      font-size: 12px;
     }
 
     .form-group input {
       width: 100%;
-      background: #090909;
-      color: white;
-      border: 1px solid #353535;
-      border-radius: 8px;
       padding: 13px;
-      outline: none;
+      border: 1px solid #3b3b3b;
+      border-radius: 8px;
+      color: white;
+      background: #090909;
     }
 
     .form-group input:focus {
@@ -320,17 +289,17 @@
 
     .auth-links {
       display: flex;
-      justify-content: space-between;
-      gap: 12px;
       flex-wrap: wrap;
+      gap: 13px;
       margin-top: 17px;
     }
 
     .text-link {
-      background: none;
-      border: none;
+      padding: 0;
+      border: 0;
+      background: transparent;
       color: var(--gold);
-      font-size: 12px;
+      font-size: 11px;
       text-decoration: underline;
     }
 
@@ -349,37 +318,139 @@
     }
 
     .message.success {
-      color: #a5f2cb;
-      background: rgba(66, 211, 146, 0.09);
-      border: 1px solid rgba(66, 211, 146, 0.3);
+      color: var(--green);
+      background: rgba(66, 211, 146, .08);
+      border: 1px solid rgba(66, 211, 146, .3);
     }
 
     .message.error {
-      color: #ffb0b0;
-      background: rgba(255, 102, 102, 0.08);
-      border: 1px solid rgba(255, 102, 102, 0.3);
+      color: var(--red);
+      background: rgba(255, 102, 102, .08);
+      border: 1px solid rgba(255, 102, 102, .3);
+    }
+
+    /* PAGAMENTO DEMONSTRATIVO */
+
+    .payment-section {
+      max-width: 540px;
+      margin: 35px auto;
+      padding: 0 18px;
+    }
+
+    .payment-card {
+      padding: 27px;
+      text-align: center;
+      background: linear-gradient(145deg, #1a1a1a, #101010);
+      border: 1px solid #806323;
+      border-radius: 18px;
+    }
+
+    .payment-card h2 {
+      color: var(--gold);
+      font-size: 22px;
+      margin-bottom: 12px;
+    }
+
+    .payment-card > p {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .amount-box {
+      padding: 17px;
+      margin-bottom: 20px;
+      border: 1px solid #363636;
+      border-radius: 10px;
+      background: #090909;
+    }
+
+    .amount-box small {
+      display: block;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .amount {
+      color: var(--gold-light);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 34px;
+      font-weight: 800;
+    }
+
+    .fake-qr {
+      display: grid;
+      grid-template-columns: repeat(17, 1fr);
+      grid-template-rows: repeat(17, 1fr);
+      gap: 2px;
+      width: 220px;
+      height: 220px;
+      max-width: 100%;
+      padding: 5px;
+      margin: 0 auto 12px;
+      border: 5px solid white;
+      border-radius: 5px;
+      background: white;
+    }
+
+    .qr-cell {
+      background: white;
+    }
+
+    .qr-cell.dark {
+      background: black;
+    }
+
+    .qr-caption {
+      color: #999;
+      font-size: 10px;
+      margin-bottom: 20px;
+    }
+
+    .warning {
+      padding: 13px;
+      margin-bottom: 20px;
+      border: 1px solid #6b5324;
+      border-radius: 9px;
+      background: rgba(245, 196, 81, .06);
+      color: #ecdba9;
+      text-align: left;
+      font-size: 11px;
+      line-height: 1.8;
     }
 
     /* CATÁLOGO */
 
     .games-section {
-      background: linear-gradient(180deg, #0a0a0a, #101010);
-      border-top: 1px solid rgba(245, 196, 81, 0.12);
-      border-bottom: 1px solid rgba(245, 196, 81, 0.12);
+      background: linear-gradient(180deg, #0a0a0a, #111);
+      border-top: 1px solid #302718;
+      border-bottom: 1px solid #302718;
+    }
+
+    .lock-message {
+      padding: 22px;
+      margin-bottom: 23px;
+      border: 1px dashed #57451f;
+      border-radius: 12px;
+      color: #ddc98f;
+      font-size: 12px;
+      line-height: 1.8;
+      text-align: center;
     }
 
     .games-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 22px;
+      gap: 20px;
     }
 
     .game-card {
-      background: #141414;
-      border: 1px solid #292929;
-      border-radius: 14px;
       overflow: hidden;
-      transition: transform 0.25s, border-color 0.25s;
+      border: 1px solid #303030;
+      border-radius: 13px;
+      background: #151515;
+      transition: .25s;
     }
 
     .game-card:hover {
@@ -388,99 +459,85 @@
     }
 
     .game-art {
-      height: 215px;
+      position: relative;
+      height: 185px;
       display: flex;
       align-items: center;
       justify-content: center;
-      position: relative;
       overflow: hidden;
-      font-size: 88px;
+      font-size: 82px;
     }
 
     .game-art::before,
     .game-art::after {
       content: "";
       position: absolute;
+      width: 150px;
+      height: 150px;
+      border: 1px solid rgba(255,255,255,.12);
       border-radius: 50%;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      width: 175px;
-      height: 175px;
     }
 
     .game-art::after {
-      width: 225px;
-      height: 225px;
+      width: 195px;
+      height: 195px;
     }
 
-    .game-art .character {
+    .character {
       position: relative;
       z-index: 1;
-      filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.35));
+      filter: drop-shadow(0 8px 15px rgba(0,0,0,.4));
     }
 
-    .art-rabbit {
-      background: radial-gradient(circle at 50% 40%, #a8751d, #38220b 65%, #111);
+    .rabbit {
+      background: radial-gradient(circle, #a8751d, #38220b 65%, #111);
     }
 
-    .art-tiger {
-      background: radial-gradient(circle at 50% 40%, #d64a0b, #5a1706 65%, #111);
+    .tiger {
+      background: radial-gradient(circle, #d64a0b, #5a1706 65%, #111);
     }
 
-    .art-bull {
-      background: radial-gradient(circle at 50% 40%, #aa2731, #401016 65%, #111);
+    .bull {
+      background: radial-gradient(circle, #aa2731, #401016 65%, #111);
     }
 
-    .art-dragon {
-      background: radial-gradient(circle at 50% 40%, #157c50, #063d29 65%, #111);
+    .dragon {
+      background: radial-gradient(circle, #157c50, #063d29 65%, #111);
     }
 
     .game-info {
-      padding: 17px;
+      padding: 15px;
     }
 
     .game-info h3 {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 14px;
+      font-size: 13px;
       margin-bottom: 9px;
     }
 
     .game-info p {
+      min-height: 40px;
+      margin-bottom: 13px;
       color: var(--muted);
-      font-size: 11px;
+      font-size: 10px;
       line-height: 1.7;
-      min-height: 38px;
-      margin-bottom: 15px;
     }
 
     .game-info .btn {
       width: 100%;
+      padding: 11px 5px;
     }
-
-    .lock-message {
-      border: 1px dashed #57451f;
-      color: #d5c08a;
-      background: rgba(245, 196, 81, 0.04);
-      border-radius: 12px;
-      padding: 23px;
-      text-align: center;
-      font-size: 13px;
-      line-height: 1.8;
-      margin-bottom: 25px;
-    }
-
-    /* CONTA */
 
     .account-box {
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 15px;
-      border: 1px solid #343434;
+      gap: 12px;
+      padding: 18px;
+      margin-bottom: 22px;
+      border: 1px solid #333;
+      border-radius: 10px;
       background: #131313;
-      padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 25px;
     }
 
     .account-box strong {
@@ -488,141 +545,136 @@
     }
 
     .account-box p {
-      color: var(--muted);
-      font-size: 12px;
       margin-top: 5px;
+      color: var(--muted);
+      font-size: 11px;
       overflow-wrap: anywhere;
     }
 
-    /* MODAL DE DEMONSTRAÇÃO */
+    /* JANELA DOS PERSONAGENS */
 
     .modal {
       position: fixed;
       inset: 0;
       z-index: 100;
-      background: rgba(0, 0, 0, 0.85);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 18px;
+      background: rgba(0,0,0,.85);
     }
 
     .modal-card {
-      width: 100%;
-      max-width: 460px;
-      border-radius: 16px;
-      background: #141414;
-      border: 1px solid rgba(245, 196, 81, 0.5);
-      padding: 30px;
-      text-align: center;
       position: relative;
-      box-shadow: 0 20px 70px rgba(0, 0, 0, 0.6);
+      width: 100%;
+      max-width: 440px;
+      padding: 28px;
+      border: 1px solid #806323;
+      border-radius: 16px;
+      background: #151515;
+      text-align: center;
     }
 
     .modal-close {
       position: absolute;
-      right: 13px;
-      top: 12px;
-      width: 35px;
-      height: 35px;
+      top: 10px;
+      right: 10px;
+      width: 34px;
+      height: 34px;
+      border: 1px solid #444;
       border-radius: 50%;
-      border: 1px solid #454545;
       color: white;
       background: #222;
       font-size: 20px;
     }
 
     .modal-character {
-      font-size: 90px;
-      margin: 12px 0;
+      margin: 15px 0;
+      font-size: 82px;
     }
 
     .modal-card h2 {
+      margin-bottom: 12px;
       color: var(--gold);
-      font-family: 'Orbitron', sans-serif;
-      font-size: 20px;
-      margin-bottom: 13px;
+      font-size: 19px;
     }
 
     .modal-card p {
-      color: #c7c7c7;
-      font-size: 13px;
-      line-height: 1.8;
       margin-bottom: 18px;
+      color: #c5c5c5;
+      font-size: 12px;
+      line-height: 1.8;
     }
 
     .demo-result {
-      border: 1px solid #393939;
-      background: #0a0a0a;
-      border-radius: 10px;
-      padding: 16px;
+      padding: 14px;
+      margin-bottom: 18px;
+      border: 1px solid #333;
+      border-radius: 9px;
+      background: #090909;
       color: var(--gold-light);
-      margin-bottom: 20px;
-      font-size: 13px;
+      font-size: 12px;
+      line-height: 1.7;
     }
-
-    /* RODAPÉ */
 
     footer {
       padding: 30px 6%;
+      color: #888;
       text-align: center;
-      color: #8b8b8b;
-      font-size: 11px;
+      font-size: 10px;
       line-height: 2;
     }
 
     footer .logo {
       display: inline-block;
+      margin-bottom: 8px;
       font-size: 20px;
-      margin-bottom: 10px;
     }
 
-    /* RESPONSIVIDADE */
-
-    @media (max-width: 950px) {
+    @media (max-width: 900px) {
       .games-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       .hero-emblem {
-        width: 190px;
-        height: 190px;
-        font-size: 85px;
+        width: 170px;
+        height: 170px;
+        font-size: 75px;
       }
     }
 
-    @media (max-width: 650px) {
+    @media (max-width: 600px) {
       header {
-        padding: 14px 5%;
+        padding: 13px 4%;
       }
 
       .logo {
-        font-size: 19px;
-      }
-
-      .header-user {
-        display: none;
+        font-size: 18px;
       }
 
       .header-actions .btn {
-        padding: 9px 11px;
-        font-size: 11px;
+        padding: 9px;
+        font-size: 10px;
+      }
+
+      #headerUser {
+        display: none;
       }
 
       .hero {
-        padding: 55px 6%;
+        padding: 42px 5%;
         text-align: center;
         flex-direction: column-reverse;
       }
 
       .hero-emblem {
-        width: 145px;
-        height: 145px;
-        font-size: 65px;
+        width: 130px;
+        height: 130px;
+        font-size: 58px;
       }
 
       .hero p {
-        font-size: 13px;
+        font-size: 12px;
       }
 
       .hero-actions {
@@ -630,7 +682,7 @@
       }
 
       .section {
-        padding: 40px 5%;
+        padding: 38px 5%;
       }
 
       .games-grid {
@@ -638,88 +690,86 @@
       }
 
       .game-art {
-        height: 145px;
-        font-size: 62px;
+        height: 130px;
+        font-size: 58px;
       }
 
       .game-art::before {
-        width: 120px;
-        height: 120px;
+        width: 110px;
+        height: 110px;
       }
 
       .game-art::after {
-        width: 150px;
-        height: 150px;
+        width: 140px;
+        height: 140px;
       }
 
       .game-info {
-        padding: 12px;
+        padding: 11px;
       }
 
       .game-info h3 {
-        font-size: 12px;
+        font-size: 11px;
       }
 
       .game-info p {
-        font-size: 10px;
+        font-size: 9px;
       }
 
       .game-info .btn {
-        font-size: 11px;
-        padding: 10px 5px;
+        font-size: 10px;
       }
 
-      .auth-card {
-        padding: 22px;
+      .auth-card,
+      .payment-card {
+        padding: 21px;
       }
 
-      .section-heading {
-        align-items: start;
-        flex-direction: column;
+      .amount {
+        font-size: 29px;
       }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
-        animation-duration: 0.01ms !important;
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
         scroll-behavior: auto !important;
-        transition-duration: 0.01ms !important;
+        transition-duration: .01ms !important;
       }
     }
   </style></head><body>  <!-- CABEÇALHO -->  <header>
-    <a href="#" class="logo">ZEUS<span>BET</span></a><div class="header-actions">
-  <span id="headerUser" class="header-user"></span>
+    <a class="logo" href="#">ZEUS<span>BET</span></a><div class="header-actions">
+  <span id="headerUser"></span>
 
-  <button id="headerLogin" class="btn btn-outline" type="button"
-    onclick="showAuth('login')">
-    Entrar
+  <button id="headerLogin" class="btn btn-outline"
+    type="button" onclick="showAuth('login')">
+    ENTRAR
   </button>
 
-  <button id="headerRegister" class="btn btn-gold" type="button"
-    onclick="showAuth('register')">
-    Cadastrar
+  <button id="headerRegister" class="btn btn-gold"
+    type="button" onclick="showAuth('register')">
+    CADASTRAR
   </button>
 
   <button id="headerLogout" class="btn btn-outline hidden"
     type="button" onclick="logout()">
-    Sair
+    SAIR
   </button>
 </div>
 
-  </header>  <!-- APRESENTAÇÃO -->  <main>
-    <section class="hero">
-      <div class="hero-content">
-        <span class="eyebrow">UNIVERSO ZEUS</span>    <h1>
+  </header>  <main><!-- APRESENTAÇÃO -->
+<section class="hero">
+  <div class="hero-content">
+    <span class="eyebrow">UNIVERSO ZEUS</span>
+
+    <h1>
       Entre em um mundo<br>
       de <span>diversão</span>
     </h1>
 
     <p>
-      Descubra um universo visual inspirado em personagens fantásticos,
-      efeitos especiais e experiências digitais demonstrativas.
-      Crie sua conta para explorar o catálogo.
+      Explore personagens fantásticos, efeitos visuais e experiências
+      demonstrativas em um ambiente digital com estilo premium.
     </p>
 
     <div class="hero-actions">
@@ -735,41 +785,40 @@
     </div>
   </div>
 
-  <div class="hero-emblem" aria-label="Símbolo de fantasia">
-    ⚡
-  </div>
+  <div class="hero-emblem" aria-hidden="true">⚡</div>
 </section>
 
 <div class="notice">
-  <strong class="gold-text">IMPORTANTE:</strong>
-  este site é um protótipo de entretenimento demonstrativo.
-  Não realiza apostas, depósitos, saques nem pagamentos e não oferece
-  prêmios em dinheiro.
+  <strong class="gold">AVISO:</strong>
+  este site é um protótipo de entretenimento. Não realiza apostas,
+  depósitos, saques ou pagamentos. O QR Code é ilustrativo e não pagável.
 </div>
 
-<!-- ÁREA DE AUTENTICAÇÃO -->
+<!-- CADASTRO E LOGIN -->
 <section id="authSection" class="auth-section hidden">
   <div class="auth-card">
     <h2 id="authTitle">Entrar na conta</h2>
 
     <p id="authDescription">
-      Entre com seu e-mail e sua senha para acessar o catálogo.
+      Informe seus dados para continuar.
     </p>
 
-    <div id="authMessage" class="message" role="status"
-      aria-live="polite"></div>
+    <div id="authMessage" class="message"
+      role="status" aria-live="polite"></div>
 
     <form id="authForm">
       <div id="nameGroup" class="form-group hidden">
         <label for="fullName">Nome</label>
-        <input id="fullName" type="text" autocomplete="name"
-          maxlength="80" placeholder="Seu nome">
+        <input id="fullName" type="text"
+          autocomplete="name" maxlength="80"
+          placeholder="Seu nome">
       </div>
 
       <div class="form-group">
         <label for="email">E-mail</label>
-        <input id="email" type="email" autocomplete="email"
-          required maxlength="254" placeholder="voce@email.com">
+        <input id="email" type="email"
+          autocomplete="email" required maxlength="254"
+          placeholder="voce@email.com">
       </div>
 
       <div id="passwordGroup" class="form-group">
@@ -788,7 +837,7 @@
     <div class="auth-links">
       <button class="text-link" type="button"
         onclick="showAuth('login')">
-        Já tenho conta
+        Entrar
       </button>
 
       <button class="text-link" type="button"
@@ -804,23 +853,65 @@
   </div>
 </section>
 
-<!-- CATÁLOGO DE JOGOS -->
+<!-- PAGAMENTO ILUSTRATIVO -->
+<section id="paymentSection" class="payment-section hidden">
+  <div class="payment-card">
+    <h2>PIX demonstrativo</h2>
+
+    <p>
+      Esta tela mostra como uma etapa de pagamento poderia aparecer.
+      Nenhuma cobrança será criada.
+    </p>
+
+    <div class="amount-box">
+      <small>Valor ilustrativo</small>
+      <div class="amount">R$ 50,00</div>
+    </div>
+
+    <div id="fakeQR" class="fake-qr"
+      role="img"
+      aria-label="Padrão gráfico ilustrativo, não é um QR Code PIX">
+    </div>
+
+    <p class="qr-caption">
+      PADRÃO ILUSTRATIVO — NÃO PAGÁVEL
+    </p>
+
+    <div class="warning">
+      <strong>⚠ ATENÇÃO</strong><br>
+      Este padrão não contém dados de pagamento e não pode ser usado
+      para transferir dinheiro. O botão abaixo apenas demonstra uma
+      mensagem; não confirma pagamentos nem adiciona saldo.
+    </div>
+
+    <button class="btn btn-gold btn-full"
+      type="button" onclick="showDemoConfirmation()">
+      VISUALIZAR CONFIRMAÇÃO DE TESTE
+    </button>
+
+    <div id="paymentResult" class="message success"
+      role="status" aria-live="polite">
+      Prévia demonstrativa exibida. Nenhum pagamento foi feito.
+    </div>
+  </div>
+</section>
+
+<!-- CATÁLOGO -->
 <section id="gamesSection" class="section games-section">
   <div class="section-heading">
-    <div>
-      <h2>Universo <span class="gold-text">Zeus</span></h2>
-      <p>Conheça os personagens do nosso catálogo demonstrativo.</p>
-    </div>
+    <h2>Universo <span class="gold">Zeus</span></h2>
+    <p>
+      Conheça os personagens e suas experiências visuais demonstrativas.
+    </p>
   </div>
 
   <div id="lockedMessage" class="lock-message">
-    🔒 <strong>Catálogo protegido por login</strong><br>
-    Faça seu cadastro ou entre na sua conta para visualizar as opções.
+    🔒 <strong>Entre na sua conta para visualizar o catálogo.</strong>
     <br><br>
 
     <button class="btn btn-gold" type="button"
       onclick="showAuth('register')">
-      CRIAR MINHA CONTA
+      CRIAR CONTA
     </button>
   </div>
 
@@ -832,76 +923,72 @@
 
     <button class="btn btn-outline" type="button"
       onclick="logout()">
-      SAIR DA CONTA
+      SAIR
     </button>
   </div>
 
   <div id="gamesGrid" class="games-grid hidden">
 
-    <!-- COELHINHO -->
     <article class="game-card">
-      <div class="game-art art-rabbit">
-        <span class="character" aria-hidden="true">🐰</span>
+      <div class="game-art rabbit">
+        <span class="character">🐰</span>
       </div>
 
       <div class="game-info">
         <h3>Coelhinho Dourado</h3>
-        <p>Uma aventura de fantasia em tons dourados.</p>
+        <p>Uma aventura visual de fantasia em tons dourados.</p>
 
         <button class="btn btn-gold" type="button"
           onclick="openDemo('rabbit')">
-          VER EXPERIÊNCIA
+          EXPLORAR
         </button>
       </div>
     </article>
 
-    <!-- TIGRINHO -->
     <article class="game-card">
-      <div class="game-art art-tiger">
-        <span class="character" aria-hidden="true">🐯</span>
+      <div class="game-art tiger">
+        <span class="character">🐯</span>
       </div>
 
       <div class="game-info">
         <h3>Tigrinho Elétrico</h3>
-        <p>Energia, cores fortes e uma atmosfera eletrizante.</p>
+        <p>Energia, cores vibrantes e uma atmosfera eletrizante.</p>
 
         <button class="btn btn-gold" type="button"
           onclick="openDemo('tiger')">
-          VER EXPERIÊNCIA
+          EXPLORAR
         </button>
       </div>
     </article>
 
-    <!-- TOURINHO -->
     <article class="game-card">
-      <div class="game-art art-bull">
-        <span class="character" aria-hidden="true">🐂</span>
+      <div class="game-art bull">
+        <span class="character">🐂</span>
       </div>
 
       <div class="game-info">
         <h3>Tourinho Turbo</h3>
-        <p>Um personagem de fantasia cheio de personalidade.</p>
+        <p>Um personagem divertido em um mundo de fantasia.</p>
 
         <button class="btn btn-gold" type="button"
           onclick="openDemo('bull')">
-          VER EXPERIÊNCIA
+          EXPLORAR
         </button>
       </div>
     </article>
 
-    <!-- DRAGÃOZINHO -->
     <article class="game-card">
-      <div class="game-art art-dragon">
-        <span class="character" aria-hidden="true">🐉</span>
+      <div class="game-art dragon">
+        <span class="character">🐉</span>
       </div>
 
       <div class="game-info">
         <h3>Dragãozinho Mágico</h3>
-        <p>Entre em um universo fantástico de magia e aventura.</p>
+        <p>Um reino fantástico cheio de cores e magia.</p>
 
         <button class="btn btn-gold" type="button"
           onclick="openDemo('dragon')">
-          VER EXPERIÊNCIA
+          EXPLORAR
         </button>
       </div>
     </article>
@@ -909,7 +996,7 @@
   </div>
 </section>
 
-  </main>  <!-- MODAL DEMONSTRATIVO -->  <div id="demoModal" class="modal hidden"
+  </main>  <!-- MODAL DOS PERSONAGENS -->  <div id="demoModal" class="modal hidden"
     role="dialog" aria-modal="true" aria-labelledby="demoTitle"><div class="modal-card">
   <button class="modal-close" type="button"
     onclick="closeDemo()" aria-label="Fechar">
@@ -920,12 +1007,10 @@
 
   <h2 id="demoTitle">Universo Zeus</h2>
 
-  <p id="demoDescription">
-    Conheça nosso universo de personagens.
-  </p>
+  <p id="demoDescription"></p>
 
   <div id="demoResult" class="demo-result">
-    Escolha uma experiência demonstrativa.
+    Experiência visual demonstrativa.
   </div>
 
   <button class="btn btn-gold btn-full" type="button"
@@ -934,21 +1019,16 @@
   </button>
 </div>
 
-  </div>  <!-- RODAPÉ -->  <footer>
-    <a href="#" class="logo">ZEUS<span>BET</span></a><p>Entretenimento digital e experiências demonstrativas.</p>
+  </div>  <footer>
+    <a class="logo" href="#">ZEUS<span>BET</span></a><p>Entretenimento digital e experiências demonstrativas.</p>
+<p>Sem transações financeiras, apostas ou prêmios reais.</p>
+<p>© <span id="year"></span> ZeusBet.</p>
 
-<p>
-  Este protótipo não oferece apostas, prêmios ou transações financeiras.
-</p>
-
-<p>© <span id="year"></span> ZeusBet. Todos os direitos reservados.</p>
-
-  </footer>  <!-- BIBLIOTECA SUPABASE -->  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <script>
+  </footer>  <!-- SUPABASE -->  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <script>
     /*
       CONFIGURAÇÃO DO SUPABASE
-
-      A chave publishable é apropriada para uso no navegador.
-      Nunca coloque uma chave sb_secret_ ou service_role neste arquivo.
+      Chave pública fornecida pelo proprietário do projeto.
+      Nunca coloque chaves sb_secret_ ou service_role no navegador.
     */
 
     const SUPABASE_URL =
@@ -960,6 +1040,7 @@
     let supabaseClient = null;
     let currentUser = null;
     let authMode = "login";
+    let selectedCharacter = null;
 
     const characters = {
       rabbit: {
@@ -1011,10 +1092,10 @@
       }
     };
 
-    /* INICIALIZAÇÃO */
-
     document.getElementById("year").textContent =
       new Date().getFullYear();
+
+    /* MENSAGENS */
 
     function showMessage(text, type) {
       const box = document.getElementById("authMessage");
@@ -1044,60 +1125,59 @@
     }
 
     function updateAuthButton() {
-      const button = document.getElementById("authSubmit");
-
       const labels = {
         login: "ENTRAR",
         register: "CRIAR CONTA",
         reset: "ENVIAR LINK DE RECUPERAÇÃO"
       };
 
-      button.textContent = labels[authMode];
+      document.getElementById("authSubmit").textContent =
+        labels[authMode];
     }
 
-    /* ABRIR FORMULÁRIO */
+    /* FORMULÁRIO */
 
     function showAuth(mode) {
       authMode = mode;
 
       const section = document.getElementById("authSection");
-      const title = document.getElementById("authTitle");
-      const description = document.getElementById("authDescription");
-      const nameGroup = document.getElementById("nameGroup");
       const passwordGroup = document.getElementById("passwordGroup");
-      const passwordInput = document.getElementById("password");
-      const passwordLabel = passwordGroup.querySelector("label");
+      const password = document.getElementById("password");
 
       clearMessage();
 
       section.classList.remove("hidden");
 
-      nameGroup.classList.toggle("hidden", mode !== "register");
-      passwordGroup.classList.toggle("hidden", mode === "reset");
+      document.getElementById("nameGroup")
+        .classList.toggle("hidden", mode !== "register");
 
-      passwordInput.required = mode !== "reset";
+      passwordGroup.classList.toggle("hidden", mode === "reset");
+      password.required = mode !== "reset";
 
       if (mode === "register") {
-        title.textContent = "Criar minha conta";
+        document.getElementById("authTitle").textContent =
+          "Criar minha conta";
 
-        description.textContent =
-          "Preencha seus dados para criar uma conta.";
+        document.getElementById("authDescription").textContent =
+          "Informe seu nome, e-mail e senha para criar sua conta.";
 
-        passwordInput.autocomplete = "new-password";
-        passwordLabel.textContent = "Senha";
+        password.autocomplete = "new-password";
+
       } else if (mode === "reset") {
-        title.textContent = "Recuperar senha";
+        document.getElementById("authTitle").textContent =
+          "Recuperar senha";
 
-        description.textContent =
+        document.getElementById("authDescription").textContent =
           "Informe seu e-mail para receber as instruções de recuperação.";
-      } else {
-        title.textContent = "Entrar na conta";
 
-        description.textContent =
+      } else {
+        document.getElementById("authTitle").textContent =
+          "Entrar na conta";
+
+        document.getElementById("authDescription").textContent =
           "Entre com seu e-mail e sua senha.";
 
-        passwordInput.autocomplete = "current-password";
-        passwordLabel.textContent = "Senha";
+        password.autocomplete = "current-password";
       }
 
       updateAuthButton();
@@ -1108,36 +1188,28 @@
       });
     }
 
-    function handleExplore() {
-      if (currentUser) {
-        document.getElementById("gamesSection").scrollIntoView({
-          behavior: "smooth"
-        });
-      } else {
-        showAuth("register");
-      }
-    }
-
-    /* FORMULÁRIO DE AUTENTICAÇÃO */
-
     document.getElementById("authForm").addEventListener(
       "submit",
       async function(event) {
         event.preventDefault();
-
         clearMessage();
 
         if (!supabaseClient) {
           showMessage(
-            "Não foi possível conectar ao Supabase. Confira a URL e a chave pública.",
+            "Não foi possível conectar ao Supabase. Confira a configuração.",
             "error"
           );
           return;
         }
 
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value;
-        const fullName = document.getElementById("fullName").value.trim();
+        const email =
+          document.getElementById("email").value.trim();
+
+        const password =
+          document.getElementById("password").value;
+
+        const fullName =
+          document.getElementById("fullName").value.trim();
 
         setBusy(true);
 
@@ -1167,12 +1239,12 @@
 
             if (data.session) {
               showMessage(
-                "Cadastro realizado! Sua conta está conectada.",
+                "Cadastro realizado! Você já pode explorar o catálogo.",
                 "success"
               );
             } else {
               showMessage(
-                "Cadastro enviado! Confira seu e-mail para confirmar a conta antes de entrar.",
+                "Cadastro enviado. Confira seu e-mail para confirmar a conta.",
                 "success"
               );
             }
@@ -1186,10 +1258,7 @@
 
             if (error) throw error;
 
-            showMessage(
-              "Login realizado com sucesso!",
-              "success"
-            );
+            showMessage("Login realizado com sucesso!", "success");
 
           } else if (authMode === "reset") {
             const { error } =
@@ -1203,7 +1272,7 @@
             if (error) throw error;
 
             showMessage(
-              "Se o endereço estiver cadastrado, você receberá um e-mail com as instruções de recuperação.",
+              "Se o e-mail estiver cadastrado, você receberá as instruções de recuperação.",
               "success"
             );
           }
@@ -1212,7 +1281,7 @@
           console.error("Erro de autenticação:", error);
 
           showMessage(
-            traduzirErro(error.message),
+            translateError(error.message),
             "error"
           );
 
@@ -1222,32 +1291,30 @@
       }
     );
 
-    /* MENSAGENS DE ERRO */
+    function translateError(message) {
+      const text = (message || "").toLowerCase();
 
-    function traduzirErro(message) {
-      const msg = (message || "").toLowerCase();
-
-      if (msg.includes("invalid login credentials")) {
+      if (text.includes("invalid login credentials")) {
         return "E-mail ou senha incorretos.";
       }
 
-      if (msg.includes("user already registered")) {
+      if (text.includes("user already registered")) {
         return "Este e-mail já possui cadastro. Tente entrar.";
       }
 
-      if (msg.includes("password should be at least")) {
-        return "A senha deve ter pelo menos 8 caracteres.";
+      if (text.includes("password should be at least")) {
+        return "A senha precisa ter pelo menos 8 caracteres.";
       }
 
-      if (msg.includes("invalid email")) {
+      if (text.includes("invalid email")) {
         return "Informe um endereço de e-mail válido.";
       }
 
-      if (msg.includes("email not confirmed")) {
+      if (text.includes("email not confirmed")) {
         return "Confirme seu e-mail antes de entrar.";
       }
 
-      if (msg.includes("rate limit")) {
+      if (text.includes("rate limit")) {
         return "Muitas tentativas. Aguarde um pouco e tente novamente.";
       }
 
@@ -1289,9 +1356,14 @@
         document.getElementById("authSection")
           .classList.add("hidden");
       }
-    }
 
-    /* SAIR DA CONTA */
+      /*
+        A tela de pagamento permanece demonstrativa.
+        Ela não confirma cobranças nem altera saldo.
+      */
+      document.getElementById("paymentSection")
+        .classList.toggle("hidden", !loggedIn);
+    }
 
     async function logout() {
       if (!supabaseClient) return;
@@ -1310,21 +1382,77 @@
       });
     }
 
-    /* JANELAS DEMONSTRATIVAS */
+    function handleExplore() {
+      if (currentUser) {
+        document.getElementById("gamesSection").scrollIntoView({
+          behavior: "smooth"
+        });
+      } else {
+        showAuth("register");
+      }
+    }
 
-    let selectedCharacter = null;
+    /* QR CODE ILUSTRATIVO */
 
-    function openDemo(characterKey) {
+    function generateIllustrativePattern() {
+      const container = document.getElementById("fakeQR");
+      const size = 17;
+
+      for (let row = 0; row < size; row++) {
+        for (let col = 0; col < size; col++) {
+          const cell = document.createElement("span");
+          cell.className = "qr-cell";
+
+          const topLeft = row < 5 && col < 5;
+          const topRight = row < 5 && col >= size - 5;
+          const bottomLeft = row >= size - 5 && col < 5;
+
+          if (topLeft || topRight || bottomLeft) {
+            const localRow = row < 5 ? row : row - (size - 5);
+            const localCol = col < 5 ? col : col - (size - 5);
+
+            const edge =
+              localRow === 0 || localRow === 4 ||
+              localCol === 0 || localCol === 4;
+
+            const center =
+              localRow === 2 && localCol === 2;
+
+            if (edge || center) {
+              cell.classList.add("dark");
+            }
+
+          } else if (Math.random() > 0.52) {
+            cell.classList.add("dark");
+          }
+
+          container.appendChild(cell);
+        }
+      }
+    }
+
+    function showDemoConfirmation() {
+      const result = document.getElementById("paymentResult");
+
+      result.textContent =
+        "Prévia demonstrativa exibida. Nenhum pagamento foi realizado ou confirmado, e nenhum saldo foi adicionado.";
+
+      result.classList.add("show");
+    }
+
+    /* PERSONAGENS */
+
+    function openDemo(key) {
       if (!currentUser) {
         showAuth("login");
         return;
       }
 
-      const character = characters[characterKey];
+      const character = characters[key];
 
       if (!character) return;
 
-      selectedCharacter = characterKey;
+      selectedCharacter = key;
 
       document.getElementById("demoCharacter").textContent =
         character.emoji;
@@ -1336,7 +1464,7 @@
         character.description;
 
       document.getElementById("demoResult").textContent =
-        "Experiência visual demonstrativa — sem apostas, dinheiro ou prêmios.";
+        "Experiência demonstrativa. Não há apostas ou prêmios.";
 
       document.getElementById("demoModal")
         .classList.remove("hidden");
@@ -1362,21 +1490,16 @@
         .classList.add("hidden");
 
       document.body.style.overflow = "";
-
       selectedCharacter = null;
     }
 
     document.getElementById("demoModal")
       .addEventListener("click", function(event) {
-        if (event.target === this) {
-          closeDemo();
-        }
+        if (event.target === this) closeDemo();
       });
 
     document.addEventListener("keydown", function(event) {
-      if (event.key === "Escape") {
-        closeDemo();
-      }
+      if (event.key === "Escape") closeDemo();
     });
 
     /* INICIALIZAÇÃO DO SUPABASE */
@@ -1399,14 +1522,12 @@
           }
         );
 
-        const {
-          data: { session },
-          error
-        } = await supabaseClient.auth.getSession();
+        const { data, error } =
+          await supabaseClient.auth.getSession();
 
         if (error) throw error;
 
-        updateInterface(session ? session.user : null);
+        updateInterface(data.session ? data.session.user : null);
 
         supabaseClient.auth.onAuthStateChange(
           function(event, session) {
@@ -1415,13 +1536,11 @@
         );
 
       } catch (error) {
-        console.error("Falha ao inicializar Supabase:", error);
+        console.error("Erro ao inicializar Supabase:", error);
 
         updateInterface(null);
 
-        const authSection = document.getElementById("authSection");
-
-        authSection.classList.remove("hidden");
+        showAuth("login");
 
         showMessage(
           "Não foi possível conectar ao serviço de cadastro. Confira sua conexão e a configuração do Supabase.",
@@ -1430,6 +1549,7 @@
       }
     }
 
+    generateIllustrativePattern();
     initializeSupabase();
   </script></body>
 </html>
