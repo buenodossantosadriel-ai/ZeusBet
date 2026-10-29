@@ -52,11 +52,16 @@ module.exports = async function handler(req, res) {
       }
     );
 
-    if (!authResponse.ok) {
-      return res.status(401).json({
-        error: "Sessão inválida. Entre novamente."
-      });
-    }
+   if (!authResponse.ok) {
+console.error(
+"Falha na autenticação Supabase:",
+authResponse.status
+);
+
+return res.status(401).json({
+error: "Sessão inválida. Entre novamente."
+});
+}
 
     const user = await authResponse.json();
 
