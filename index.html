@@ -1,615 +1,952 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!DOCTYPE html><html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#080808">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>ZeusBet | O Poder da Sua Mente</title><meta
+name="description"
+content="Entre no universo ZeusBet e descubra experiências de memória, lógica e raciocínio."
 
-  <title>ZeusBet | Cassino de apostas</title>
+«»
 
-  <meta name="description"
-    content="Experiências emocionantes, jogue com responsabilidade">
-
-  <style>
+  <meta name="theme-color" content="#100820">  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <style>
     :root {
-      --gold: #f4c542;
-      --gold-light: #ffe58a;
-      --bg: #080808;
-      --card: #151515;
-      --border: #353535;
-      --text: #fff;
-      --muted: #bbb;
-      --green: #37d67a;
-      --red: #ff6262;
+      --background: #100820;
+      --surface: #1c1030;
+      --surface-light: #281740;
+      --gold: #ffd166;
+      --gold-dark: #d99b24;
+      --purple: #8b45ff;
+      --text: #fff8eb;
+      --muted: #c3b5d4;
+      --success: #4ade80;
+      --danger: #ff7272;
+      --border: rgba(255, 209, 102, 0.25);
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-    [hidden] { display: none !important; }
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
-      margin: 0;
       min-height: 100vh;
       background:
-        radial-gradient(circle at top, #3a2c0d 0, transparent 36%),
-        var(--bg);
+        radial-gradient(
+          circle at top,
+          #321353 0,
+          var(--background) 48%,
+          #080410 100%
+        );
       color: var(--text);
       font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
     }
 
-    button, input, textarea { font: inherit; }
+    button,
+    input {
+      font: inherit;
+    }
 
-    button { cursor: pointer; }
+    button {
+      cursor: pointer;
+    }
 
     button:disabled {
-      opacity: .6;
-      cursor: wait;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    a {
+      color: var(--gold);
     }
 
     .container {
-      width: min(1080px, 92%);
-      margin: auto;
+      width: min(1120px, 92%);
+      margin: 0 auto;
     }
+
+    /* CABEÇALHO */
 
     header {
-      background: #080808;
-      border-bottom: 1px solid #51431b;
+      position: relative;
+      z-index: 5;
+      background: rgba(12, 6, 23, 0.96);
+      border-bottom: 1px solid var(--border);
     }
 
-    .header-content {
-      min-height: 72px;
+    .navbar {
+      min-height: 76px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: 14px;
-      flex-wrap: wrap;
-      padding: 14px 0;
+      justify-content: space-between;
+      gap: 20px;
     }
 
-    .logo {
-      font-size: 26px;
-      font-weight: 900;
-      letter-spacing: 1px;
+    .brand {
       color: var(--gold);
+      font-weight: 900;
+      font-size: 1.65rem;
+      text-decoration: none;
+      letter-spacing: 1px;
+      text-shadow: 0 0 20px rgba(255, 209, 102, 0.3);
     }
 
-    .logo span { color: white; }
-
-    #headerStatus {
-      color: var(--muted);
-      font-size: 13px;
-      overflow-wrap: anywhere;
+    .brand span {
+      color: white;
     }
 
-    main { padding: 30px 0 55px; }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* BOTÕES */
+
+    .btn {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-weight: 800;
+      text-decoration: none;
+      transition: transform 0.2s, filter 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.08);
+    }
+
+    .btn-gold {
+      color: #241500;
+      background: linear-gradient(135deg, #ffe69a, #ffc247, #d99b24);
+      box-shadow: 0 5px 20px rgba(255, 193, 64, 0.14);
+    }
+
+    .btn-outline {
+      color: var(--gold);
+      background: transparent;
+      border: 1px solid var(--gold);
+    }
+
+    .btn-purple {
+      color: white;
+      background: linear-gradient(135deg, #a65cff, #6726c9);
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    /* CAPA PRINCIPAL COM capa.jpg */
 
     .hero {
-      text-align: center;
-      padding: 38px 0;
-    }
-
-    .badge {
-      display: inline-block;
-      border: 1px solid #8b7025;
-      border-radius: 30px;
-      padding: 8px 13px;
-      color: var(--gold);
-      background: #f4c54212;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    h1 {
-      font-size: clamp(32px, 7vw, 55px);
-      line-height: 1.1;
-      margin: 20px 0 15px;
-    }
-
-    h1 span, .gold { color: var(--gold); }
-
-    .hero p {
-      max-width: 680px;
-      margin: auto;
-      line-height: 1.7;
-      color: var(--muted);
-    }
-
-    .panel {
-      background: linear-gradient(145deg, #191919, #101010);
-      border: 1px solid var(--border);
-      border-radius: 17px;
-      padding: 24px;
-      margin-bottom: 22px;
-      box-shadow: 0 12px 35px #0005;
-    }
-
-    .panel h2 { margin-top: 0; }
-
-    .panel p {
-      color: var(--muted);
-      line-height: 1.65;
-    }
-
-    .form {
-      display: grid;
-      gap: 14px;
-      max-width: 460px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 7px;
-      font-size: 14px;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 13px;
-      color: white;
-      background: #080808;
-      border: 1px solid #454545;
-      border-radius: 9px;
-    }
-
-    input:focus, textarea:focus {
-      outline: 1px solid var(--gold);
-      border-color: var(--gold);
-    }
-
-    .button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 13px 17px;
-      border: 0;
-      border-radius: 9px;
-      font-weight: bold;
-      text-align: center;
-      transition: .2s;
-    }
-
-    .button:hover:not(:disabled) {
-      filter: brightness(1.08);
-      transform: translateY(-1px);
-    }
-
-    .button-gold {
-      color: #111;
-      background: linear-gradient(135deg, var(--gold-light), var(--gold));
-    }
-
-    .button-dark {
-      color: white;
-      background: #292929;
-      border: 1px solid #444;
-    }
-
-    .button-green {
-      color: #06150b;
-      background: var(--green);
-    }
-
-    .button-small {
-      padding: 9px 12px;
-      font-size: 13px;
-    }
-
-    .message {
-      margin-top: 14px;
-      padding: 13px;
-      border-radius: 9px;
-      line-height: 1.5;
-      overflow-wrap: anywhere;
-    }
-
-    .message-info {
-      background: #222;
-      border: 1px solid #444;
-      color: #eee;
-    }
-
-    .message-success {
-      background: #37d67a15;
-      border: 1px solid #37d67a80;
-      color: #a8ffc8;
-    }
-
-    .message-error {
-      background: #ff626215;
-      border: 1px solid #ff626280;
-      color: #ffb6b6;
-    }
-
-    .row {
+      position: relative;
+      isolation: isolate;
+      min-height: 480px;
+      padding: 65px 6%;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 30px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(10, 5, 25, 0.96) 0%,
+          rgba(20, 8, 40, 0.82) 43%,
+          rgba(10, 5, 25, 0.18) 100%
+        ),
+        url("capa.jpg") center 35% / cover no-repeat;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      width: min(570px, 100%);
+    }
+
+    .hero-label {
+      display: inline-block;
+      color: var(--gold);
+      background: rgba(12, 5, 25, 0.78);
+      border: 1px solid var(--border);
+      padding: 7px 13px;
+      border-radius: 30px;
+      font-size: 0.83rem;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 6vw, 4.2rem);
+      line-height: 1.05;
+      margin-bottom: 20px;
+      color: white;
+      text-shadow: 0 3px 20px #000;
+    }
+
+    .hero h1 span {
+      color: var(--gold);
+    }
+
+    .hero p {
+      max-width: 520px;
+      color: #f1e8ff;
+      font-size: 1.08rem;
+      margin-bottom: 25px;
+      text-shadow: 0 2px 8px #000;
+    }
+
+    .hero-buttons {
+      display: flex;
       flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* SEÇÕES */
+
+    section {
+      padding: 55px 0;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: clamp(1.7rem, 4vw, 2.5rem);
+      margin-bottom: 12px;
+    }
+
+    .section-title span {
+      color: var(--gold);
+    }
+
+    .section-subtitle {
+      max-width: 700px;
+      text-align: center;
+      color: var(--muted);
+      margin: 0 auto 32px;
+    }
+
+    /* CARDS */
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: linear-gradient(145deg, #241437, #170d26);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.16);
+    }
+
+    .card-icon {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+    }
+
+    .card h3 {
+      color: var(--gold);
+      margin-bottom: 8px;
+      font-size: 1.2rem;
+    }
+
+    .card p {
+      color: var(--muted);
+    }
+
+    /* ÁREA DE LOGIN E CADASTRO */
+
+    .auth-section {
+      max-width: 570px;
+      margin: 0 auto;
+    }
+
+    .auth-card {
+      background: rgba(28, 16, 48, 0.97);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 20px 55px rgba(0, 0, 0, 0.28);
+    }
+
+    .auth-card h2 {
+      color: var(--gold);
+      margin-bottom: 8px;
+      font-size: 1.8rem;
+    }
+
+    .auth-description {
+      color: var(--muted);
+      margin-bottom: 22px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: 700;
+    }
+
+    .form-group input {
+      display: block;
+      width: 100%;
+      padding: 13px 14px;
+      color: white;
+      background: #10091b;
+      border: 1px solid #50376b;
+      border-radius: 9px;
+      outline: none;
+    }
+
+    .form-group input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(255, 209, 102, 0.1);
+    }
+
+    .form-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 15px;
+      font-size: 0.92rem;
+    }
+
+    .text-link {
+      color: var(--gold);
+      background: none;
+      border: none;
+      text-decoration: underline;
+      padding: 0;
+    }
+
+    .status-message {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 9px;
+      background: rgba(139, 69, 255, 0.12);
+      border: 1px solid rgba(139, 69, 255, 0.3);
+      overflow-wrap: anywhere;
+    }
+
+    .status-message:empty {
+      display: none;
+    }
+
+    .status-message.error {
+      color: #ffb1b1;
+      border-color: rgba(255, 114, 114, 0.45);
+    }
+
+    .status-message.success {
+      color: #a7ffc3;
+      border-color: rgba(74, 222, 128, 0.4);
+    }
+
+    /* ÁREA DE PAGAMENTO */
+
+    .payment-section {
+      max-width: 650px;
+      margin: 0 auto;
     }
 
     .price {
+      font-size: 3rem;
       color: var(--gold);
-      font-size: 38px;
       font-weight: 900;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .payment-card {
+      background: linear-gradient(145deg, #291744, #150a25);
+      border: 1px solid var(--gold-dark);
+      border-radius: 18px;
+      padding: 28px;
+      text-align: center;
+    }
+
+    .payment-card h2 {
+      font-size: 1.8rem;
+      color: var(--gold);
+    }
+
+    .payment-description {
+      color: var(--muted);
       margin: 12px 0;
     }
 
-    .price small {
-      font-size: 13px;
+    .payment-note {
+      font-size: 0.9rem;
       color: var(--muted);
-      font-weight: normal;
+      margin-top: 18px;
     }
 
-    .features {
-      padding-left: 20px;
-      line-height: 1.9;
-      color: #eee;
-    }
-
-    .features li::marker { color: var(--gold); }
-
-    .payment-layout {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 22px;
-      margin-top: 22px;
-    }
-
-    .qr-area {
-      text-align: center;
-      padding: 15px;
-      background: #080808;
-      border: 1px solid #333;
+    .pix-box {
+      margin-top: 24px;
+      padding: 20px;
+      background: #fff;
+      color: #17101e;
       border-radius: 12px;
+      overflow-wrap: anywhere;
     }
 
-    .qr-area img {
+    .pix-box img {
       display: block;
-      width: min(280px, 100%);
-      height: auto;
-      margin: 12px auto;
-      background: white;
+      width: min(260px, 100%);
+      margin: 15px auto;
       border-radius: 8px;
     }
 
     .pix-code {
-      min-height: 120px;
+      width: 100%;
+      min-height: 100px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
       resize: vertical;
-      font-size: 12px;
-      line-height: 1.5;
+      font-size: 0.8rem;
+      color: #17101e;
+      background: #fff;
+    }
+
+    .pix-box a {
+      display: inline-block;
+      margin-top: 12px;
+      color: #5a1eb0;
+      font-weight: 700;
       overflow-wrap: anywhere;
-      margin: 8px 0 12px;
     }
 
-    .section-heading {
-      text-align: center;
-      margin: 40px 0 25px;
+    /* EXPERIÊNCIAS */
+
+    .experience-area {
+      margin-top: 30px;
     }
 
-    .section-heading h2 {
-      font-size: clamp(26px, 5vw, 36px);
+    .access-banner {
+      border: 1px solid rgba(74, 222, 128, 0.4);
+      background: rgba(74, 222, 128, 0.08);
+      padding: 18px;
+      border-radius: 12px;
+      margin-bottom: 25px;
     }
 
-    .section-heading p {
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    .games-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 17px;
+    .access-banner h3 {
+      color: var(--success);
+      margin-bottom: 5px;
     }
 
     .game-card {
-      padding: 21px;
-      border: 1px solid #363636;
-      border-radius: 15px;
-      background: linear-gradient(145deg, #191919, #101010);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
-    .game-icon {
-      font-size: 39px;
+    .game-card .btn {
+      margin-top: auto;
+    }
+
+    .game-panel {
+      margin-top: 25px;
+      background: #160c25;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+    }
+
+    .game-panel h3 {
+      color: var(--gold);
       margin-bottom: 12px;
     }
 
-    .game-card h3 { color: var(--gold); }
-
-    .game-card p {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.6;
-      min-height: 62px;
-    }
-
-    .game-card .button { width: 100%; }
-
-    .game-area {
-      margin-top: 24px;
-      padding: 22px;
-      border: 1px solid var(--gold);
-      border-radius: 15px;
-      background: #111;
-    }
-
-    .game-area h3 { color: var(--gold); }
-
-    .game-output {
-      min-height: 90px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 9px;
-      margin: 18px 0;
-      padding: 20px;
-      border: 1px solid #333;
-      border-radius: 11px;
-      background: #080808;
-      text-align: center;
-      font-size: 24px;
+    .game-result {
+      margin-top: 12px;
+      color: var(--gold);
+      font-weight: 700;
       overflow-wrap: anywhere;
     }
 
-    .game-controls {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 9px;
+    .game-input {
+      width: 100%;
+      max-width: 300px;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #60427b;
+      color: white;
+      background: #0c0615;
+      margin: 10px 0;
     }
 
-    .number-button {
-      min-width: 60px;
-      min-height: 55px;
-      border: 1px solid #555;
-      border-radius: 10px;
-      color: white;
-      background: #252525;
-      font-size: 20px;
+    .sequence {
+      font-size: 1.5rem;
+      letter-spacing: 5px;
+      color: var(--gold);
+      margin: 12px 0;
+      overflow-wrap: anywhere;
     }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* RODAPÉ */
 
     footer {
-      border-top: 1px solid #333;
-      padding: 24px 0;
-      color: #999;
-      font-size: 12px;
+      padding: 30px 0;
+      background: rgba(7, 3, 13, 0.85);
+      border-top: 1px solid var(--border);
       text-align: center;
-      line-height: 1.7;
+      color: var(--muted);
     }
 
-    @media (max-width: 600px) {
-      .panel { padding: 18px; }
-      .logo { font-size: 23px; }
+    footer p + p {
+      margin-top: 6px;
     }
-  </style>
-</head>
 
-<body>
-  <header>
-    <div class="container header-content">
-      <div class="logo">ZEUS<span>BET</span> ⚡</div>
-      <div id="headerStatus">Carregando...</div>
-    </div>
-  </header>
+    @media (max-width: 760px) {
+      .navbar {
+        padding: 14px 0;
+        align-items: flex-start;
+        flex-direction: column;
+      }
 
-  <main class="container">
+      .nav-actions {
+        width: 100%;
+      }
 
-    <section class="hero">
-      <span class="badge">Slots • Cassino • Esportes</span>
-      <h1>Desafie sua <span>mente</span></h1>
-      <p>
-        Explore experiências de jogos emocionantes, resgate seus 100$ bônus de boas vindas.
-        Entre na sua conta e desbloqueie o acesso após a confirmação do pagamento.
-      </p>
+      .nav-actions .btn {
+        flex: 1;
+        padding: 10px;
+      }
 
-      
-    </section>
+      .hero {
+        min-height: 480px;
+        padding: 35px 22px;
+        background:
+          linear-gradient(
+            90deg,
+            rgba(10, 5, 25, 0.9),
+            rgba(10, 5, 25, 0.52)
+          ),
+          url("capa.jpg") center 30% / cover no-repeat;
+      }
 
-    <!-- LOGIN E CADASTRO -->
-    <section id="authCard" class="panel">
-      <h2>🔐 Acesse sua conta</h2>
-      <p>
-        Entre ou crie uma conta. Novos usuários precisam confirmar o e-mail
-        antes de solicitar o pagamento.
-      </p>
+      .hero-content {
+        width: 100%;
+      }
 
-      <form id="authForm" class="form">
-        <div>
-          <label for="email">E-mail</label>
-          <input id="email" type="email" autocomplete="email"
-            placeholder="voce@email.com" required>
+      .hero h1 {
+        font-size: 2.45rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 38px 0;
+      }
+
+      .auth-card,
+      .payment-card {
+        padding: 21px;
+      }
+
+      .price {
+        font-size: 2.5rem;
+      }
+    }
+  </style></head><body>  <header>
+    <div class="container navbar">
+      <a class="brand" href="#inicio">ZEUS<span>BET</span> ⚡</a>  <div class="nav-actions">
+    <button class="btn btn-outline" id="navLogin" type="button">
+      Entrar
+    </button>
+
+    <button class="btn btn-gold" id="navRegister" type="button">
+      Criar conta
+    </button>
+
+    <button class="btn btn-outline hidden" id="navLogout" type="button">
+      Sair
+    </button>
+  </div>
+</div>
+
+  </header>  <main>
+    <div class="container">  <section id="inicio">
+    <div class="hero">
+      <div class="hero-content">
+        <span class="hero-label">⚡ DESAFIE SUA MENTE</span>
+
+        <h1>
+          O poder está na sua
+          <span>mente.</span>
+        </h1>
+
+        <p>
+          Descubra experiências de memória, lógica e raciocínio
+          em um universo inspirado na força dos deuses.
+        </p>
+
+        <div class="hero-buttons">
+          <button class="btn btn-gold" id="heroStart" type="button">
+            Começar agora ⚡
+          </button>
+
+          <a class="btn btn-outline" href="#experiencias">
+            Conhecer experiências
+          </a>
         </div>
-
-        <div>
-          <label for="password">Senha</label>
-          <input id="password" type="password" minlength="6"
-            autocomplete="current-password"
-            placeholder="Mínimo de 6 caracteres" required>
-        </div>
-
-        <button id="loginButton" class="button button-gold" type="submit">
-          Entrar
-        </button>
-
-        <button id="signupButton" class="button button-dark" type="button">
-          Criar conta
-        </button>
-
-        <button id="resetPasswordButton" class="button button-dark"
-          type="button">
-          Esqueci minha senha
-        </button>
-      </form>
-
-      <div id="authMessage" class="message message-info" hidden></div>
-    </section>
-
-    <!-- CONTA -->
-    <section id="accountCard" class="panel" hidden>
-      <div class="row">
-        <div>
-          <h2>👤 Sua conta</h2>
-          <p id="accountEmail"></p>
-          <p id="accessLabel">Consultando acesso...</p>
-        </div>
-
-        <button id="logoutButton" class="button button-dark" type="button">
-          Sair da conta
-        </button>
       </div>
+    </div>
+  </section>
 
-      <button id="retryAccessButton" class="button button-dark" type="button">
-        Verificar acesso novamente
-      </button>
+  <section id="sobre">
+    <h2 class="section-title">
+      Entre no universo <span>ZeusBet</span>
+    </h2>
 
-      <div id="accountMessage" class="message message-info" hidden></div>
-    </section>
+    <p class="section-subtitle">
+      Uma proposta de entretenimento com desafios de memória,
+      atenção, lógica e raciocínio. Sem apostas e sem prêmios em dinheiro.
+    </p>
 
-    <!-- PIX -->
-    <section id="paymentCard" class="panel" hidden>
-      <h2>⚡ Desbloqueie o acesso</h2>
-      <p>
-        Pagamento de 20$ para acesso ao bônus, obrigatório rolar pelo menos 40$ antes do saque.
-      </p>
+    <div class="grid">
+      <article class="card">
+        <div class="card-icon">🧠</div>
+        <h3>Desafie a lógica</h3>
+        <p>
+          Resolva problemas e explore diferentes formas de pensar.
+        </p>
+      </article>
 
-      <div class="price">R$ 20,00 <small>pagamento vip</small></div>
+      <article class="card">
+        <div class="card-icon">⚡</div>
+        <h3>Teste a memória</h3>
+        <p>
+          Exercite sua capacidade de lembrar sequências e informações.
+        </p>
+      </article>
 
-      <ul class="features">
-        <li>Slots mais famosos do momento</li>
-        <li>Cassinos online direto de Las Vegas</li>
-        <li>Apostas esportivas do futebol mundial</li>
-        <li>Bônus exclusivo de 100$</li>
-      </ul>
+      <article class="card">
+        <div class="card-icon">🏛️</div>
+        <h3>Explore o Olimpo</h3>
+        <p>
+          Entre em uma experiência visual inspirada na mitologia grega.
+        </p>
+      </article>
+    </div>
+  </section>
 
-      <p>
-        O acesso só será liberado quando o servidor confirmar o pagamento.
-      </p>
+  <!-- LOGIN, CADASTRO E RECUPERAÇÃO -->
 
-      <button id="createPixButton" class="button button-gold" type="button">
-        Gerar pagamento Pix de R$ 20,00
-      </button>
+  <section id="conta">
+    <div class="auth-section">
+      <div class="auth-card" id="authCard">
+        <h2 id="authTitle">Entre no ZeusBet</h2>
 
-      <div id="paymentMessage" class="message message-info" hidden></div>
+        <p class="auth-description" id="authDescription">
+          Entre na sua conta ou crie um cadastro para continuar.
+        </p>
 
-      <div id="pixResult" class="payment-layout" hidden>
-        <div class="qr-area">
-          <h3>Escaneie o QR Code</h3>
-          <img id="pixQrImage" alt="QR Code Pix" hidden>
-          <p id="qrFallback" hidden>
-            A imagem não foi recebida. Se houver um código Pix, utilize
-            a opção Copia e Cola.
-          </p>
+        <form id="authForm">
+          <div class="form-group hidden" id="nameGroup">
+            <label for="name">Nome</label>
+            <input
+              id="name"
+              type="text"
+              autocomplete="name"
+              maxlength="80"
+              placeholder="Seu nome"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="email">E-mail</label>
+            <input
+              id="email"
+              type="email"
+              autocomplete="email"
+              required
+              maxlength="254"
+              placeholder="voce@exemplo.com"
+            >
+          </div>
+
+          <div class="form-group" id="passwordGroup">
+            <label for="password">Senha</label>
+            <input
+              id="password"
+              type="password"
+              autocomplete="current-password"
+              minlength="8"
+              required
+              placeholder="Mínimo de 8 caracteres"
+            >
+          </div>
+
+          <button class="btn btn-gold btn-block" id="authSubmit" type="submit">
+            Entrar
+          </button>
+        </form>
+
+        <div class="form-links">
+          <button class="text-link" id="switchAuth" type="button">
+            Criar uma conta
+          </button>
+
+          <button class="text-link" id="forgotPassword" type="button">
+            Esqueci minha senha
+          </button>
         </div>
 
-        <div>
-          <h3>Pix Copia e Cola</h3>
-          <p>Copie o código e cole no aplicativo do seu banco.</p>
+        <div
+          class="status-message"
+          id="authMessage"
+          role="status"
+          aria-live="polite"
+        ></div>
+      </div>
+    </div>
+  </section>
 
-          <textarea id="pixCode" class="pix-code" readonly
-            aria-label="Código Pix Copia e Cola"></textarea>
+  <!-- STATUS DE ACESSO -->
 
-          <button id="copyPixButton" class="button button-green" type="button">
+  <section id="acesso" class="hidden">
+    <div class="payment-section">
+
+      <div class="payment-card" id="paymentCard">
+        <h2>⚡ Desbloqueie o ZeusBet</h2>
+
+        <p class="payment-description">
+          O pagamento único libera o acesso às quatro experiências
+          demonstrativas desta plataforma.
+        </p>
+
+        <div class="price">R$ 20,00</div>
+
+        <p>
+          Acesso único, sem mensalidade.
+        </p>
+
+        <p class="payment-note">
+          O acesso só será liberado após a confirmação do pagamento
+          pelo servidor. Não feche a página enquanto acompanha o status.
+        </p>
+
+        <button
+          class="btn btn-gold btn-block"
+          id="createPix"
+          type="button"
+          style="margin-top: 22px;"
+        >
+          Gerar Pix
+        </button>
+
+        <div
+          id="paymentMessage"
+          class="status-message"
+          role="status"
+          aria-live="polite"
+        ></div>
+
+        <div id="pixArea" class="pix-box hidden">
+          <h3>Pagamento via Pix</h3>
+
+          <p>
+            Escaneie o QR Code no aplicativo do seu banco ou copie
+            o código Pix abaixo.
+          </p>
+
+          <img
+            id="pixImage"
+            class="hidden"
+            alt="QR Code para pagamento via Pix"
+          >
+
+          <label for="pixCode">
+            Código Pix copia e cola
+          </label>
+
+          <textarea
+            id="pixCode"
+            class="pix-code"
+            readonly
+            rows="5"
+          ></textarea>
+
+          <button
+            class="btn btn-purple btn-block"
+            id="copyPix"
+            type="button"
+            style="margin-top: 12px;"
+          >
             Copiar código Pix
           </button>
 
-          <p id="paymentIdLabel"></p>
+          <a
+            id="ticketLink"
+            class="hidden"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Abrir página de pagamento
+          </a>
 
-          <button id="checkAccessButton" class="button button-dark"
-            type="button">
+          <p class="payment-note" style="color: #4a3b57;">
+            Após pagar, use o botão abaixo para consultar a confirmação.
+          </p>
+
+          <button
+            class="btn btn-gold btn-block"
+            id="checkPayment"
+            type="button"
+            style="margin-top: 12px;"
+          >
             Já paguei — verificar acesso
           </button>
         </div>
       </div>
-    </section>
 
-    <!-- EXPERIÊNCIAS: BLOQUEADAS POR PADRÃO -->
-    <section id="gamesSection" hidden>
-      <div class="section-heading">
-        <span class="badge">Acesso desbloqueado</span>
-        <h2>Suas experiências</h2>
-        <p>Escolha uma atividade demonstrativa.</p>
-      </div>
+      <div
+        class="status-message"
+        id="accessMessage"
+        role="status"
+        aria-live="polite"
+      ></div>
 
-      <div class="games-grid">
-        <article class="game-card">
-          <div class="game-icon">🧠</div>
-          <h3>Memória numérica</h3>
-          <p>Memorize uma sequência de números e repita na ordem correta.</p>
-          <button class="button button-gold" data-game="memory">Jogar</button>
-        </article>
-
-        <article class="game-card">
-          <div class="game-icon">🔎</div>
-          <h3>Atenção visual</h3>
-          <p>Encontre o número diferente entre opções semelhantes.</p>
-          <button class="button button-gold" data-game="attention">Jogar</button>
-        </article>
-
-        <article class="game-card">
-          <div class="game-icon">🔢</div>
-          <h3>Raciocínio lógico</h3>
-          <p>Descubra qual número completa a sequência.</p>
-          <button class="button button-gold" data-game="logic">Jogar</button>
-        </article>
-
-        <article class="game-card">
-          <div class="game-icon">🎯</div>
-          <h3>Memória rápida</h3>
-          <p>Memorize algumas palavras e responda ao desafio.</p>
-          <button class="button button-gold" data-game="words">Jogar</button>
-        </article>
-      </div>
-
-      <section id="gameArea" class="game-area" hidden>
-        <div class="row">
-          <h3 id="gameTitle">Experiência</h3>
-          <button id="closeGameButton" class="button button-dark button-small"
-            type="button">
-            Fechar
-          </button>
-        </div>
-
-        <p id="gameInstructions"></p>
-        <div id="gameOutput" class="game-output"></div>
-        <div id="gameControls" class="game-controls"></div>
-        <div id="gameMessage" class="message message-info" hidden></div>
-      </section>
-    </section>
-
-    <section class="panel">
-      <h2>ℹ️ Sobre o acesso</h2>
-      <p>
-        A confirmação é processada pelo servidor. A geração do QR Code
-        não significa que o pagamento foi aprovado.
-      </p>
-      <p>
-        As experiências são reais, após o primeiro depósito nao será creditado um segundo bônus, os jogos 
-        oferecem ganhos financeiros reais e serão sacados apenas na conta do titutal. 
-      </p>
-    </section>
-
-  </main>
-
-  <footer>
-    <div class="container">
-      ZeusBet — experiências de slots e cassinos ao vivo. 
-      <br>
-      O acesso depende da confirmação do pagamento pelo servidor.
     </div>
-  </footer>
+  </section>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- AS QUATRO EXPERIÊNCIAS: OCULTAS ATÉ CONFIRMAÇÃO DO SERVIDOR -->
 
-  <script>
+  <section id="experiencias" class="hidden">
+    <h2 class="section-title">
+      Suas <span>experiências</span>
+    </h2>
+
+    <p class="section-subtitle">
+      Escolha um desafio e divirta-se exercitando sua mente.
+    </p>
+
+    <div class="experience-area">
+      <div class="access-banner">
+        <h3>✓ Acesso confirmado</h3>
+        <p>
+          Sua conta tem acesso às quatro experiências demonstrativas.
+        </p>
+      </div>
+
+      <div class="grid">
+        <article class="card game-card">
+          <div class="card-icon">🧠</div>
+          <h3>1. Memória Relâmpago</h3>
+          <p>
+            Memorize uma sequência de números e tente reproduzi-la.
+          </p>
+          <button class="btn btn-gold" data-game="memory" type="button">
+            Jogar
+          </button>
+        </article>
+
+        <article class="card game-card">
+          <div class="card-icon">🔢</div>
+          <h3>2. Desafio Matemático</h3>
+          <p>
+            Resolva uma conta para testar seu raciocínio.
+          </p>
+          <button class="btn btn-gold" data-game="math" type="button">
+            Jogar
+          </button>
+        </article>
+
+        <article class="card game-card">
+          <div class="card-icon">🔍</div>
+          <h3>3. Adivinhe o Número</h3>
+          <p>
+            Descubra o número secreto em suas tentativas.
+          </p>
+          <button class="btn btn-gold" data-game="guess" type="button">
+            Jogar
+          </button>
+        </article>
+
+        <article class="card game-card">
+          <div class="card-icon">🧩</div>
+          <h3>4. Sequência Lógica</h3>
+          <p>
+            Observe o padrão e descubra o próximo número.
+          </p>
+          <button class="btn btn-gold" data-game="logic" type="button">
+            Jogar
+          </button>
+        </article>
+      </div>
+
+      <div class="game-panel hidden" id="gamePanel">
+        <h3 id="gameTitle">Experiência</h3>
+        <div id="gameContent"></div>
+
+        <button
+          class="btn btn-outline"
+          id="closeGame"
+          type="button"
+          style="margin-top: 20px;"
+        >
+          Fechar experiência
+        </button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+  </main>  <footer>
+    <div class="container">
+      <p><strong>ZEUSBET ⚡</strong></p>  <p>
+    Experiências demonstrativas de memória, lógica e raciocínio.
+  </p>
+
+  <p>
+    Sem apostas e sem prêmios em dinheiro.
+  </p>
+
+  <p>
+    © <span id="year"></span> ZeusBet. Todos os direitos reservados.
+  </p>
+</div>
+
+  </footer>  <script>
     "use strict";
 
-    // ---------------------------------------------------------
-    // SUPABASE
-    // Utilize somente a chave pública neste arquivo.
-    // Nunca coloque a service_role ou o token do Mercado Pago aqui.
-    // ---------------------------------------------------------
+    // =========================================================
+    // CONFIGURAÇÃO SUPABASE
+    // =========================================================
 
     const SUPABASE_URL =
       "https://gtgjxojobbljrvwppfzi.supabase.co";
@@ -622,957 +959,1070 @@
       SUPABASE_PUBLISHABLE_KEY
     );
 
-    const $ = id => document.getElementById(id);
+    // =========================================================
+    // ELEMENTOS DA PÁGINA
+    // =========================================================
 
+    const $ = (id) => document.getElementById(id);
+
+    const authCard = $("authCard");
+    const authForm = $("authForm");
+    const authTitle = $("authTitle");
+    const authDescription = $("authDescription");
+    const authSubmit = $("authSubmit");
+    const authMessage = $("authMessage");
+    const nameGroup = $("nameGroup");
+    const passwordGroup = $("passwordGroup");
+    const passwordInput = $("password");
+    const switchAuth = $("switchAuth");
+    const forgotPassword = $("forgotPassword");
+
+    const accessSection = $("acesso");
+    const paymentCard = $("paymentCard");
+    const paymentMessage = $("paymentMessage");
+    const accessMessage = $("accessMessage");
+    const createPixButton = $("createPix");
+    const pixArea = $("pixArea");
+    const pixImage = $("pixImage");
+    const pixCode = $("pixCode");
+    const ticketLink = $("ticketLink");
+    const checkPaymentButton = $("checkPayment");
+
+    const experiencesSection = $("experiencias");
+    const gamePanel = $("gamePanel");
+    const gameTitle = $("gameTitle");
+    const gameContent = $("gameContent");
+
+    let authMode = "login";
     let currentUser = null;
     let hasLifetimeAccess = false;
-    let paymentInProgress = false;
-    let currentGame = null;
-    let gameTimer = null;
+    let paymentRequestInProgress = false;
+    let accessCheckInProgress = false;
 
-    function showMessage(id, message, type = "info") {
-      const el = $(id);
-      el.textContent = message;
-      el.className = "message message-" + type;
-      el.hidden = false;
-    }
+    let secretNumber = null;
+    let secretSequence = "";
+    let logicAnswer = null;
 
-    function hideMessage(id) {
-      $(id).hidden = true;
-      $(id).textContent = "";
-    }
+    $("year").textContent = new Date().getFullYear();
 
-    function setLoading(button, loading, label = "Aguarde...") {
-      if (loading) {
-        if (!button.dataset.originalText) {
-          button.dataset.originalText = button.textContent;
-        }
-        button.disabled = true;
-        button.textContent = label;
-      } else {
-        button.disabled = false;
-        button.textContent =
-          button.dataset.originalText || button.textContent;
-        delete button.dataset.originalText;
+    // =========================================================
+    // MENSAGENS
+    // =========================================================
+
+    function setMessage(element, message, type = "") {
+      element.textContent = message;
+      element.className = "status-message";
+
+      if (type) {
+        element.classList.add(type);
       }
     }
 
-    async function readApiResponse(response) {
-      const text = await response.text();
-      let data = {};
-
-      try {
-        data = text ? JSON.parse(text) : {};
-      } catch (_) {}
-
-      if (!response.ok) {
-        const error = new Error(
-          data.error ||
-          data.message ||
-          "Erro HTTP " + response.status + " recebido do servidor."
-        );
-        error.status = response.status;
-        throw error;
-      }
-
-      return data;
+    function clearMessage(element) {
+      element.textContent = "";
+      element.className = "status-message";
     }
 
-    // ---------------------------------------------------------
-    // INTERFACE SEM LOGIN
-    // ---------------------------------------------------------
-
-    function updateSignedOutInterface() {
-      currentUser = null;
-      hasLifetimeAccess = false;
-
-      $("headerStatus").textContent = "Entre para continuar";
-      $("authCard").hidden = false;
-      $("accountCard").hidden = true;
-      $("paymentCard").hidden = true;
-      $("gamesSection").hidden = true;
-      $("gameArea").hidden = true;
-      $("pixResult").hidden = true;
-
-      hideMessage("authMessage");
-      hideMessage("accountMessage");
-      hideMessage("paymentMessage");
-
-      clearTimeout(gameTimer);
-      currentGame = null;
+    function setButtonLoading(button, loading, loadingText, normalText) {
+      button.disabled = loading;
+      button.textContent = loading ? loadingText : normalText;
     }
 
-    // ---------------------------------------------------------
-    // VERIFICAR ACESSO
-    // Não fica carregando indefinidamente.
-    // Em caso de falha, exibe a área Pix, mas mantém os jogos
-    // bloqueados até a confirmação verdadeira do servidor.
-    // ---------------------------------------------------------
-
-    async function refreshAccessStatus() {
-      const {
-        data: { session },
-        error: sessionError
-      } = await supabaseClient.auth.getSession();
-
-      if (sessionError) throw sessionError;
-
-      if (!session || !session.user) {
-        updateSignedOutInterface();
-        return;
-      }
-
-      currentUser = session.user;
-
-      $("headerStatus").textContent = currentUser.email || "Conta conectada";
-      $("authCard").hidden = true;
-      $("accountCard").hidden = false;
-      $("accountEmail").textContent = currentUser.email || "";
-      $("accessLabel").textContent = "Consultando acesso...";
-
-      $("paymentCard").hidden = true;
-      $("gamesSection").hidden = true;
-      $("gameArea").hidden = true;
-
-      hideMessage("accountMessage");
-
+    async function fetchWithTimeout(url, options = {}, timeout = 15000) {
       const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 12000);
+
+      const timer = setTimeout(() => {
+        controller.abort();
+      }, timeout);
 
       try {
-        const response = await fetch("/api/access-status", {
-          method: "GET",
-          headers: {
-            "Authorization": "Bearer " + session.access_token,
-            "Accept": "application/json"
-          },
-          cache: "no-store",
+        return await fetch(url, {
+          ...options,
           signal: controller.signal
         });
-
-        const result = await readApiResponse(response);
-
-        hasLifetimeAccess = result.hasLifetimeAccess === true;
-
-        $("paymentCard").hidden = hasLifetimeAccess;
-        $("gamesSection").hidden = !hasLifetimeAccess;
-
-        if (hasLifetimeAccess) {
-          $("accessLabel").textContent = "✓ Acesso vitalício confirmado";
-          $("headerStatus").textContent = "Acesso vitalício ativo";
-          $("paymentCard").hidden = true;
-          $("gamesSection").hidden = false;
-          hideMessage("accountMessage");
-        } else {
-          $("accessLabel").textContent = "Acesso ainda não desbloqueado";
-          $("headerStatus").textContent = "Aguardando pagamento";
-          $("paymentCard").hidden = false;
-          $("gamesSection").hidden = true;
-
-          showMessage(
-            "accountMessage",
-            "Conta conectada. Você pode solicitar o Pix abaixo.",
-            "info"
-          );
-        }
-      } catch (error) {
-        console.error("Erro ao verificar acesso:", error);
-
-        hasLifetimeAccess = false;
-
-        $("accessLabel").textContent = "Não foi possível confirmar o acesso";
-        $("headerStatus").textContent = "Verificação indisponível";
-        $("paymentCard").hidden = false;
-        $("gamesSection").hidden = true;
-        $("gameArea").hidden = true;
-
-        showMessage(
-          "accountMessage",
-          error.name === "AbortError"
-            ? "A verificação demorou mais que 12 segundos. A área Pix está disponível abaixo. Você também pode tentar verificar novamente."
-            : "Não foi possível consultar o acesso no servidor. A área Pix está disponível abaixo, mas as experiências continuam bloqueadas.",
-          "error"
-        );
       } finally {
         clearTimeout(timer);
       }
     }
 
-    // ---------------------------------------------------------
-    // LOGIN
-    // ---------------------------------------------------------
+    async function readJsonResponse(response) {
+      const text = await response.text();
 
-    $("authForm").addEventListener("submit", async event => {
+      let data = {};
+
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch {
+        throw new Error(
+          "O servidor retornou uma resposta inválida. Verifique a API no Vercel."
+        );
+      }
+
+      if (!response.ok) {
+        throw new Error(
+          data.error ||
+          data.message ||
+          "Não foi possível concluir a solicitação."
+        );
+      }
+
+      return data;
+    }
+
+    // =========================================================
+    // NAVEGAÇÃO
+    // =========================================================
+
+    function scrollToSection(id) {
+      $(id).scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+
+    $("navLogin").addEventListener("click", () => {
+      if (!currentUser) {
+        setAuthMode("login");
+        scrollToSection("conta");
+      } else {
+        scrollToSection("acesso");
+      }
+    });
+
+    $("navRegister").addEventListener("click", () => {
+      if (!currentUser) {
+        setAuthMode("register");
+        scrollToSection("conta");
+      } else {
+        scrollToSection("acesso");
+      }
+    });
+
+    $("heroStart").addEventListener("click", async () => {
+      if (!currentUser) {
+        setAuthMode("register");
+        scrollToSection("conta");
+      } else {
+        scrollToSection("acesso");
+        await refreshAccessStatus();
+      }
+    });
+
+    // =========================================================
+    // LOGIN, CADASTRO E RECUPERAÇÃO DE SENHA
+    // =========================================================
+
+    function setAuthMode(mode) {
+      authMode = mode;
+      clearMessage(authMessage);
+
+      authForm.reset();
+
+      if (mode === "login") {
+        authTitle.textContent = "Entre no ZeusBet";
+
+        authDescription.textContent =
+          "Acesse sua conta para consultar seu acesso.";
+
+        authSubmit.textContent = "Entrar";
+        switchAuth.textContent = "Criar uma conta";
+        forgotPassword.classList.remove("hidden");
+
+        nameGroup.classList.add("hidden");
+        passwordGroup.classList.remove("hidden");
+
+        passwordInput.required = true;
+        passwordInput.autocomplete = "current-password";
+      }
+
+      if (mode === "register") {
+        authTitle.textContent = "Criar minha conta";
+
+        authDescription.textContent =
+          "Preencha os dados para se cadastrar.";
+
+        authSubmit.textContent = "Criar conta";
+        switchAuth.textContent = "Já tenho uma conta";
+        forgotPassword.classList.remove("hidden");
+
+        nameGroup.classList.remove("hidden");
+        passwordGroup.classList.remove("hidden");
+
+        passwordInput.required = true;
+        passwordInput.autocomplete = "new-password";
+      }
+
+      if (mode === "reset") {
+        authTitle.textContent = "Recuperar senha";
+
+        authDescription.textContent =
+          "Informe seu e-mail para receber as instruções de recuperação.";
+
+        authSubmit.textContent = "Enviar instruções";
+        switchAuth.textContent = "Voltar ao login";
+        forgotPassword.classList.add("hidden");
+
+        nameGroup.classList.add("hidden");
+        passwordGroup.classList.add("hidden");
+
+        passwordInput.required = false;
+      }
+    }
+
+    switchAuth.addEventListener("click", () => {
+      if (authMode === "login") {
+        setAuthMode("register");
+      } else {
+        setAuthMode("login");
+      }
+    });
+
+    forgotPassword.addEventListener("click", () => {
+      setAuthMode("reset");
+    });
+
+    authForm.addEventListener("submit", async (event) => {
       event.preventDefault();
 
-      const button = $("loginButton");
-      setLoading(button, true, "Entrando...");
-      hideMessage("authMessage");
+      clearMessage(authMessage);
 
-      try {
-        const { error } = await supabaseClient.auth.signInWithPassword({
-          email: $("email").value.trim(),
-          password: $("password").value
-        });
-
-        if (error) throw error;
-
-        await refreshAccessStatus();
-      } catch (error) {
-        showMessage(
-          "authMessage",
-          error.message || "Não foi possível entrar.",
-          "error"
-        );
-      } finally {
-        setLoading(button, false);
-      }
-    });
-
-    // ---------------------------------------------------------
-    // CADASTRO
-    // ---------------------------------------------------------
-
-    $("signupButton").addEventListener("click", async () => {
       const email = $("email").value.trim();
-      const password = $("password").value;
+      const password = passwordInput.value;
+      const name = $("name").value.trim();
 
-      if (!email || !password) {
-        showMessage(
-          "authMessage",
-          "Informe o e-mail e a senha.",
-          "error"
-        );
-        return;
-      }
-
-      if (password.length < 6) {
-        showMessage(
-          "authMessage",
-          "A senha deve ter pelo menos 6 caracteres.",
-          "error"
-        );
-        return;
-      }
-
-      const button = $("signupButton");
-      setLoading(button, true, "Criando conta...");
+      setButtonLoading(
+        authSubmit,
+        true,
+        "Aguarde...",
+        authMode === "login"
+          ? "Entrar"
+          : authMode === "register"
+            ? "Criar conta"
+            : "Enviar instruções"
+      );
 
       try {
-        const { data, error } = await supabaseClient.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: window.location.origin
+        if (authMode === "register") {
+          if (password.length < 8) {
+            throw new Error(
+              "A senha precisa ter pelo menos 8 caracteres."
+            );
           }
-        });
 
-        if (error) throw error;
+          if (!name) {
+            throw new Error("Informe seu nome.");
+          }
 
-        if (data.session) {
+          const { data, error } =
+            await supabaseClient.auth.signUp({
+              email,
+              password,
+              options: {
+                data: {
+                  full_name: name
+                }
+              }
+            });
+
+          if (error) {
+            throw error;
+          }
+
+          if (data.session) {
+            currentUser = data.user;
+            setMessage(
+              authMessage,
+              "Cadastro realizado! Verificando seu acesso...",
+              "success"
+            );
+
+            await refreshAccessStatus();
+          } else {
+            setMessage(
+              authMessage,
+              "Cadastro iniciado. Confira seu e-mail para confirmar a conta e depois entre no ZeusBet.",
+              "success"
+            );
+
+            setAuthMode("login");
+          }
+
+          return;
+        }
+
+        if (authMode === "login") {
+          const { data, error } =
+            await supabaseClient.auth.signInWithPassword({
+              email,
+              password
+            });
+
+          if (error) {
+            throw error;
+          }
+
+          currentUser = data.user;
+
+          setMessage(
+            authMessage,
+            "Login realizado. Verificando seu acesso...",
+            "success"
+          );
+
           await refreshAccessStatus();
-          showMessage(
-            "accountMessage",
-            "Conta criada. Confira seu e-mail para confirmar o cadastro.",
+          return;
+        }
+
+        if (authMode === "reset") {
+          const { error } =
+            await supabaseClient.auth.resetPasswordForEmail(email, {
+              redirectTo: window.location.origin
+            });
+
+          if (error) {
+            throw error;
+          }
+
+          setMessage(
+            authMessage,
+            "Se o e-mail estiver cadastrado, você receberá as instruções de recuperação. Verifique também a pasta de spam.",
             "success"
           );
+        }
+      } catch (error) {
+        setMessage(
+          authMessage,
+          error.message || "Ocorreu um erro. Tente novamente.",
+          "error"
+        );
+      } finally {
+        authSubmit.disabled = false;
+
+        if (authMode === "login") {
+          authSubmit.textContent = "Entrar";
+        } else if (authMode === "register") {
+          authSubmit.textContent = "Criar conta";
         } else {
-          showMessage(
-            "authMessage",
-            "Cadastro iniciado. Confirme seu e-mail e depois entre na sua conta.",
+          authSubmit.textContent = "Enviar instruções";
+        }
+      }
+    });
+
+    // =========================================================
+    // ESTADO VISUAL DO USUÁRIO
+    // =========================================================
+
+    function updateHeader() {
+      $("navLogin").classList.toggle("hidden", Boolean(currentUser));
+      $("navRegister").classList.toggle("hidden", Boolean(currentUser));
+      $("navLogout").classList.toggle("hidden", !currentUser);
+    }
+
+    function hideProtectedAreas() {
+      experiencesSection.classList.add("hidden");
+      gamePanel.classList.add("hidden");
+    }
+
+    function showPaymentArea() {
+      accessSection.classList.remove("hidden");
+      paymentCard.classList.remove("hidden");
+      experiencesSection.classList.add("hidden");
+      gamePanel.classList.add("hidden");
+    }
+
+    function showExperiences() {
+      accessSection.classList.add("hidden");
+      experiencesSection.classList.remove("hidden");
+      gamePanel.classList.add("hidden");
+    }
+
+    async function getSession() {
+      const { data, error } = await supabaseClient.auth.getSession();
+
+      if (error) {
+        throw error;
+      }
+
+      return data.session;
+    }
+
+    // =========================================================
+    // VERIFICAÇÃO DE ACESSO NO SERVIDOR
+    // =========================================================
+
+    async function refreshAccessStatus() {
+      if (accessCheckInProgress) {
+        return;
+      }
+
+      accessCheckInProgress = true;
+
+      hideProtectedAreas();
+      clearMessage(accessMessage);
+
+      try {
+        const session = await getSession();
+
+        if (!session) {
+          currentUser = null;
+          hasLifetimeAccess = false;
+
+          updateHeader();
+          accessSection.classList.add("hidden");
+
+          setAuthMode("login");
+
+          setMessage(
+            authMessage,
+            "Entre na sua conta para continuar.",
+            ""
+          );
+
+          return;
+        }
+
+        currentUser = session.user;
+        updateHeader();
+
+        accessSection.classList.remove("hidden");
+        paymentCard.classList.remove("hidden");
+
+        setMessage(
+          accessMessage,
+          "Verificando seu acesso no servidor..."
+        );
+
+        const response = await fetchWithTimeout(
+          "/api/access-status",
+          {
+            method: "GET",
+            headers: {
+              "Authorization": "Bearer " + session.access_token,
+              "Accept": "application/json"
+            },
+            cache: "no-store"
+          },
+          15000
+        );
+
+        const result = await readJsonResponse(response);
+
+        if (result.authenticated !== true) {
+          throw new Error(
+            "Não foi possível confirmar sua autenticação. Entre novamente."
+          );
+        }
+
+        hasLifetimeAccess = result.hasLifetimeAccess === true;
+
+        if (hasLifetimeAccess) {
+          paymentCard.classList.add("hidden");
+          accessSection.classList.add("hidden");
+          experiencesSection.classList.remove("hidden");
+
+          setMessage(
+            authMessage,
+            "Acesso confirmado! Suas experiências estão disponíveis.",
             "success"
+          );
+
+          clearMessage(accessMessage);
+        } else {
+          showPaymentArea();
+
+          setMessage(
+            accessMessage,
+            "Sua conta está autenticada, mas o servidor ainda não confirmou o acesso. Se você já pagou, aguarde a confirmação e consulte novamente."
           );
         }
       } catch (error) {
-        showMessage(
-          "authMessage",
-          error.message || "Não foi possível criar a conta.",
+        hasLifetimeAccess = false;
+        showPaymentArea();
+
+        setMessage(
+          accessMessage,
+          error.name === "AbortError"
+            ? "A verificação demorou demais. Confira sua conexão e tente novamente."
+            : (
+                error.message ||
+                "Não foi possível verificar o acesso. Tente novamente."
+              ),
           "error"
         );
       } finally {
-        setLoading(button, false);
+        accessCheckInProgress = false;
       }
-    });
+    }
 
-    // ---------------------------------------------------------
-    // RECUPERAR SENHA
-    // ---------------------------------------------------------
+    // =========================================================
+    // GERAR PIX PELA API DO SERVIDOR
+    // =========================================================
 
-    $("resetPasswordButton").addEventListener("click", async () => {
-      const email = $("email").value.trim();
-
-      if (!email) {
-        showMessage(
-          "authMessage",
-          "Digite seu e-mail antes de solicitar a recuperação.",
-          "error"
-        );
+    createPixButton.addEventListener("click", async () => {
+      if (paymentRequestInProgress) {
         return;
       }
 
-      const button = $("resetPasswordButton");
-      setLoading(button, true, "Enviando...");
+      paymentRequestInProgress = true;
+
+      clearMessage(paymentMessage);
+
+      setButtonLoading(
+        createPixButton,
+        true,
+        "Gerando Pix...",
+        "Gerar Pix"
+      );
 
       try {
-        const { error } =
-          await supabaseClient.auth.resetPasswordForEmail(email, {
-            redirectTo: window.location.origin
-          });
+        const session = await getSession();
 
-        if (error) throw error;
-
-        showMessage(
-          "authMessage",
-          "Se o endereço estiver cadastrado, você receberá as instruções de recuperação. Confira também o spam.",
-          "success"
-        );
-      } catch (error) {
-        showMessage(
-          "authMessage",
-          error.message || "Não foi possível solicitar a recuperação.",
-          "error"
-        );
-      } finally {
-        setLoading(button, false);
-      }
-    });
-
-    // ---------------------------------------------------------
-    // SAIR
-    // ---------------------------------------------------------
-
-    $("logoutButton").addEventListener("click", async () => {
-      const button = $("logoutButton");
-      setLoading(button, true, "Saindo...");
-
-      try {
-        const { error } = await supabaseClient.auth.signOut();
-        if (error) throw error;
-
-        updateSignedOutInterface();
-      } catch (error) {
-        showMessage(
-          "accountMessage",
-          error.message || "Não foi possível sair.",
-          "error"
-        );
-      } finally {
-        setLoading(button, false);
-      }
-    });
-
-    // ---------------------------------------------------------
-    // TENTAR VERIFICAR ACESSO NOVAMENTE
-    // ---------------------------------------------------------
-
-    $("retryAccessButton").addEventListener("click", async () => {
-      const button = $("retryAccessButton");
-      setLoading(button, true, "Verificando...");
-
-      try {
-        await refreshAccessStatus();
-      } finally {
-        setLoading(button, false);
-      }
-    });
-
-    // ---------------------------------------------------------
-    // GERAR PIX
-    // ---------------------------------------------------------
-
-    $("createPixButton").addEventListener("click", async () => {
-      if (paymentInProgress) return;
-
-      if (!currentUser) {
-        showMessage(
-          "paymentMessage",
-          "Entre na sua conta antes de solicitar o Pix.",
-          "error"
-        );
-        return;
-      }
-
-      if (hasLifetimeAccess) {
-        showMessage(
-          "paymentMessage",
-          "Sua conta já possui acesso vitalício.",
-          "success"
-        );
-        return;
-      }
-
-      paymentInProgress = true;
-
-      const button = $("createPixButton");
-      setLoading(button, true, "Preparando Pix...");
-
-      $("pixResult").hidden = true;
-      $("pixQrImage").hidden = true;
-      $("pixQrImage").removeAttribute("src");
-      $("pixCode").value = "";
-      $("paymentIdLabel").textContent = "";
-      $("qrFallback").hidden = true;
-
-      hideMessage("paymentMessage");
-
-      try {
-        const {
-          data: { session },
-          error: sessionError
-        } = await supabaseClient.auth.getSession();
-
-        if (sessionError) throw sessionError;
-
-        if (!session || !session.access_token) {
-          throw new Error("Sua sessão expirou. Entre novamente.");
+        if (!session) {
+          throw new Error(
+            "Sua sessão expirou. Entre novamente antes de gerar o Pix."
+          );
         }
 
-        const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), 20000);
-
-        let response;
-
-        try {
-          response = await fetch("/api/create-payment", {
+        const response = await fetchWithTimeout(
+          "/api/create-payment",
+          {
             method: "POST",
             headers: {
               "Authorization": "Bearer " + session.access_token,
               "Content-Type": "application/json",
               "Accept": "application/json"
             },
-            body: JSON.stringify({}),
-            cache: "no-store",
-            signal: controller.signal
-          });
-        } finally {
-          clearTimeout(timer);
-        }
+            body: JSON.stringify({})
+          },
+          25000
+        );
 
-        const result = await readApiResponse(response);
+        const result = await readJsonResponse(response);
 
-        if (
-          typeof result.qr_code !== "string" ||
-          !result.qr_code.trim()
-        ) {
+        if (!result.qr_code && !result.qr_code_base64) {
           throw new Error(
-            "O servidor não retornou o código Pix. Verifique os logs de api/create-payment no Vercel."
+            "A API não retornou os dados do Pix. Confira os registros do Vercel."
           );
         }
 
-        $("pixCode").value = result.qr_code;
-
-        if (result.payment_id) {
-          $("paymentIdLabel").textContent =
-            "Identificador do pagamento: " + result.payment_id;
-        }
+        pixArea.classList.remove("hidden");
 
         if (result.qr_code_base64) {
-          $("pixQrImage").src =
-            "data:image/png;base64," + result.qr_code_base64;
+          pixImage.src = result.qr_code_base64.startsWith("data:")
+            ? result.qr_code_base64
+            : "data:image/png;base64," + result.qr_code_base64;
 
-          $("pixQrImage").hidden = false;
-          $("qrFallback").hidden = true;
-
-          $("pixQrImage").onerror = () => {
-            $("pixQrImage").hidden = true;
-            $("qrFallback").hidden = false;
-          };
+          pixImage.classList.remove("hidden");
         } else {
-          $("pixQrImage").hidden = true;
-          $("qrFallback").hidden = false;
+          pixImage.removeAttribute("src");
+          pixImage.classList.add("hidden");
         }
 
-        $("pixResult").hidden = false;
+        pixCode.value = result.qr_code || "";
 
-        showMessage(
-          "paymentMessage",
-          "Pix gerado. Antes de pagar, confira o valor e o destinatário no aplicativo do banco.",
-          "success"
+        if (result.ticket_url) {
+          ticketLink.href = result.ticket_url;
+          ticketLink.classList.remove("hidden");
+        } else {
+          ticketLink.removeAttribute("href");
+          ticketLink.classList.add("hidden");
+        }
+
+        setMessage(
+          paymentMessage,
+          "Pix gerado. Conclua o pagamento e depois consulte a confirmação."
         );
+
+        pixArea.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
       } catch (error) {
-        console.error("Erro ao gerar Pix:", error);
-
-        let message = error.message ||
-          "Não foi possível gerar o Pix.";
-
-        if (error.name === "AbortError") {
-          message =
-            "A solicitação demorou demais. Verifique os logs de api/create-payment no Vercel e tente novamente.";
-        } else if (error.status === 401) {
-          message =
-            "Sessão inválida ou expirada. Saia e entre novamente.";
-        } else if (error.status === 403) {
-          message =
-            "Confirme seu e-mail antes de solicitar o Pix.";
-        } else if (error.status === 409) {
-          message =
-            "O servidor informou que sua conta já possui acesso vitalício.";
-        } else if (error.status >= 500) {
-          message =
-            "A API encontrou um erro no servidor. Verifique as variáveis de ambiente e os logs de api/create-payment no Vercel.";
-        }
-
-        showMessage("paymentMessage", message, "error");
+        setMessage(
+          paymentMessage,
+          error.name === "AbortError"
+            ? "A solicitação demorou demais. Verifique se a API está funcionando no Vercel e tente novamente."
+            : (
+                error.message ||
+                "Não foi possível gerar o Pix. Tente novamente."
+              ),
+          "error"
+        );
       } finally {
-        paymentInProgress = false;
-        setLoading(button, false);
+        paymentRequestInProgress = false;
+
+        setButtonLoading(
+          createPixButton,
+          false,
+          "Gerando Pix...",
+          "Gerar Pix"
+        );
       }
     });
 
-    // ---------------------------------------------------------
-    // COPIAR CÓDIGO PIX
-    // ---------------------------------------------------------
+    // =========================================================
+    // COPIAR PIX
+    // =========================================================
 
-    $("copyPixButton").addEventListener("click", async () => {
-      const code = $("pixCode").value.trim();
+    $("copyPix").addEventListener("click", async () => {
+      const code = pixCode.value.trim();
 
       if (!code) {
-        showMessage(
-          "paymentMessage",
+        setMessage(
+          paymentMessage,
           "Não há código Pix para copiar.",
           "error"
         );
+
         return;
       }
 
       try {
         await navigator.clipboard.writeText(code);
 
-        showMessage(
-          "paymentMessage",
-          "Código copiado. Confira os dados no aplicativo do banco antes de pagar.",
+        setMessage(
+          paymentMessage,
+          "Código Pix copiado. Abra seu aplicativo bancário para realizar o pagamento.",
           "success"
         );
-      } catch (_) {
-        $("pixCode").focus();
-        $("pixCode").select();
+      } catch {
+        pixCode.focus();
+        pixCode.select();
 
-        showMessage(
-          "paymentMessage",
-          "Copie manualmente o código que está selecionado.",
-          "info"
+        const copied = document.execCommand("copy");
+
+        setMessage(
+          paymentMessage,
+          copied
+            ? "Código Pix copiado."
+            : "Selecione e copie manualmente o código Pix.",
+          copied ? "success" : "error"
         );
       }
     });
 
-    // ---------------------------------------------------------
-    // VERIFICAR PAGAMENTO
-    // ---------------------------------------------------------
+    // =========================================================
+    // CONSULTAR CONFIRMAÇÃO DO PAGAMENTO
+    // =========================================================
 
-    $("checkAccessButton").addEventListener("click", async () => {
-      const button = $("checkAccessButton");
-      setLoading(button, true, "Verificando...");
+    checkPaymentButton.addEventListener("click", async () => {
+      setButtonLoading(
+        checkPaymentButton,
+        true,
+        "Verificando...",
+        "Já paguei — verificar acesso"
+      );
 
       try {
         await refreshAccessStatus();
-
-        if (hasLifetimeAccess) {
-          $("pixResult").hidden = true;
-
-          showMessage(
-            "accountMessage",
-            "Acesso vitalício confirmado pelo servidor!",
-            "success"
-          );
-        } else {
-          showMessage(
-            "paymentMessage",
-            "O acesso ainda não foi confirmado. Aguarde o processamento do pagamento e tente novamente.",
-            "info"
-          );
-        }
-      } catch (error) {
-        showMessage(
-          "paymentMessage",
-          error.message || "Não foi possível verificar o pagamento.",
-          "error"
-        );
       } finally {
-        setLoading(button, false);
+        setButtonLoading(
+          checkPaymentButton,
+          false,
+          "Verificando...",
+          "Já paguei — verificar acesso"
+        );
       }
     });
 
-    // ---------------------------------------------------------
-    // FERRAMENTAS DOS JOGOS
-    // ---------------------------------------------------------
+    // =========================================================
+    // SAIR DA CONTA
+    // =========================================================
 
-    function gameMessage(message, type = "info") {
-      showMessage("gameMessage", message, type);
+    $("navLogout").addEventListener("click", async () => {
+      try {
+        const { error } = await supabaseClient.auth.signOut();
+
+        if (error) {
+          throw error;
+        }
+
+        currentUser = null;
+        hasLifetimeAccess = false;
+
+        updateHeader();
+        accessSection.classList.add("hidden");
+        hideProtectedAreas();
+
+        pixArea.classList.add("hidden");
+        pixCode.value = "";
+        pixImage.removeAttribute("src");
+
+        setAuthMode("login");
+
+        setMessage(
+          authMessage,
+          "Você saiu da sua conta.",
+          "success"
+        );
+
+        scrollToSection("conta");
+      } catch (error) {
+        setMessage(
+          authMessage,
+          error.message || "Não foi possível sair da conta.",
+          "error"
+        );
+      }
+    });
+
+    // =========================================================
+    // CONTROLE DAS QUATRO EXPERIÊNCIAS
+    // =========================================================
+
+    function requireAccess() {
+      if (!currentUser || !hasLifetimeAccess) {
+        hideProtectedAreas();
+
+        setMessage(
+          accessMessage,
+          "O servidor ainda não confirmou seu acesso. Consulte o status antes de abrir uma experiência.",
+          "error"
+        );
+
+        showPaymentArea();
+        return false;
+      }
+
+      return true;
     }
 
-    function makeButton(text, action, className = "button button-gold") {
+    function renderGameButton(text, onClick) {
       const button = document.createElement("button");
+
       button.type = "button";
-      button.className = className;
+      button.className = "btn btn-gold";
       button.textContent = text;
-      button.addEventListener("click", action);
+      button.addEventListener("click", onClick);
+
       return button;
     }
 
-    function clearGame() {
-      clearTimeout(gameTimer);
-      $("gameArea").hidden = true;
-      $("gameOutput").replaceChildren();
-      $("gameControls").replaceChildren();
-      hideMessage("gameMessage");
-      currentGame = null;
-    }
-
-    function startGame(name) {
-      if (!currentUser || !hasLifetimeAccess) {
-        $("gamesSection").hidden = true;
-        $("gameArea").hidden = true;
-
-        showMessage(
-          "paymentMessage",
-          "O servidor precisa confirmar o acesso antes de abrir uma experiência.",
-          "error"
-        );
+    function startGame(game) {
+      if (!requireAccess()) {
         return;
       }
 
-      clearGame();
+      gamePanel.classList.remove("hidden");
+      gameContent.replaceChildren();
 
-      currentGame = name;
-      $("gameArea").hidden = false;
+      if (game === "memory") {
+        startMemoryGame();
+      } else if (game === "math") {
+        startMathGame();
+      } else if (game === "guess") {
+        startGuessGame();
+      } else if (game === "logic") {
+        startLogicGame();
+      }
 
-      if (name === "memory") startMemoryGame();
-      if (name === "attention") startAttentionGame();
-      if (name === "logic") startLogicGame();
-      if (name === "words") startWordsGame();
-
-      $("gameArea").scrollIntoView({
+      gamePanel.scrollIntoView({
         behavior: "smooth",
         block: "start"
       });
     }
 
-    // JOGO 1: MEMÓRIA NUMÉRICA
-
-    function startMemoryGame() {
-      $("gameTitle").textContent = "🧠 Memória numérica";
-      $("gameInstructions").textContent =
-        "Memorize os números e depois repita a sequência na ordem correta.";
-
-      $("gameOutput").textContent =
-        "Prepare-se para observar a sequência.";
-
-      $("gameControls").replaceChildren(
-        makeButton("Começar desafio", showSequence)
-      );
-
-      hideMessage("gameMessage");
-
-      function showSequence() {
-        const sequence = Array.from(
-          { length: 5 },
-          () => Math.floor(Math.random() * 9) + 1
-        );
-
-        let index = 0;
-        let position = 0;
-
-        $("gameControls").replaceChildren();
-        $("gameOutput").textContent = "Prepare-se...";
-
-        function next() {
-          if (currentGame !== "memory") return;
-
-          if (index >= sequence.length) {
-            $("gameOutput").textContent = "Repita a sequência!";
-            createNumberButtons();
-            return;
-          }
-
-          $("gameOutput").textContent = sequence[index++];
-          gameTimer = setTimeout(next, 850);
-        }
-
-        function createNumberButtons() {
-          for (let n = 1; n <= 9; n++) {
-            $("gameControls").appendChild(
-              makeButton(
-                String(n),
-                () => {
-                  if (n !== sequence[position]) {
-                    $("gameOutput").textContent =
-                      "Sequência: " + sequence.join(" ");
-
-                    gameMessage("Tente novamente!", "error");
-
-                    $("gameControls").replaceChildren(
-                      makeButton("Jogar novamente", startMemoryGame)
-                    );
-                    return;
-                  }
-
-                  position++;
-
-                  if (position === sequence.length) {
-                    $("gameOutput").textContent = "🎉 Muito bem!";
-                    gameMessage(
-                      "Você completou o desafio de memória.",
-                      "success"
-                    );
-
-                    $("gameControls").replaceChildren(
-                      makeButton("Jogar novamente", startMemoryGame)
-                    );
-                  } else {
-                    $("gameOutput").textContent =
-                      "Acertos: " + position + "/" + sequence.length;
-                  }
-                },
-                "number-button"
-              )
-            );
-          }
-        }
-
-        gameTimer = setTimeout(next, 700);
-      }
-    }
-
-    // JOGO 2: ATENÇÃO VISUAL
-
-    function startAttentionGame() {
-      $("gameTitle").textContent = "🔎 Atenção visual";
-      $("gameInstructions").textContent =
-        "Encontre o número diferente entre as opções.";
-
-      $("gameOutput").replaceChildren();
-      $("gameControls").replaceChildren();
-      hideMessage("gameMessage");
-
-      const values = Array(9).fill(7);
-      const differentIndex = Math.floor(Math.random() * values.length);
-      values[differentIndex] = 1;
-
-      for (let i = values.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [values[i], values[j]] = [values[j], values[i]];
-      }
-
-      const grid = document.createElement("div");
-      grid.style.display = "grid";
-      grid.style.gridTemplateColumns = "repeat(3, minmax(55px, 1fr))";
-      grid.style.gap = "9px";
-      grid.style.width = "100%";
-
-      values.forEach(value => {
-        grid.appendChild(
-          makeButton(
-            String(value),
-            () => {
-              if (value === 1) {
-                gameMessage("Correto! Você encontrou o número diferente.", "success");
-                $("gameControls").replaceChildren(
-                  makeButton("Novo desafio", startAttentionGame)
-                );
-              } else {
-                gameMessage("Tente outra opção.", "error");
-              }
-            },
-            "number-button"
-          )
-        );
-      });
-
-      $("gameOutput").appendChild(grid);
-    }
-
-    // JOGO 3: RACIOCÍNIO LÓGICO
-
-    function startLogicGame() {
-      $("gameTitle").textContent = "🔢 Raciocínio lógico";
-      $("gameInstructions").textContent =
-        "Descubra qual número completa a sequência.";
-
-      $("gameControls").replaceChildren();
-      hideMessage("gameMessage");
-
-      const start = Math.floor(Math.random() * 5) + 2;
-      const step = Math.floor(Math.random() * 4) + 2;
-
-      const sequence = [
-        start,
-        start + step,
-        start + step * 2,
-        start + step * 3
-      ];
-
-      const answer = start + step * 4;
-
-      $("gameOutput").textContent = sequence.join(" • ") + " • ?";
-
-      const options = [
-        answer,
-        answer + 1,
-        answer - 2,
-        answer + step
-      ];
-
-      for (let i = options.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [options[i], options[j]] = [options[j], options[i]];
-      }
-
-      options.forEach(value => {
-        $("gameControls").appendChild(
-          makeButton(
-            String(value),
-            () => {
-              gameMessage(
-                value === answer
-                  ? "Correto! Você identificou o padrão."
-                  : "Não é essa opção. Observe a diferença entre os números.",
-                value === answer ? "success" : "error"
-              );
-
-              $("gameControls").replaceChildren(
-                makeButton("Novo desafio", startLogicGame)
-              );
-            },
-            "number-button"
-          )
-        );
-      });
-    }
-
-    // JOGO 4: MEMÓRIA RÁPIDA
-
-    function startWordsGame() {
-      $("gameTitle").textContent = "🎯 Memória rápida";
-      $("gameInstructions").textContent =
-        "Memorize as palavras. Elas desaparecerão após alguns segundos.";
-
-      $("gameControls").replaceChildren();
-      hideMessage("gameMessage");
-
-      const allWords = [
-        "CASA", "RIO", "FLOR", "LIVRO", "SOL",
-        "PRAIA", "NUVEM", "PONTE", "MESA", "ÁRVORE"
-      ];
-
-      const shuffled = [...allWords].sort(() => Math.random() - 0.5);
-      const selected = shuffled.slice(0, 4);
-
-      $("gameOutput").textContent = selected.join(" • ");
-
-      $("gameControls").appendChild(
-        makeButton("Estou pronto", () => {
-          clearTimeout(gameTimer);
-
-          const correct =
-            selected[Math.floor(Math.random() * selected.length)];
-
-          const distractors = allWords
-            .filter(word => !selected.includes(word))
-            .sort(() => Math.random() - 0.5)
-            .slice(0, 3);
-
-          const options = [correct, ...distractors]
-            .sort(() => Math.random() - 0.5);
-
-          $("gameOutput").textContent =
-            "Qual destas palavras estava na lista?";
-
-          $("gameControls").replaceChildren();
-
-          options.forEach(word => {
-            $("gameControls").appendChild(
-              makeButton(
-                word,
-                () => {
-                  const correctAnswer = word === correct;
-
-                  gameMessage(
-                    correctAnswer
-                      ? "Muito bem! Você lembrou da palavra."
-                      : "Essa palavra não estava na lista. Tente de novo!",
-                    correctAnswer ? "success" : "error"
-                  );
-
-                  $("gameControls").replaceChildren(
-                    makeButton("Novo desafio", startWordsGame)
-                  );
-                },
-                "button button-dark"
-              )
-            );
-          });
-        })
-      );
-
-      gameTimer = setTimeout(() => {
-        if (currentGame === "words") {
-          $("gameOutput").textContent = "As palavras desapareceram!";
-        }
-      }, 4000);
-    }
-
-    // BOTÕES DOS JOGOS
-
-    document.querySelectorAll("[data-game]").forEach(button => {
+    document.querySelectorAll("[data-game]").forEach((button) => {
       button.addEventListener("click", () => {
         startGame(button.dataset.game);
       });
     });
 
-    $("closeGameButton").addEventListener("click", clearGame);
+    $("closeGame").addEventListener("click", () => {
+      gamePanel.classList.add("hidden");
+    });
 
-    // ---------------------------------------------------------
-    // INICIALIZAÇÃO
-    // ---------------------------------------------------------
+    // =========================================================
+    // EXPERIÊNCIA 1: MEMÓRIA RELÂMPAGO
+    // =========================================================
+
+    function startMemoryGame() {
+      gameTitle.textContent = "🧠 Memória Relâmpago";
+
+      const intro = document.createElement("p");
+      intro.textContent =
+        "Observe a sequência durante alguns segundos e depois tente digitá-la.";
+
+      const sequence = document.createElement("div");
+      sequence.className = "sequence";
+      sequence.textContent = "Prepare-se...";
+
+      const input = document.createElement("input");
+      input.className = "game-input";
+      input.type = "text";
+      input.inputMode = "numeric";
+      input.maxLength = 8;
+      input.placeholder = "Digite a sequência";
+      input.autocomplete = "off";
+
+      const result = document.createElement("p");
+      result.className = "game-result";
+      result.setAttribute("aria-live", "polite");
+
+      const startButton = renderGameButton(
+        "Começar desafio",
+        () => {
+          secretSequence = String(
+            Math.floor(10000 + Math.random() * 90000)
+          );
+
+          sequence.textContent = secretSequence;
+          input.value = "";
+          input.disabled = true;
+          startButton.disabled = true;
+          result.textContent = "Memorize os números...";
+
+          setTimeout(() => {
+            sequence.textContent = "● ● ● ● ●";
+            input.disabled = false;
+            input.focus();
+            result.textContent = "Agora digite a sequência.";
+            startButton.disabled = false;
+          }, 3500);
+        }
+      );
+
+      const checkButton = renderGameButton(
+        "Conferir resposta",
+        () => {
+          if (!secretSequence) {
+            result.textContent = "Comece o desafio primeiro.";
+            return;
+          }
+
+          result.textContent =
+            input.value.trim() === secretSequence
+              ? "Excelente! Você acertou a sequência."
+              : "Não foi dessa vez. Tente novamente.";
+
+          secretSequence = "";
+        }
+      );
+
+      gameContent.append(
+        intro,
+        sequence,
+        startButton,
+        document.createElement("br"),
+        input,
+        document.createElement("br"),
+        checkButton,
+        result
+      );
+    }
+
+    // =========================================================
+    // EXPERIÊNCIA 2: DESAFIO MATEMÁTICO
+    // =========================================================
+
+    function startMathGame() {
+      gameTitle.textContent = "🔢 Desafio Matemático";
+
+      const first = Math.floor(Math.random() * 20) + 5;
+      const second = Math.floor(Math.random() * 15) + 2;
+      const answer = first + second;
+
+      const question = document.createElement("p");
+      question.textContent = `Quanto é ${first} + ${second}?`;
+
+      const input = document.createElement("input");
+      input.className = "game-input";
+      input.type = "number";
+      input.inputMode = "numeric";
+      input.placeholder = "Sua resposta";
+
+      const result = document.createElement("p");
+      result.className = "game-result";
+      result.setAttribute("aria-live", "polite");
+
+      const check = renderGameButton("Verificar", () => {
+        if (input.value.trim() === "") {
+          result.textContent = "Digite uma resposta.";
+          return;
+        }
+
+        result.textContent =
+          Number(input.value) === answer
+            ? "Correto! Muito bem."
+            : "Resposta incorreta. Tente outra vez.";
+      });
+
+      gameContent.append(question, input, check, result);
+    }
+
+    // =========================================================
+    // EXPERIÊNCIA 3: ADIVINHE O NÚMERO
+    // =========================================================
+
+    function startGuessGame() {
+      gameTitle.textContent = "🔍 Adivinhe o Número";
+
+      secretNumber = Math.floor(Math.random() * 20) + 1;
+
+      let attempts = 0;
+
+      const intro = document.createElement("p");
+      intro.textContent =
+        "Pensei em um número entre 1 e 20. Você consegue descobrir?";
+
+      const input = document.createElement("input");
+      input.className = "game-input";
+      input.type = "number";
+      input.min = "1";
+      input.max = "20";
+      input.step = "1";
+      input.placeholder = "Número de 1 a 20";
+
+      const result = document.createElement("p");
+      result.className = "game-result";
+      result.setAttribute("aria-live", "polite");
+
+      const check = renderGameButton("Tentar", () => {
+        const guess = Number(input.value);
+
+        if (
+          input.value.trim() === "" ||
+          !Number.isInteger(guess) ||
+          guess < 1 ||
+          guess > 20
+        ) {
+          result.textContent = "Digite um número inteiro de 1 a 20.";
+          return;
+        }
+
+        attempts++;
+
+        if (guess === secretNumber) {
+          result.textContent =
+            `Acertou! Você descobriu em ${attempts} tentativa(s).`;
+
+          check.disabled = true;
+        } else if (guess < secretNumber) {
+          result.textContent = "O número secreto é maior.";
+        } else {
+          result.textContent = "O número secreto é menor.";
+        }
+      });
+
+      gameContent.append(intro, input, check, result);
+    }
+
+    // =========================================================
+    // EXPERIÊNCIA 4: SEQUÊNCIA LÓGICA
+    // =========================================================
+
+    function startLogicGame() {
+      gameTitle.textContent = "🧩 Sequência Lógica";
+
+      const start = Math.floor(Math.random() * 5) + 2;
+      const difference = Math.floor(Math.random() * 5) + 2;
+
+      const numbers = [
+        start,
+        start + difference,
+        start + difference * 2,
+        start + difference * 3
+      ];
+
+      logicAnswer = start + difference * 4;
+
+      const question = document.createElement("p");
+      question.textContent =
+        "Observe a sequência e descubra qual número vem a seguir:";
+
+      const sequence = document.createElement("div");
+      sequence.className = "sequence";
+      sequence.textContent = numbers.join("  •  ") + "  •  ?";
+
+      const input = document.createElement("input");
+      input.className = "game-input";
+      input.type = "number";
+      input.inputMode = "numeric";
+      input.placeholder = "Próximo número";
+
+      const result = document.createElement("p");
+      result.className = "game-result";
+      result.setAttribute("aria-live", "polite");
+
+      const check = renderGameButton("Verificar", () => {
+        if (input.value.trim() === "") {
+          result.textContent = "Digite o próximo número.";
+          return;
+        }
+
+        result.textContent =
+          Number(input.value) === logicAnswer
+            ? "Correto! Você encontrou o padrão."
+            : "Não é esse. Observe a diferença entre os números.";
+      });
+
+      gameContent.append(question, sequence, input, check, result);
+    }
+
+    // =========================================================
+    // INICIALIZAÇÃO E MUDANÇAS DE SESSÃO
+    // =========================================================
 
     async function initialize() {
-      $("headerStatus").textContent = "Verificando sessão...";
+      updateHeader();
+      hideProtectedAreas();
+      accessSection.classList.add("hidden");
 
       try {
-        await refreshAccessStatus();
-      } catch (error) {
-        console.error("Falha na inicialização:", error);
+        const session = await getSession();
 
-        $("gamesSection").hidden = true;
-        $("gameArea").hidden = true;
-
-        const {
-          data: { session }
-        } = await supabaseClient.auth.getSession();
-
-        if (session && session.user) {
+        if (session) {
           currentUser = session.user;
+          updateHeader();
 
-          $("authCard").hidden = true;
-          $("accountCard").hidden = false;
-          $("accountEmail").textContent = currentUser.email || "";
-          $("paymentCard").hidden = false;
-
-          $("accessLabel").textContent =
-            "Não foi possível confirmar o acesso";
-
-          $("headerStatus").textContent =
-            "Verificação indisponível";
-
-          showMessage(
-            "accountMessage",
-            "A consulta de acesso falhou. A área Pix está disponível, mas as experiências continuam bloqueadas até a confirmação.",
-            "error"
-          );
+          await refreshAccessStatus();
         } else {
-          updateSignedOutInterface();
+          currentUser = null;
+          hasLifetimeAccess = false;
+
+          updateHeader();
+          setAuthMode("login");
         }
+      } catch (error) {
+        currentUser = null;
+        hasLifetimeAccess = false;
+
+        updateHeader();
+        hideProtectedAreas();
+
+        setMessage(
+          authMessage,
+          "Não foi possível verificar sua sessão. Atualize a página e tente novamente.",
+          "error"
+        );
       }
     }
 
-    // Atualizar a interface quando o estado da sessão mudar.
-    supabaseClient.auth.onAuthStateChange((event) => {
+    supabaseClient.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_OUT") {
-        updateSignedOutInterface();
+        currentUser = null;
+        hasLifetimeAccess = false;
+
+        updateHeader();
+        accessSection.classList.add("hidden");
+        hideProtectedAreas();
+
+        setAuthMode("login");
+        return;
+      }
+
+      if (event === "SIGNED_IN" && session) {
+        currentUser = session.user;
+        updateHeader();
+
+        // A verificação é adiada para evitar trabalho dentro do callback
+        // de autenticação do Supabase.
+        setTimeout(() => {
+          refreshAccessStatus();
+        }, 0);
       }
     });
 
     initialize();
-  </script>
-</body>
+  </script></body>
 </html>
