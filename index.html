@@ -3,27 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>ZeusBet | Jogos Demonstrativos</title>
-
-  <meta
-    name="description"
-    content="ZeusBet: uma experiência de jogos demonstrativos com visual premium, animações e desafios recreativos."
-  >
+  <meta name="theme-color" content="#090909">
+  <meta name="description" content="ZeusBet — experiências recreativas de memória, estratégia e raciocínio.">
+  <title>ZeusBet | Desafie sua mente</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     :root {
-      --gold: #f7c948;
+      --gold: #f5c542;
       --gold-light: #ffe99a;
-      --gold-dark: #b88618;
-      --black: #080808;
-      --panel: #141414;
-      --text: #ffffff;
-      --muted: #b8b8b8;
-      --green: #4ade80;
-      --red: #ff6565;
+      --gold-dark: #9e7414;
+      --bg: #080808;
+      --panel: #111111;
+      --panel2: #181818;
+      --text: #f7f3e8;
+      --muted: #aaa49a;
+      --border: rgba(245,197,66,.25);
+      --green: #40dc92;
+      --red: #ff6969;
     }
 
     * {
@@ -38,40 +36,16 @@
 
     body {
       min-height: 100vh;
-      overflow-x: hidden;
       color: var(--text);
       background:
-        radial-gradient(
-          circle at 15% 10%,
-          rgba(247, 201, 72, 0.12),
-          transparent 30%
-        ),
-        radial-gradient(
-          circle at 90% 40%,
-          rgba(184, 134, 24, 0.09),
-          transparent 28%
-        ),
-        var(--black);
+        radial-gradient(ellipse at 50% -15%, rgba(245,197,66,.13), transparent 48%),
+        radial-gradient(ellipse at 0% 50%, rgba(245,197,66,.035), transparent 35%),
+        var(--bg);
       font-family: Arial, Helvetica, sans-serif;
+      overflow-x: hidden;
     }
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: -50%;
-      z-index: -1;
-      pointer-events: none;
-      background:
-        radial-gradient(
-          circle,
-          rgba(247, 201, 72, 0.04) 0,
-          transparent 55%
-        );
-      animation: backgroundDrift 18s ease-in-out infinite alternate;
-    }
-
-    button,
-    input {
+    button, input {
       font: inherit;
     }
 
@@ -79,313 +53,224 @@
       cursor: pointer;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
+    button:focus-visible, input:focus-visible {
+      outline: 2px solid var(--gold-light);
+      outline-offset: 3px;
     }
 
-    .container {
-      width: min(1150px, 92%);
-      margin: auto;
+    button:disabled {
+      cursor: not-allowed;
+      opacity: .6;
     }
 
-    .gold {
-      color: var(--gold);
+    .ambient {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
     }
 
-    .muted {
-      color: var(--muted);
+    .orb {
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: rgba(245,197,66,.045);
+      filter: blur(55px);
+      animation: float 12s ease-in-out infinite alternate;
     }
 
-    /* CABEÇALHO */
+    .orb:nth-child(1) {
+      left: -70px;
+      top: 25%;
+    }
+
+    .orb:nth-child(2) {
+      right: -80px;
+      top: 60%;
+      animation-delay: -5s;
+    }
+
+    @keyframes float {
+      from { transform: translate(0,0) scale(1); }
+      to { transform: translate(35px,-45px) scale(1.3); }
+    }
+
+    @keyframes glow {
+      0%,100% { box-shadow: 0 0 15px rgba(245,197,66,.08); }
+      50% { box-shadow: 0 0 30px rgba(245,197,66,.23); }
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    header, main, footer {
+      position: relative;
+      z-index: 1;
+    }
 
     header {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      border-bottom: 1px solid rgba(247, 201, 72, 0.25);
-      background: rgba(8, 8, 8, 0.91);
-      backdrop-filter: blur(14px);
-    }
-
-    .nav {
-      min-height: 76px;
+      padding: 18px 5%;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
+      border-bottom: 1px solid rgba(245,197,66,.13);
+      background: rgba(7,7,7,.8);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
     }
 
     .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
       font-weight: 900;
-      font-size: 1.55rem;
-      letter-spacing: 1px;
-    }
-
-    .brand-icon {
-      display: grid;
-      place-items: center;
-      width: 44px;
-      height: 44px;
-      border: 1px solid var(--gold);
-      border-radius: 50%;
+      font-size: clamp(23px, 4vw, 32px);
+      letter-spacing: 2px;
       color: var(--gold);
-      box-shadow: 0 0 20px rgba(247, 201, 72, 0.18);
-      animation: emblemFloat 3s ease-in-out infinite;
+      text-shadow: 0 0 20px rgba(245,197,66,.35);
+      white-space: nowrap;
     }
 
-    .nav-links {
+    .brand span {
+      color: white;
+    }
+
+    .header-right {
       display: flex;
       align-items: center;
-      gap: 22px;
+      gap: 12px;
     }
 
-    .nav-links a {
-      color: #ddd;
-      font-size: 0.9rem;
-      transition: color 0.25s;
+    .user-label {
+      color: var(--muted);
+      font-size: 12px;
+      max-width: 170px;
+      overflow-wrap: anywhere;
     }
 
-    .nav-links a:hover {
-      color: var(--gold);
+    .container {
+      width: min(1100px, 92%);
+      margin: 0 auto;
     }
-
-    .button {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      min-height: 44px;
-      padding: 12px 19px;
-      border: 1px solid var(--gold);
-      border-radius: 10px;
-      font-weight: 800;
-      transition:
-        transform 0.25s,
-        box-shadow 0.25s,
-        background 0.25s;
-    }
-
-    .button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(247, 201, 72, 0.22);
-    }
-
-    .button-gold {
-      color: #111;
-      background: linear-gradient(
-        135deg,
-        var(--gold-light),
-        var(--gold),
-        var(--gold-dark)
-      );
-    }
-
-    .button-outline {
-      color: var(--gold);
-      background: transparent;
-    }
-
-    .button-outline:hover {
-      color: #111;
-      background: var(--gold);
-    }
-
-    .button-small {
-      min-height: 38px;
-      padding: 9px 13px;
-      font-size: 0.85rem;
-    }
-
-    /* HERO */
 
     .hero {
-      position: relative;
-      padding: 76px 0 58px;
-      overflow: hidden;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: 790px;
-      margin: auto;
       text-align: center;
-      animation: heroEnter 0.9s ease both;
+      padding: 65px 10px 40px;
+      animation: appear .7s ease both;
     }
 
-    .hero-badge {
+    .eyebrow {
       display: inline-block;
-      padding: 9px 15px;
-      margin-bottom: 22px;
-      border: 1px solid rgba(247, 201, 72, 0.5);
+      padding: 7px 13px;
+      border: 1px solid var(--border);
       border-radius: 30px;
       color: var(--gold-light);
-      background: rgba(247, 201, 72, 0.07);
-      font-size: 0.82rem;
-      letter-spacing: 1px;
-    }
-
-    .hero h1 {
+      background: rgba(245,197,66,.06);
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 2px;
       margin-bottom: 20px;
-      font-size: clamp(2.6rem, 7vw, 5.3rem);
-      line-height: 1.04;
-      font-weight: 950;
-      letter-spacing: -2px;
     }
 
-    .shimmer {
+    h1 {
+      font-size: clamp(34px, 7vw, 68px);
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: -1.5px;
+    }
+
+    h1 .gold {
       color: var(--gold);
-      background: linear-gradient(
-        100deg,
-        #b88618,
-        #ffe99a,
-        #f7c948,
-        #fff1b5,
-        #b88618
-      );
-      background-size: 250% auto;
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: goldShimmer 5s linear infinite;
+      text-shadow: 0 0 35px rgba(245,197,66,.18);
     }
 
     .hero p {
-      max-width: 620px;
-      margin: 0 auto 28px;
-      color: #c6c6c6;
-      font-size: 1.05rem;
-      line-height: 1.8;
-    }
-
-    .hero-buttons {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .hero-art {
-      position: relative;
-      width: 170px;
-      height: 170px;
-      margin: 38px auto 0;
-      display: grid;
-      place-items: center;
-      border: 1px solid rgba(247, 201, 72, 0.35);
-      border-radius: 50%;
-      background: radial-gradient(
-        circle,
-        rgba(247, 201, 72, 0.16),
-        rgba(247, 201, 72, 0.02) 65%,
-        transparent
-      );
-      animation: orbitPulse 4s ease-in-out infinite;
-    }
-
-    .hero-art::before,
-    .hero-art::after {
-      content: "";
-      position: absolute;
-      inset: -13px;
-      border: 1px solid rgba(247, 201, 72, 0.22);
-      border-radius: 50%;
-      animation: ringRotate 16s linear infinite;
-    }
-
-    .hero-art::after {
-      inset: -27px;
-      border-style: dashed;
-      animation-direction: reverse;
-      animation-duration: 30s;
-    }
-
-    .hero-emoji {
-      font-size: 5.2rem;
-      filter: drop-shadow(0 0 20px rgba(247, 201, 72, 0.35));
-      animation: characterFloat 3s ease-in-out infinite;
-    }
-
-    /* FAIXA INFORMATIVA */
-
-    .info-strip {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-bottom: 65px;
-    }
-
-    .info-item {
-      padding: 19px;
-      text-align: center;
-      border: 1px solid rgba(247, 201, 72, 0.2);
-      border-radius: 14px;
-      background: rgba(255, 255, 255, 0.025);
-    }
-
-    .info-item strong {
-      display: block;
-      margin-bottom: 6px;
-      color: var(--gold);
-      font-size: 1.05rem;
-    }
-
-    .info-item span {
       color: var(--muted);
-      font-size: 0.85rem;
+      max-width: 650px;
+      margin: 18px auto 0;
+      line-height: 1.8;
+      font-size: 15px;
     }
 
-    /* SEÇÕES */
-
-    section.content-section {
-      padding: 25px 0 65px;
+    .section {
+      padding: 25px 0 55px;
     }
 
     .section-heading {
-      margin-bottom: 30px;
       text-align: center;
+      margin-bottom: 25px;
     }
 
     .section-heading h2 {
-      margin-bottom: 12px;
-      font-size: clamp(1.8rem, 5vw, 2.7rem);
+      font-size: clamp(24px, 4vw, 34px);
+      margin-bottom: 10px;
+    }
+
+    .section-heading h2 span {
+      color: var(--gold);
     }
 
     .section-heading p {
       color: var(--muted);
+      font-size: 13px;
       line-height: 1.7;
     }
 
-    /* CONTA */
-
-    .account-card {
-      max-width: 560px;
-      margin: auto;
-      padding: 28px;
-      border: 1px solid rgba(247, 201, 72, 0.35);
+    .panel {
+      background: linear-gradient(145deg, rgba(25,25,25,.97), rgba(12,12,12,.98));
+      border: 1px solid var(--border);
       border-radius: 20px;
-      background: linear-gradient(
-        145deg,
-        rgba(255, 255, 255, 0.055),
-        rgba(255, 255, 255, 0.015)
-      );
-      box-shadow: 0 18px 55px rgba(0, 0, 0, 0.25);
+      padding: clamp(20px, 4vw, 32px);
+      box-shadow: 0 15px 45px rgba(0,0,0,.28);
     }
 
-    .account-card h3 {
-      margin-bottom: 10px;
-      color: var(--gold);
-      font-size: 1.4rem;
+    .auth-wrap {
+      max-width: 470px;
+      margin: 0 auto;
+      animation: appear .6s ease both;
     }
 
-    .account-card > p {
-      margin-bottom: 20px;
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+      margin-bottom: 24px;
+      padding: 5px;
+      background: #080808;
+      border: 1px solid #29251b;
+      border-radius: 12px;
+    }
+
+    .tab {
+      border: 0;
+      border-radius: 8px;
+      padding: 11px 5px;
+      background: transparent;
       color: var(--muted);
+      font-size: 12px;
+      font-weight: bold;
+      transition: .2s;
+    }
+
+    .tab.active {
+      color: #171208;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+    }
+
+    .form-title {
+      font-size: 23px;
+      margin-bottom: 8px;
+    }
+
+    .form-subtitle {
+      color: var(--muted);
+      font-size: 13px;
       line-height: 1.6;
+      margin-bottom: 23px;
     }
 
     .field {
@@ -394,215 +279,233 @@
 
     .field label {
       display: block;
+      font-size: 12px;
+      color: #ddd2b5;
       margin-bottom: 8px;
-      color: #eee;
-      font-size: 0.9rem;
     }
 
     .field input {
       width: 100%;
-      min-height: 47px;
-      padding: 12px 14px;
-      border: 1px solid #3c3c3c;
-      border-radius: 9px;
-      outline: none;
+      padding: 14px;
       color: white;
-      background: #0b0b0b;
-      transition: border 0.2s, box-shadow 0.2s;
+      background: #090909;
+      border: 1px solid #373126;
+      border-radius: 10px;
+      transition: border-color .2s, box-shadow .2s;
     }
 
     .field input:focus {
       border-color: var(--gold);
-      box-shadow: 0 0 0 3px rgba(247, 201, 72, 0.1);
+      box-shadow: 0 0 0 3px rgba(245,197,66,.08);
+      outline: none;
     }
 
-    .account-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 18px;
+    .btn {
+      border: 1px solid transparent;
+      border-radius: 10px;
+      padding: 13px 18px;
+      font-weight: 800;
+      font-size: 13px;
+      transition: transform .2s, box-shadow .2s, background .2s;
     }
 
-    .account-actions .button {
-      flex: 1;
+    .btn:hover:not(:disabled) {
+      transform: translateY(-2px);
     }
 
-    .text-button {
-      margin-top: 15px;
-      border: none;
+    .btn-gold {
+      color: #171208;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark));
+      box-shadow: 0 5px 20px rgba(245,197,66,.12);
+    }
+
+    .btn-gold:hover:not(:disabled) {
+      box-shadow: 0 7px 28px rgba(245,197,66,.25);
+    }
+
+    .btn-outline {
+      background: transparent;
       color: var(--gold);
-      background: none;
-      text-decoration: underline;
+      border-color: var(--border);
     }
 
-    .status-message {
+    .btn-outline:hover:not(:disabled) {
+      background: rgba(245,197,66,.07);
+    }
+
+    .btn-full {
+      width: 100%;
+    }
+
+    .btn-small {
+      padding: 9px 12px;
+      font-size: 11px;
+    }
+
+    .notice {
       display: none;
       margin-top: 16px;
       padding: 12px;
-      border: 1px solid rgba(247, 201, 72, 0.35);
-      border-radius: 9px;
-      color: var(--gold-light);
-      background: rgba(247, 201, 72, 0.07);
-      line-height: 1.5;
+      border-radius: 10px;
+      font-size: 13px;
+      line-height: 1.6;
       overflow-wrap: anywhere;
     }
 
-    .status-message.show {
+    .notice.show {
       display: block;
     }
 
-    .account-logged {
-      text-align: center;
+    .notice.success {
+      color: #a5f2c8;
+      border: 1px solid rgba(64,220,146,.25);
+      background: rgba(64,220,146,.07);
     }
 
-    .account-logged .account-icon {
-      margin-bottom: 12px;
-      font-size: 2.5rem;
+    .notice.error {
+      color: #ffb2b2;
+      border: 1px solid rgba(255,105,105,.25);
+      background: rgba(255,105,105,.07);
     }
 
-    .account-logged p {
-      margin: 12px 0 20px;
+    .notice.info {
+      color: var(--gold-light);
+      border: 1px solid var(--border);
+      background: rgba(245,197,66,.06);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .account-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 25px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(245,197,66,.04);
+    }
+
+    .account-bar strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .account-bar small {
       color: var(--muted);
       overflow-wrap: anywhere;
     }
 
-    /* CARTÕES DOS JOGOS */
+    .access-badge {
+      font-size: 11px;
+      font-weight: bold;
+      color: var(--gold-light);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 7px 11px;
+      white-space: nowrap;
+    }
 
     .games-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 22px;
+      gap: 17px;
     }
 
     .game-card {
       position: relative;
-      display: flex;
-      flex-direction: column;
-      min-height: 300px;
-      padding: 24px;
       overflow: hidden;
-      border: 1px solid rgba(247, 201, 72, 0.28);
+      padding: 22px;
+      min-height: 210px;
       border-radius: 17px;
-      background: linear-gradient(
-        150deg,
-        #191919,
-        #0d0d0d
-      );
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.22);
-      animation: cardEnter 0.7s ease both;
-      transition:
-        transform 0.3s,
-        border-color 0.3s,
-        box-shadow 0.3s;
-    }
-
-    .game-card:nth-child(2) {
-      animation-delay: 0.1s;
-    }
-
-    .game-card:nth-child(3) {
-      animation-delay: 0.2s;
-    }
-
-    .game-card:nth-child(4) {
-      animation-delay: 0.3s;
-    }
-
-    .game-card:nth-child(5) {
-      animation-delay: 0.4s;
-    }
-
-    .game-card:hover {
-      transform: translateY(-9px);
-      border-color: var(--gold);
-      box-shadow: 0 18px 45px rgba(247, 201, 72, 0.11);
+      border: 1px solid var(--border);
+      background: linear-gradient(150deg, #191919, #0c0c0c);
+      transition: transform .25s, border-color .25s, box-shadow .25s;
+      animation: appear .5s ease both;
     }
 
     .game-card::before {
       content: "";
       position: absolute;
-      top: -80px;
-      right: -70px;
-      width: 170px;
-      height: 170px;
+      width: 120px;
+      height: 120px;
       border-radius: 50%;
-      background: rgba(247, 201, 72, 0.055);
-      transition: transform 0.4s;
+      right: -65px;
+      top: -65px;
+      background: rgba(245,197,66,.09);
+      filter: blur(20px);
+      transition: .3s;
+    }
+
+    .game-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(245,197,66,.65);
+      box-shadow: 0 12px 32px rgba(0,0,0,.35), 0 0 22px rgba(245,197,66,.06);
     }
 
     .game-card:hover::before {
-      transform: scale(1.5);
+      transform: scale(1.7);
     }
 
-    .game-art {
-      position: relative;
-      display: grid;
-      place-items: center;
-      min-height: 115px;
-      margin-bottom: 16px;
-      border: 1px solid rgba(247, 201, 72, 0.13);
-      border-radius: 13px;
-      background: radial-gradient(
-        circle,
-        rgba(247, 201, 72, 0.12),
-        transparent 70%
-      );
+    .game-icon {
+      font-size: 35px;
+      margin-bottom: 15px;
+      display: inline-block;
+      transition: transform .25s;
     }
 
-    .game-emoji {
-      font-size: 4rem;
-      filter: drop-shadow(0 0 14px rgba(247, 201, 72, 0.16));
-      animation: characterFloat 4s ease-in-out infinite;
-      transition: transform 0.3s;
-    }
-
-    .game-card:hover .game-emoji {
+    .game-card:hover .game-icon {
       transform: scale(1.12) rotate(-4deg);
     }
 
     .game-card h3 {
-      position: relative;
-      margin-bottom: 10px;
-      font-size: 1.18rem;
+      font-size: 18px;
+      margin-bottom: 9px;
     }
 
     .game-card p {
-      position: relative;
-      flex: 1;
-      margin-bottom: 20px;
       color: var(--muted);
-      font-size: 0.92rem;
-      line-height: 1.6;
+      font-size: 12px;
+      line-height: 1.65;
+      min-height: 40px;
+      margin-bottom: 18px;
     }
 
-    .game-card .button {
-      position: relative;
+    .game-card .btn {
       width: 100%;
     }
 
-    .game-tag {
-      display: inline-block;
-      margin-bottom: 12px;
-      color: var(--gold);
-      font-size: 0.73rem;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-
-    /* JOGO ABERTO */
-
-    .game-panel {
-      display: none;
+    .pay-card {
       margin: 28px auto 0;
-      padding: 25px;
-      border: 1px solid var(--gold-dark);
-      border-radius: 18px;
-      background: #111;
-      animation: modalEnter 0.35s ease both;
+      max-width: 700px;
+      text-align: center;
+      background:
+        radial-gradient(ellipse at top, rgba(245,197,66,.12), transparent 60%),
+        #101010;
     }
 
-    .game-panel.active {
-      display: block;
+    .pay-price {
+      color: var(--gold);
+      font-size: 39px;
+      font-weight: 900;
+      margin: 15px 0 7px;
+    }
+
+    .pay-card p {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 13px;
+      margin-bottom: 20px;
+    }
+
+    .game-area {
+      margin-top: 28px;
+      animation: appear .4s ease both;
     }
 
     .game-top {
@@ -610,130 +513,159 @@
       justify-content: space-between;
       align-items: center;
       gap: 12px;
-      margin-bottom: 22px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
     }
 
     .game-top h3 {
       color: var(--gold);
-      font-size: 1.35rem;
+      font-size: 23px;
     }
 
-    .game-content {
+    .game-instructions {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+      margin-bottom: 18px;
+    }
+
+    .game-board {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      max-width: 510px;
+      margin: 0 auto;
+    }
+
+    .memory-card {
+      min-height: 90px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--gold);
+      background: linear-gradient(145deg, #202020, #101010);
+      font-size: 27px;
+      transition: .2s;
+    }
+
+    .memory-card:hover {
+      border-color: var(--gold);
+    }
+
+    .memory-card.revealed, .memory-card.matched {
+      background: linear-gradient(135deg, #493813, #211b0e);
+      border-color: var(--gold);
+    }
+
+    .memory-card.matched {
+      color: var(--green);
+    }
+
+    .game-status {
       text-align: center;
-    }
-
-    .game-content p {
-      margin-bottom: 16px;
-      color: #ccc;
-      line-height: 1.6;
-    }
-
-    .game-result {
-      min-height: 28px;
-      margin-top: 18px;
       color: var(--gold-light);
-      font-weight: 700;
+      margin: 20px 0 12px;
+      line-height: 1.7;
+      font-size: 14px;
     }
 
-    .game-controls {
+    .sequence-display {
+      text-align: center;
+      font-size: clamp(30px, 7vw, 48px);
+      font-weight: 900;
+      letter-spacing: 5px;
+      padding: 25px 10px;
+      color: var(--gold);
+      overflow-wrap: anywhere;
+    }
+
+    .sequence-input {
+      max-width: 300px;
+      margin: 0 auto 15px;
+    }
+
+    .sequence-input input {
+      width: 100%;
+      text-align: center;
+      padding: 15px;
+      border-radius: 10px;
+      color: white;
+      background: #080808;
+      border: 1px solid var(--border);
+    }
+
+    .suits-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    .suit-btn {
+      padding: 17px 5px;
+      font-size: 30px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #171717;
+      color: white;
+      transition: .2s;
+    }
+
+    .suit-btn:hover {
+      background: #2a2416;
+      transform: translateY(-3px);
+    }
+
+    .suit-btn.red-suit {
+      color: #ff7777;
+    }
+
+    .playing-card {
+      width: 72px;
+      min-height: 96px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin: 5px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: linear-gradient(145deg, #222, #101010);
+      color: var(--gold-light);
+      font-size: 23px;
+      font-weight: bold;
+    }
+
+    .playing-card.red {
+      color: #ff7777;
+    }
+
+    .game-actions {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 10px;
-      margin-top: 16px;
+      margin-top: 18px;
     }
 
-    .memory-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 70px));
-      justify-content: center;
-      gap: 9px;
-      margin: 20px auto;
+    .game-center {
+      text-align: center;
     }
 
-    .memory-card {
-      display: grid;
-      place-items: center;
-      min-height: 70px;
-      border: 1px solid var(--gold-dark);
-      border-radius: 10px;
-      color: var(--gold);
-      background: #202020;
-      font-size: 1.65rem;
-      transition: transform 0.2s, background 0.2s;
+    .game-message {
+      min-height: 24px;
+      color: var(--gold-light);
+      text-align: center;
+      margin: 15px 0;
+      line-height: 1.7;
     }
-
-    .memory-card:hover {
-      transform: scale(1.05);
-      background: #302712;
-    }
-
-    .sequence-display {
-      min-height: 90px;
-      display: grid;
-      place-items: center;
-      margin: 20px auto;
-      padding: 15px;
-      border: 1px solid rgba(247, 201, 72, 0.25);
-      border-radius: 12px;
-      color: var(--gold);
-      background: #090909;
-      font-size: 2rem;
-      letter-spacing: 8px;
-    }
-
-    .choice-button {
-      min-width: 90px;
-      min-height: 70px;
-      padding: 12px;
-      border: 1px solid var(--gold-dark);
-      border-radius: 12px;
-      color: var(--gold);
-      background: #1a1a1a;
-      font-size: 1.6rem;
-      transition: transform 0.2s, background 0.2s;
-    }
-
-    .choice-button:hover {
-      transform: translateY(-3px);
-      background: #302712;
-    }
-
-    .cards-row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      margin: 22px 0;
-    }
-
-    .playing-card {
-      display: grid;
-      place-items: center;
-      width: 75px;
-      height: 105px;
-      border: 1px solid var(--gold);
-      border-radius: 10px;
-      color: #171717;
-      background: #f4f0e6;
-      font-size: 2rem;
-      box-shadow: 0 7px 15px rgba(0, 0, 0, 0.25);
-    }
-
-    .playing-card.red-suit {
-      color: #c42d2d;
-    }
-
-    /* RODAPÉ */
 
     footer {
-      margin-top: 35px;
-      padding: 32px 0;
-      border-top: 1px solid rgba(247, 201, 72, 0.2);
-      color: #a8a8a8;
+      border-top: 1px solid rgba(245,197,66,.14);
+      padding: 28px 5%;
       text-align: center;
-      font-size: 0.86rem;
-      line-height: 1.8;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.9;
     }
 
     footer strong {
@@ -743,156 +675,45 @@
     .footer-links {
       display: flex;
       flex-wrap: wrap;
+      gap: 15px;
       justify-content: center;
-      gap: 18px;
-      margin: 12px 0;
+      margin-bottom: 12px;
+    }
+
+    .footer-links a {
+      color: var(--gold-light);
+      text-decoration: none;
     }
 
     .footer-links a:hover {
-      color: var(--gold);
+      text-decoration: underline;
     }
 
-    /* ANIMAÇÕES */
-
-    @keyframes backgroundDrift {
-      from {
-        transform: translate(-2%, -1%);
-      }
-
-      to {
-        transform: translate(3%, 2%);
-      }
-    }
-
-    @keyframes emblemFloat {
-      0%, 100% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-4px);
-      }
-    }
-
-    @keyframes goldShimmer {
-      to {
-        background-position: 250% center;
-      }
-    }
-
-    @keyframes heroEnter {
-      from {
-        opacity: 0;
-        transform: translateY(25px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes orbitPulse {
-      0%, 100% {
-        box-shadow: 0 0 20px rgba(247, 201, 72, 0.05);
-      }
-
-      50% {
-        box-shadow: 0 0 45px rgba(247, 201, 72, 0.15);
-      }
-    }
-
-    @keyframes ringRotate {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    @keyframes characterFloat {
-      0%, 100% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-7px);
-      }
-    }
-
-    @keyframes cardEnter {
-      from {
-        opacity: 0;
-        transform: translateY(18px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes modalEnter {
-      from {
-        opacity: 0;
-        transform: translateY(10px) scale(0.99);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-
-    /* RESPONSIVIDADE */
-
-    @media (max-width: 850px) {
+    @media (max-width: 760px) {
       .games-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
-      .nav-links {
-        gap: 12px;
+      .hero {
+        padding-top: 48px;
       }
     }
 
-    @media (max-width: 580px) {
-      .nav {
-        min-height: 68px;
+    @media (max-width: 480px) {
+      header {
+        padding: 14px 4%;
       }
 
       .brand {
-        font-size: 1.25rem;
+        font-size: 22px;
       }
 
-      .brand-icon {
-        width: 38px;
-        height: 38px;
-      }
-
-      .nav-links a:not(.button) {
+      .user-label {
         display: none;
       }
 
-      .hero {
-        padding-top: 55px;
-      }
-
-      .hero h1 {
-        letter-spacing: -1px;
-      }
-
-      .hero-art {
-        width: 135px;
-        height: 135px;
-      }
-
-      .hero-emoji {
-        font-size: 4.2rem;
-      }
-
-      .info-strip {
-        grid-template-columns: 1fr;
-        gap: 9px;
-        margin-bottom: 45px;
+      .container {
+        width: 94%;
       }
 
       .games-grid {
@@ -900,1660 +721,1266 @@
       }
 
       .game-card {
-        min-height: 285px;
+        min-height: 0;
       }
 
-      .account-card {
-        padding: 21px;
-      }
-
-      .game-panel {
-        padding: 17px;
-      }
-
-      .game-top {
-        align-items: flex-start;
-      }
-
-      .memory-grid {
-        grid-template-columns: repeat(4, minmax(0, 58px));
+      .game-board {
+        gap: 7px;
       }
 
       .memory-card {
-        min-height: 58px;
+        min-height: 69px;
+        font-size: 23px;
       }
 
       .playing-card {
-        width: 60px;
-        height: 88px;
+        width: 57px;
+        min-height: 78px;
+        margin: 3px;
+        font-size: 18px;
       }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
-        animation-duration: 0.01ms !important;
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
         animation-iteration-count: 1 !important;
         scroll-behavior: auto !important;
-        transition-duration: 0.01ms !important;
+        transition-duration: .01ms !important;
       }
     }
   </style>
 </head>
 
 <body>
-
-  <!-- CABEÇALHO -->
+  <div class="ambient" aria-hidden="true">
+    <div class="orb"></div>
+    <div class="orb"></div>
+  </div>
 
   <header>
-    <div class="container nav">
+    <div class="brand">ZEUS<span>BET</span></div>
 
-      <a class="brand" href="#inicio" aria-label="ZeusBet início">
-        <span class="brand-icon">⚡</span>
-        <span>ZEUS<span class="gold">BET</span></span>
-      </a>
-
-      <nav class="nav-links" aria-label="Navegação principal">
-        <a href="#inicio">Início</a>
-        <a href="#jogos">Jogos</a>
-        <a href="#conta">Minha conta</a>
-
-        <a class="button button-gold button-small" href="#conta">
-          Entrar
-        </a>
-      </nav>
-
+    <div class="header-right">
+      <span class="user-label" id="headerUser"></span>
+      <button class="btn btn-outline btn-small hidden" id="logoutBtn" type="button">
+        Sair
+      </button>
     </div>
   </header>
 
-  <main>
+  <main class="container">
+    <section class="hero">
+      <div class="eyebrow">ESTRATÉGIA • MEMÓRIA • RACIOCÍNIO</div>
 
-    <!-- HERO -->
+      <h1>
+        DESAFIE SUA<br>
+        <span class="gold">MENTE.</span>
+      </h1>
 
-    <section class="hero" id="inicio">
-      <div class="container">
+      <p>
+        Entre no universo ZeusBet e explore experiências recreativas
+        de memória, atenção e estratégia. Escolha seu desafio e tente
+        superar sua própria pontuação.
+      </p>
+    </section>
 
-        <div class="hero-content">
+    <!-- AUTENTICAÇÃO -->
+    <section class="section" id="authSection">
+      <div class="section-heading">
+        <h2>Entre no <span>universo ZeusBet</span></h2>
+        <p>Entre na sua conta ou crie seu cadastro para continuar.</p>
+      </div>
 
-          <span class="hero-badge">
-            ✦ EXPERIÊNCIA PREMIUM ✦
-          </span>
-
-          <h1>
-            ENTRE NO UNIVERSO<br>
-            <span class="shimmer">ZEUSBET</span>
-          </h1>
-
-          <p>
-            Descubra desafios recreativos, teste sua memória,
-            exercite sua estratégia e divirta-se em uma experiência
-            com visual premium, animações e inspiração na mitologia.
-          </p>
-
-          <div class="hero-buttons">
-            <a class="button button-gold" href="#jogos">
-              🎮 Explorar jogos
-            </a>
-
-            <a class="button button-outline" href="#conta">
-              👤 Criar minha conta
-            </a>
-          </div>
-
-          <div class="hero-art" aria-hidden="true">
-            <span class="hero-emoji">⚡</span>
-          </div>
-
+      <div class="auth-wrap panel">
+        <div class="tabs">
+          <button class="tab active" data-mode="login" type="button">Entrar</button>
+          <button class="tab" data-mode="signup" type="button">Cadastrar</button>
+          <button class="tab" data-mode="reset" type="button">Recuperar</button>
         </div>
 
+        <h3 class="form-title" id="authTitle">Bem-vindo de volta</h3>
+        <p class="form-subtitle" id="authSubtitle">
+          Entre com seu e-mail e senha para acessar sua conta.
+        </p>
+
+        <form id="authForm">
+          <div class="field">
+            <label for="email">E-mail</label>
+            <input
+              id="email"
+              type="email"
+              autocomplete="email"
+              placeholder="seu@email.com"
+              required
+            >
+          </div>
+
+          <div class="field" id="passwordField">
+            <label for="password">Senha</label>
+            <input
+              id="password"
+              type="password"
+              autocomplete="current-password"
+              minlength="8"
+              placeholder="Mínimo de 8 caracteres"
+              required
+            >
+          </div>
+
+          <button class="btn btn-gold btn-full" id="authSubmit" type="submit">
+            Entrar na conta
+          </button>
+        </form>
+
+        <div class="notice" id="authNotice" role="status" aria-live="polite"></div>
       </div>
     </section>
 
-    <!-- INFORMAÇÕES -->
-
-    <div class="container">
-      <div class="info-strip">
-
-        <div class="info-item">
-          <strong>🎮 Jogos recreativos</strong>
-          <span>Desafios para se divertir</span>
-        </div>
-
-        <div class="info-item">
-          <strong>🔐 Área de conta</strong>
-          <span>Entre para liberar os jogos</span>
-        </div>
-
-        <div class="info-item">
-          <strong>✨ Visual premium</strong>
-          <span>Animações e efeitos dourados</span>
-        </div>
-
+    <!-- ÁREA DOS JOGOS -->
+    <section class="section hidden" id="dashboardSection">
+      <div class="section-heading">
+        <h2>Seu centro de <span>desafios</span></h2>
+        <p>Escolha uma experiência recreativa para começar.</p>
       </div>
-    </div>
 
-    <!-- CONTA: CADASTRO E LOGIN -->
+      <div class="account-bar">
+        <div>
+          <strong>Conta conectada</strong>
+          <small id="accountEmail"></small>
+        </div>
+        <span class="access-badge" id="accessBadge">VERIFICANDO ACESSO</span>
+      </div>
 
-    <section class="content-section" id="conta">
-      <div class="container">
+      <div class="games-grid" id="gamesGrid">
+        <article class="game-card">
+          <div class="game-icon">🧠</div>
+          <h3>Memória</h3>
+          <p>Encontre os pares e exercite sua memória visual.</p>
+          <button class="btn btn-gold" data-game="memory" type="button">
+            Jogar agora
+          </button>
+        </article>
 
-        <div class="section-heading">
-          <h2>Sua <span class="gold">conta</span></h2>
+        <article class="game-card">
+          <div class="game-icon">🔢</div>
+          <h3>Sequência</h3>
+          <p>Observe os números e tente repetir a sequência correta.</p>
+          <button class="btn btn-gold" data-game="sequence" type="button">
+            Jogar agora
+          </button>
+        </article>
 
-          <p>
-            Faça login ou crie sua conta para acessar os jogos.
+        <article class="game-card">
+          <div class="game-icon">🃏</div>
+          <h3>Batalha de Cartas</h3>
+          <p>Compare cartas e descubra qual possui o maior valor.</p>
+          <button class="btn btn-gold" data-game="battle" type="button">
+            Jogar agora
+          </button>
+        </article>
+
+        <article class="game-card">
+          <div class="game-icon">♠️</div>
+          <h3>Paciência Simplificada</h3>
+          <p>Organize as cartas por naipe e valor em uma experiência casual.</p>
+          <button class="btn btn-gold" data-game="solitaire" type="button">
+            Jogar agora
+          </button>
+        </article>
+
+        <article class="game-card">
+          <div class="game-icon">♦️</div>
+          <h3>Desafio dos Naipes</h3>
+          <p>Teste sua atenção identificando os símbolos apresentados.</p>
+          <button class="btn btn-gold" data-game="suits" type="button">
+            Jogar agora
+          </button>
+        </article>
+      </div>
+
+      <!-- ACESSO PAGO: NÃO LIBERA ACESSO APENAS POR INICIAR PAGAMENTO -->
+      <div class="panel pay-card" id="paymentCard">
+        <div class="eyebrow">ACESSO DIGITAL</div>
+        <h2>Acesso vitalício às experiências</h2>
+        <div class="pay-price">R$ 20,00</div>
+        <p>
+          Pagamento único para o acesso digital descrito nesta página.
+          Não há apostas, prêmios em dinheiro ou promessa de ganhos.
+          A liberação depende da confirmação do pagamento pelo servidor.
+        </p>
+
+        <button class="btn btn-gold" id="payBtn" type="button">
+          Preparar pagamento Pix
+        </button>
+
+        <div class="notice" id="paymentNotice" role="status" aria-live="polite"></div>
+
+        <div class="hidden" id="pixArea">
+          <p style="margin-top:20px">QR Code Pix</p>
+          <img
+            id="pixImage"
+            alt="QR Code Pix"
+            style="display:block;max-width:250px;width:100%;margin:15px auto;background:white;padding:10px;border-radius:12px"
+          >
+
+          <div class="field">
+            <label for="pixCode">Código Pix copia e cola</label>
+            <input id="pixCode" readonly>
+          </div>
+
+          <button class="btn btn-outline" id="copyPixBtn" type="button">
+            Copiar código Pix
+          </button>
+
+          <p style="margin-top:15px">
+            O pagamento não libera o acesso imediatamente.
+            Aguarde a confirmação oficial do servidor.
           </p>
         </div>
+      </div>
 
-        <div class="account-card">
-
-          <!-- FORMULÁRIO EXIBIDO QUANDO ESTÁ DESLOGADO -->
-
-          <div id="authForm">
-
-            <h3>🔐 Acesse sua conta</h3>
-
-            <p>
-              Entre com seu e-mail e senha. Se ainda não tiver cadastro,
-              crie uma conta gratuitamente.
-            </p>
-
-            <form id="loginForm">
-
-              <div class="field">
-                <label for="email">E-mail</label>
-
-                <input
-                  id="email"
-                  type="email"
-                  placeholder="seuemail@exemplo.com"
-                  autocomplete="email"
-                  required
-                >
-              </div>
-
-              <div class="field">
-                <label for="password">Senha</label>
-
-                <input
-                  id="password"
-                  type="password"
-                  placeholder="Digite sua senha"
-                  autocomplete="current-password"
-                  minlength="6"
-                  required
-                >
-              </div>
-
-              <div class="account-actions">
-
-                <button
-                  class="button button-gold"
-                  type="submit"
-                  id="loginButton"
-                >
-                  Entrar
-                </button>
-
-                <button
-                  class="button button-outline"
-                  type="button"
-                  id="signupButton"
-                >
-                  Criar conta
-                </button>
-
-              </div>
-
-            </form>
-
-            <button
-              type="button"
-              class="text-button"
-              id="resetButton"
-            >
-              Esqueci minha senha
-            </button>
-
-          </div>
-
-          <!-- ÁREA EXIBIDA QUANDO ESTÁ LOGADO -->
-
-          <div id="loggedArea" class="account-logged" hidden>
-
-            <div class="account-icon">✅</div>
-
-            <h3>Você está conectado!</h3>
-
-            <p id="userEmail"></p>
-
-            <p>
-              Sua conta está ativa. Os jogos estão liberados
-              para você nesta sessão.
-            </p>
-
-            <a class="button button-gold" href="#jogos">
-              Acessar jogos
-            </a>
-
-            <div style="margin-top: 16px;">
-              <button
-                type="button"
-                class="button button-outline"
-                id="logoutButton"
-              >
-                Sair da conta
-              </button>
-            </div>
-
-          </div>
-
-          <div
-            class="status-message"
-            id="authMessage"
-            role="status"
-            aria-live="polite"
-          ></div>
-
+      <!-- JOGO ABERTO -->
+      <div class="panel game-area hidden" id="gameArea">
+        <div class="game-top">
+          <h3 id="gameTitle">Jogo</h3>
+          <button class="btn btn-outline btn-small" id="closeGameBtn" type="button">
+            Voltar aos jogos
+          </button>
         </div>
 
+        <p class="game-instructions" id="gameInstructions"></p>
+        <div id="gameContent"></div>
+        <div class="game-message" id="gameMessage" role="status" aria-live="polite"></div>
       </div>
     </section>
-
-    <!-- JOGOS -->
-
-    <section class="content-section" id="jogos">
-      <div class="container">
-
-        <div class="section-heading">
-          <h2>Escolha seu <span class="gold">desafio</span></h2>
-
-          <p>
-            Entre na sua conta para liberar os jogos demonstrativos.
-            Todos os desafios abaixo são recreativos.
-          </p>
-        </div>
-
-        <div class="games-grid">
-
-          <!-- JOGO 1 -->
-
-          <article class="game-card">
-
-            <div class="game-art">
-              <span class="game-emoji">🧠</span>
-            </div>
-
-            <span class="game-tag">Memória</span>
-
-            <h3>Memória Divina</h3>
-
-            <p>
-              Encontre os pares de símbolos e teste sua memória
-              neste desafio visual.
-            </p>
-
-            <button
-              class="button button-gold"
-              onclick="openGame('memory')"
-            >
-              Jogar agora
-            </button>
-
-          </article>
-
-          <!-- JOGO 2 -->
-
-          <article class="game-card">
-
-            <div class="game-art">
-              <span class="game-emoji">🔢</span>
-            </div>
-
-            <span class="game-tag">Concentração</span>
-
-            <h3>Sequência de Zeus</h3>
-
-            <p>
-              Observe a sequência numérica e tente repeti-la
-              sem cometer erros.
-            </p>
-
-            <button
-              class="button button-gold"
-              onclick="openGame('sequence')"
-            >
-              Jogar agora
-            </button>
-
-          </article>
-
-          <!-- JOGO 3 -->
-
-          <article class="game-card">
-
-            <div class="game-art">
-              <span class="game-emoji">🃏</span>
-            </div>
-
-            <span class="game-tag">Cartas</span>
-
-            <h3>Desafio das Cartas</h3>
-
-            <p>
-              Tire duas cartas demonstrativas e compare seus valores.
-              Um desafio simples de estratégia e sorte.
-            </p>
-
-            <button
-              class="button button-gold"
-              onclick="openGame('cards')"
-            >
-              Jogar agora
-            </button>
-
-          </article>
-
-          <!-- JOGO 4 -->
-
-          <article class="game-card">
-
-            <div class="game-art">
-              <span class="game-emoji">🛡️</span>
-            </div>
-
-            <span class="game-tag">Estratégia</span>
-
-            <h3>Batalha Mitológica</h3>
-
-            <p>
-              Escolha um personagem da mitologia e enfrente
-              um adversário em uma batalha recreativa.
-            </p>
-
-            <button
-              class="button button-gold"
-              onclick="openGame('battle')"
-            >
-              Jogar agora
-            </button>
-
-          </article>
-
-          <!-- JOGO 5 -->
-
-          <article class="game-card">
-
-            <div class="game-art">
-              <span class="game-emoji">♠️</span>
-            </div>
-
-            <span class="game-tag">Cartas</span>
-
-            <h3>Desafio dos Naipes</h3>
-
-            <p>
-              Identifique o naipe da carta exibida e acumule
-              acertos neste exercício de atenção.
-            </p>
-
-            <button
-              class="button button-gold"
-              onclick="openGame('suits')"
-            >
-              Jogar agora
-            </button>
-
-          </article>
-
-          <!-- JOGO 6 -->
-
-          <article class="game-card">
-
-            <div class="game-art">
-              <span class="game-emoji">🐉</span>
-            </div>
-
-            <span class="game-tag">Conhecimento</span>
-
-            <h3>Desafio do Dragão</h3>
-
-            <p>
-              Responda a perguntas rápidas e teste seus conhecimentos
-              em um pequeno quiz.
-            </p>
-
-            <button
-              class="button button-gold"
-              onclick="openGame('quiz')"
-            >
-              Jogar agora
-            </button>
-
-          </article>
-
-        </div>
-
-        <!-- ÁREA ONDE OS JOGOS SÃO EXIBIDOS -->
-
-        <div class="game-panel" id="gamePanel">
-
-          <div class="game-top">
-
-            <h3 id="gameTitle">Jogo</h3>
-
-            <button
-              class="button button-outline button-small"
-              onclick="closeGame()"
-            >
-              ✕ Fechar
-            </button>
-
-          </div>
-
-          <div class="game-content" id="gameContent"></div>
-
-          <div
-            class="game-result"
-            id="gameResult"
-            role="status"
-            aria-live="polite"
-          ></div>
-
-        </div>
-
-      </div>
-    </section>
-
   </main>
 
-  <!-- RODAPÉ -->
-
   <footer>
-    <div class="container">
-
-      <strong>ZEUSBET</strong>
-
-      <div class="footer-links">
-        <a href="#inicio">Início</a>
-        <a href="#jogos">Jogos</a>
-        <a href="#conta">Minha conta</a>
-      </div>
-
-      <p>
-        Plataforma demonstrativa de jogos recreativos.
-        Sem apostas, depósitos ou prêmios em dinheiro.
-      </p>
-
-      <p>
-        © <span id="year"></span> ZeusBet — Todos os direitos reservados.
-      </p>
-
+    <div class="footer-links">
+      <a href="#authSection">Minha conta</a>
+      <a href="#dashboardSection">Experiências</a>
     </div>
+
+    <strong>ZEUSBET</strong><br>
+    Experiências recreativas de memória, atenção e estratégia.<br>
+    Sem apostas, sem prêmios em dinheiro e sem promessa de ganhos.<br>
+    © <span id="year"></span> ZeusBet. Todos os direitos reservados.
   </footer>
 
   <script>
-    /* ======================================================
-       CONFIGURAÇÃO DO SUPABASE
-       ====================================================== */
+    "use strict";
 
-    const SUPABASE_URL =
-      "https://gtgjxojobbljrvwppfzi.supabase.co";
+    // --------------------------------------------------
+    // CONFIGURAÇÃO SUPABASE
+    // A chave pública pode ficar no navegador.
+    // Nunca coloque a service_role ou o token MP aqui.
+    // --------------------------------------------------
 
-    const SUPABASE_ANON_KEY =
-      "sb_publishable_M91qcsHQee_BH4qvIn2oJA_oLKWpY--";
+    const SUPABASE_URL = "https://gtgjxojobbljrvwppfzi.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_M91qcsHQee_BH4qvIn2oJA_oLKWpY--";
 
     const supabaseClient = window.supabase.createClient(
       SUPABASE_URL,
-      SUPABASE_ANON_KEY,
-      {
-        auth: {
-          persistSession: true,
-          autoRefreshToken: true,
-          detectSessionInUrl: true
-        }
-      }
+      SUPABASE_ANON_KEY
     );
 
-    /* ======================================================
-       ELEMENTOS DA PÁGINA
-       ====================================================== */
-
-    const authForm = document.getElementById("authForm");
-    const loggedArea = document.getElementById("loggedArea");
-    const userEmail = document.getElementById("userEmail");
-    const authMessage = document.getElementById("authMessage");
-
-    const loginForm = document.getElementById("loginForm");
-    const loginButton = document.getElementById("loginButton");
-    const signupButton = document.getElementById("signupButton");
-    const resetButton = document.getElementById("resetButton");
-    const logoutButton = document.getElementById("logoutButton");
-
-    const gamePanel = document.getElementById("gamePanel");
-    const gameTitle = document.getElementById("gameTitle");
-    const gameContent = document.getElementById("gameContent");
-    const gameResult = document.getElementById("gameResult");
+    const $ = (id) => document.getElementById(id);
 
     let currentUser = null;
+    let authMode = "login";
     let currentGame = null;
-    let gameState = {};
+    let memoryState = null;
+    let sequenceState = null;
+    let battleState = null;
+    let solitaireState = null;
+    let suitsState = null;
+    let accessCheckInProgress = false;
 
-    document.getElementById("year").textContent =
-      new Date().getFullYear();
+    $("year").textContent = new Date().getFullYear();
 
-    /* ======================================================
-       MENSAGENS
-       ====================================================== */
-
-    function showAuthMessage(message) {
-      authMessage.textContent = message;
-      authMessage.classList.add("show");
+    function showNotice(id, message, type = "info") {
+      const element = $(id);
+      element.textContent = message;
+      element.className = "notice show " + type;
     }
 
-    function clearAuthMessage() {
-      authMessage.textContent = "";
-      authMessage.classList.remove("show");
+    function hideNotice(id) {
+      const element = $(id);
+      element.textContent = "";
+      element.className = "notice";
     }
 
-    function showGameResult(message) {
-      gameResult.textContent = message;
-    }
+    function setAuthMode(mode) {
+      authMode = mode;
 
-    function clearGameResult() {
-      gameResult.textContent = "";
-    }
+      document.querySelectorAll(".tab").forEach((tab) => {
+        tab.classList.toggle("active", tab.dataset.mode === mode);
+      });
 
-    /* ======================================================
-       ATUALIZAÇÃO DO ESTADO DA CONTA
-       ====================================================== */
+      hideNotice("authNotice");
 
-    function updateAccountUI(user) {
-      currentUser = user || null;
+      $("passwordField").classList.toggle("hidden", mode === "reset");
+      $("password").required = mode !== "reset";
 
-      if (currentUser) {
-        authForm.hidden = true;
-        loggedArea.hidden = false;
-
-        userEmail.textContent =
-          currentUser.email || "Conta conectada";
-
+      if (mode === "login") {
+        $("authTitle").textContent = "Bem-vindo de volta";
+        $("authSubtitle").textContent = "Entre com seu e-mail e senha.";
+        $("authSubmit").textContent = "Entrar na conta";
+        $("password").autocomplete = "current-password";
+      } else if (mode === "signup") {
+        $("authTitle").textContent = "Crie sua conta";
+        $("authSubtitle").textContent =
+          "Cadastre seu e-mail e crie uma senha com pelo menos 8 caracteres.";
+        $("authSubmit").textContent = "Criar conta";
+        $("password").autocomplete = "new-password";
       } else {
-        authForm.hidden = false;
-        loggedArea.hidden = true;
-
-        userEmail.textContent = "";
-        closeGame();
+        $("authTitle").textContent = "Recuperar senha";
+        $("authSubtitle").textContent =
+          "Informe seu e-mail para receber as instruções de recuperação.";
+        $("authSubmit").textContent = "Enviar instruções";
       }
     }
 
-    /* ======================================================
-       VERIFICAÇÃO REAL DA SESSÃO
-       Essa função é usada antes de abrir QUALQUER jogo.
-       ====================================================== */
+    document.querySelectorAll(".tab").forEach((tab) => {
+      tab.addEventListener("click", () => setAuthMode(tab.dataset.mode));
+    });
 
-    async function getAuthenticatedUser() {
-      const {
-        data: { session },
-        error
-      } = await supabaseClient.auth.getSession();
+    $("authForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
 
-      if (error) {
-        throw error;
-      }
+      const email = $("email").value.trim();
+      const password = $("password").value;
+      const button = $("authSubmit");
 
-      if (!session || !session.user) {
-        currentUser = null;
-        updateAccountUI(null);
-        return null;
-      }
-
-      currentUser = session.user;
-      return session.user;
-    }
-
-    /* ======================================================
-       CADASTRO
-       ====================================================== */
-
-    signupButton.addEventListener("click", async function () {
-      clearAuthMessage();
-
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-
-      if (!email || !password) {
-        showAuthMessage(
-          "Informe seu e-mail e uma senha para criar a conta."
-        );
-        return;
-      }
-
-      if (password.length < 6) {
-        showAuthMessage(
-          "Sua senha deve ter pelo menos 6 caracteres."
-        );
-        return;
-      }
-
-      signupButton.disabled = true;
-      signupButton.textContent = "Criando conta...";
+      button.disabled = true;
+      hideNotice("authNotice");
 
       try {
-        const { data, error } =
-          await supabaseClient.auth.signUp({
-            email: email,
-            password: password
+        if (authMode === "signup") {
+          const { data, error } = await supabaseClient.auth.signUp({
+            email,
+            password,
+            options: {
+              emailRedirectTo: window.location.origin
+            }
           });
 
-        if (error) {
-          throw error;
-        }
+          if (error) throw error;
 
-        if (data.session && data.user) {
-          updateAccountUI(data.user);
+          if (data.session) {
+            showNotice("authNotice", "Cadastro realizado. Conta conectada!", "success");
+          } else {
+            showNotice(
+              "authNotice",
+              "Cadastro enviado! Confira seu e-mail para confirmar a conta. Depois, volte e entre.",
+              "success"
+            );
+          }
 
-          showAuthMessage(
-            "Cadastro concluído! Você já está conectado e pode acessar os jogos."
-          );
+        } else if (authMode === "login") {
+          const { error } = await supabaseClient.auth.signInWithPassword({
+            email,
+            password
+          });
+
+          if (error) throw error;
+
+          showNotice("authNotice", "Login realizado!", "success");
 
         } else {
-          showAuthMessage(
-            "Cadastro iniciado! Confira seu e-mail para confirmar a conta, se a confirmação estiver ativada no Supabase. Depois, volte e faça login."
-          );
-        }
-
-      } catch (error) {
-        showAuthMessage(
-          "Não foi possível criar a conta: " + error.message
-        );
-
-      } finally {
-        signupButton.disabled = false;
-        signupButton.textContent = "Criar conta";
-      }
-    });
-
-    /* ======================================================
-       LOGIN
-       ====================================================== */
-
-    loginForm.addEventListener("submit", async function (event) {
-      event.preventDefault();
-      clearAuthMessage();
-
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-
-      if (!email || !password) {
-        showAuthMessage(
-          "Preencha seu e-mail e sua senha."
-        );
-        return;
-      }
-
-      loginButton.disabled = true;
-      loginButton.textContent = "Entrando...";
-
-      try {
-        const { data, error } =
-          await supabaseClient.auth.signInWithPassword({
-            email: email,
-            password: password
-          });
-
-        if (error) {
-          throw error;
-        }
-
-        updateAccountUI(data.user);
-
-        showAuthMessage(
-          "Login realizado com sucesso! Os jogos estão liberados."
-        );
-
-        document.getElementById("jogos").scrollIntoView({
-          behavior: "smooth"
-        });
-
-      } catch (error) {
-        showAuthMessage(
-          "Não foi possível entrar: " + error.message
-        );
-
-      } finally {
-        loginButton.disabled = false;
-        loginButton.textContent = "Entrar";
-      }
-    });
-
-    /* ======================================================
-       RECUPERAÇÃO DE SENHA
-       ====================================================== */
-
-    resetButton.addEventListener("click", async function () {
-      clearAuthMessage();
-
-      const email = document.getElementById("email").value.trim();
-
-      if (!email) {
-        showAuthMessage(
-          "Digite seu e-mail no campo acima antes de solicitar a recuperação."
-        );
-        return;
-      }
-
-      resetButton.disabled = true;
-      resetButton.textContent = "Enviando...";
-
-      try {
-        const { error } =
-          await supabaseClient.auth.resetPasswordForEmail(email, {
+          const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
             redirectTo: window.location.origin
           });
 
-        if (error) {
-          throw error;
+          if (error) throw error;
+
+          showNotice(
+            "authNotice",
+            "Se o endereço estiver cadastrado, você receberá um e-mail com instruções para recuperar a senha.",
+            "success"
+          );
         }
 
-        showAuthMessage(
-          "Se o e-mail estiver cadastrado e as configurações permitirem, você receberá as instruções para redefinir sua senha."
-        );
-
       } catch (error) {
-        showAuthMessage(
-          "Não foi possível solicitar a recuperação: " + error.message
+        console.error("Erro de autenticação:", error);
+
+        const messages = {
+          "Invalid login credentials": "E-mail ou senha incorretos.",
+          "Email not confirmed": "Confirme seu e-mail antes de entrar.",
+          "User already registered": "Este e-mail já possui cadastro.",
+          "Password should be at least 8 characters":
+            "A senha precisa ter pelo menos 8 caracteres."
+        };
+
+        showNotice(
+          "authNotice",
+          messages[error.message] || error.message || "Não foi possível concluir a operação.",
+          "error"
         );
 
       } finally {
-        resetButton.disabled = false;
-        resetButton.textContent = "Esqueci minha senha";
+        button.disabled = false;
       }
     });
 
-    /* ======================================================
-       LOGOUT
-       ====================================================== */
+    async function refreshSession() {
+      const { data, error } = await supabaseClient.auth.getSession();
 
-    logoutButton.addEventListener("click", async function () {
-      logoutButton.disabled = true;
-      logoutButton.textContent = "Saindo...";
+      if (error) {
+        console.error("Erro ao consultar sessão:", error);
+      }
+
+      await updateUser(data.session?.user || null);
+    }
+
+    async function updateUser(user) {
+      currentUser = user;
+
+      const loggedIn = Boolean(user);
+
+      $("authSection").classList.toggle("hidden", loggedIn);
+      $("dashboardSection").classList.toggle("hidden", !loggedIn);
+      $("logoutBtn").classList.toggle("hidden", !loggedIn);
+      $("headerUser").textContent = loggedIn ? user.email : "";
+
+      if (!loggedIn) {
+        closeGame();
+        return;
+      }
+
+      $("accountEmail").textContent = user.email || "";
+      await refreshAccessStatus();
+    }
+
+    supabaseClient.auth.onAuthStateChange((event, session) => {
+      // Evita chamadas síncronas complexas dentro do callback do Supabase.
+      setTimeout(() => {
+        updateUser(session?.user || null);
+      }, 0);
+    });
+
+    $("logoutBtn").addEventListener("click", async () => {
+      $("logoutBtn").disabled = true;
 
       try {
         const { error } = await supabaseClient.auth.signOut();
-
-        if (error) {
-          throw error;
-        }
+        if (error) throw error;
 
         currentUser = null;
-        updateAccountUI(null);
         closeGame();
-
-        showAuthMessage(
-          "Você saiu da conta. Para acessar os jogos novamente, faça login."
-        );
-
-        document.getElementById("conta").scrollIntoView({
-          behavior: "smooth"
-        });
+        $("authSection").classList.remove("hidden");
+        $("dashboardSection").classList.add("hidden");
+        $("logoutBtn").classList.add("hidden");
+        $("headerUser").textContent = "";
 
       } catch (error) {
-        showAuthMessage(
-          "Não foi possível sair da conta: " + error.message
+        alert("Não foi possível sair da conta. Tente novamente.");
+      } finally {
+        $("logoutBtn").disabled = false;
+      }
+    });
+
+    // --------------------------------------------------
+    // CONSULTA DE ACESSO: O SERVIDOR É A FONTE OFICIAL.
+    // O navegador nunca marca uma conta como paga.
+    // --------------------------------------------------
+
+    async function refreshAccessStatus() {
+      if (!currentUser || accessCheckInProgress) return;
+
+      accessCheckInProgress = true;
+      $("accessBadge").textContent = "VERIFICANDO ACESSO";
+
+      try {
+        const { data } = await supabaseClient.auth.getSession();
+        const token = data.session?.access_token;
+
+        if (!token) throw new Error("Entre novamente na sua conta.");
+
+        const response = await fetch("/api/access-status", {
+          method: "GET",
+          headers: {
+            "Authorization": "Bearer " + token,
+            "Accept": "application/json"
+          },
+          cache: "no-store"
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || result.authenticated !== true) {
+          throw new Error("Não foi possível confirmar o acesso.");
+        }
+
+        const hasAccess = result.hasLifetimeAccess === true;
+
+        $("accessBadge").textContent = hasAccess
+          ? "ACESSO CONFIRMADO"
+          : "ACESSO NÃO CONFIRMADO";
+
+        $("accessBadge").style.color = hasAccess
+          ? "var(--green)"
+          : "var(--gold-light)";
+
+        $("paymentCard").classList.toggle("hidden", hasAccess);
+
+        document.querySelectorAll("[data-game]").forEach((button) => {
+          button.disabled = !hasAccess;
+          button.title = hasAccess
+            ? "Abrir experiência"
+            : "O acesso precisa ser confirmado pelo servidor";
+        });
+
+        if (!hasAccess) {
+          showNotice(
+            "paymentNotice",
+            "Sua conta ainda não tem acesso confirmado. Os jogos serão habilitados após a confirmação oficial pelo servidor.",
+            "info"
+          );
+        } else {
+          hideNotice("paymentNotice");
+        }
+
+      } catch (error) {
+        console.error("Falha ao verificar acesso:", error);
+
+        $("accessBadge").textContent = "ACESSO NÃO VERIFICADO";
+
+        document.querySelectorAll("[data-game]").forEach((button) => {
+          button.disabled = true;
+        });
+
+        showNotice(
+          "paymentNotice",
+          "Não foi possível verificar seu acesso. Confira a API /api/access-status e tente novamente.",
+          "error"
         );
 
       } finally {
-        logoutButton.disabled = false;
-        logoutButton.textContent = "Sair da conta";
+        accessCheckInProgress = false;
       }
-    });
+    }
 
-    /* ======================================================
-       ACOMPANHAMENTO DA SESSÃO
-       Mantém a interface sincronizada com o Supabase.
-       ====================================================== */
+    // --------------------------------------------------
+    // PREPARAR PIX
+    // Este botão não confirma pagamento nem libera acesso.
+    // --------------------------------------------------
 
-    supabaseClient.auth.onAuthStateChange(function (event, session) {
-      currentUser = session ? session.user : null;
-      updateAccountUI(currentUser);
-
-      if (event === "SIGNED_OUT") {
-        closeGame();
+    $("payBtn").addEventListener("click", async () => {
+      if (!currentUser) {
+        showNotice("paymentNotice", "Entre na sua conta primeiro.", "error");
+        return;
       }
-    });
 
-    /* ======================================================
-       CONTROLE CENTRAL DOS JOGOS
-       NUNCA abrir jogo sem verificar a sessão.
-       ====================================================== */
-
-    async function openGame(gameName) {
-      clearAuthMessage();
-
-      let user;
+      const button = $("payBtn");
+      button.disabled = true;
+      button.textContent = "Preparando...";
+      hideNotice("paymentNotice");
+      $("pixArea").classList.add("hidden");
 
       try {
-        user = await getAuthenticatedUser();
+        const { data } = await supabaseClient.auth.getSession();
+        const token = data.session?.access_token;
+
+        if (!token) throw new Error("Sua sessão expirou. Entre novamente.");
+
+        const response = await fetch("/api/create-payment", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+          },
+          body: JSON.stringify({})
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.error || "Não foi possível preparar o Pix.");
+        }
+
+        if (!result.qr_code || !result.qr_code_base64) {
+          throw new Error("O servidor não retornou os dados completos do Pix.");
+        }
+
+        $("pixImage").src = "data:image/png;base64," + result.qr_code_base64;
+        $("pixCode").value = result.qr_code;
+        $("pixArea").classList.remove("hidden");
+
+        showNotice(
+          "paymentNotice",
+          "Pix preparado. Confira o valor e os dados no aplicativo do banco antes de confirmar. O pagamento ainda precisa ser validado pelo servidor.",
+          "info"
+        );
 
       } catch (error) {
-        showAuthMessage(
-          "Não foi possível verificar sua sessão. Tente novamente."
+        console.error("Erro ao preparar Pix:", error);
+
+        showNotice(
+          "paymentNotice",
+          error.message || "Não foi possível preparar o pagamento.",
+          "error"
         );
 
-        document.getElementById("conta").scrollIntoView({
-          behavior: "smooth"
-        });
-
-        return;
+      } finally {
+        button.disabled = false;
+        button.textContent = "Preparar pagamento Pix";
       }
+    });
 
-      /* BLOQUEIO DE ACESSO SEM LOGIN */
+    $("copyPixBtn").addEventListener("click", async () => {
+      const input = $("pixCode");
 
-      if (!user) {
-        closeGame();
+      try {
+        await navigator.clipboard.writeText(input.value);
+        showNotice("paymentNotice", "Código Pix copiado.", "success");
+      } catch {
+        input.select();
+        input.setSelectionRange(0, input.value.length);
 
-        showAuthMessage(
-          "🔒 Para acessar os jogos, você precisa criar uma conta ou fazer login."
+        const copied = document.execCommand("copy");
+
+        showNotice(
+          "paymentNotice",
+          copied
+            ? "Código Pix copiado."
+            : "Selecione e copie o código Pix manualmente.",
+          copied ? "success" : "info"
         );
-
-        document.getElementById("conta").scrollIntoView({
-          behavior: "smooth"
-        });
-
-        return;
       }
+    });
 
-      /* A sessão foi confirmada. O jogo pode abrir. */
+    // --------------------------------------------------
+    // CONTROLE DOS JOGOS
+    // --------------------------------------------------
 
-      currentGame = gameName;
-      gameState = {};
+    document.querySelectorAll("[data-game]").forEach((button) => {
+      button.addEventListener("click", async () => {
+        if (button.disabled) return;
 
-      gamePanel.classList.add("active");
-      gamePanel.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
+        // Confere o acesso novamente antes de abrir um jogo.
+        await refreshAccessStatus();
+
+        if (button.disabled) {
+          showNotice(
+            "paymentNotice",
+            "O acesso ainda não foi confirmado. Tente novamente mais tarde.",
+            "error"
+          );
+          return;
+        }
+
+        openGame(button.dataset.game);
       });
+    });
 
-      clearGameResult();
+    $("closeGameBtn").addEventListener("click", closeGame);
 
-      switch (gameName) {
-        case "memory":
-          renderMemoryGame();
-          break;
+    function openGame(name) {
+      currentGame = name;
+      $("gameArea").classList.remove("hidden");
+      $("gameMessage").textContent = "";
 
-        case "sequence":
-          renderSequenceGame();
-          break;
+      const titles = {
+        memory: "Memória",
+        sequence: "Sequência",
+        battle: "Batalha de Cartas",
+        solitaire: "Paciência Simplificada",
+        suits: "Desafio dos Naipes"
+      };
 
-        case "cards":
-          renderCardsGame();
-          break;
+      const instructions = {
+        memory: "Encontre todos os pares. Toque em duas cartas por vez.",
+        sequence: "Observe a sequência de números e repita-a corretamente.",
+        battle: "Cada rodada apresenta duas cartas. Descubra qual tem o maior valor.",
+        solitaire: "Organize as cartas em ordem crescente por naipe. Este é um desafio simplificado.",
+        suits: "Memorize o naipe solicitado e escolha o símbolo correto."
+      };
 
-        case "battle":
-          renderBattleGame();
-          break;
+      $("gameTitle").textContent = titles[name] || "Jogo";
+      $("gameInstructions").textContent = instructions[name] || "";
 
-        case "suits":
-          renderSuitsGame();
-          break;
+      if (name === "memory") startMemory();
+      if (name === "sequence") startSequence();
+      if (name === "battle") startBattle();
+      if (name === "solitaire") startSolitaire();
+      if (name === "suits") startSuits();
 
-        case "quiz":
-          renderQuizGame();
-          break;
-
-        default:
-          closeGame();
-          break;
-      }
+      $("gameArea").scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
     function closeGame() {
       currentGame = null;
-      gameState = {};
-
-      gamePanel.classList.remove("active");
-      gameTitle.textContent = "Jogo";
-      gameContent.innerHTML = "";
-      clearGameResult();
+      $("gameArea").classList.add("hidden");
+      $("gameContent").innerHTML = "";
+      $("gameMessage").textContent = "";
     }
 
-    /* ======================================================
-       JOGO 1 — MEMÓRIA DIVINA
-       ====================================================== */
+    function shuffle(array) {
+      const result = [...array];
 
-    function renderMemoryGame() {
-      gameTitle.textContent = "🧠 Memória Divina";
-
-      const symbols = [
-        "⚡", "🐉", "🛡️", "👑",
-        "⚡", "🐉", "🛡️", "👑"
-      ];
-
-      for (let i = symbols.length - 1; i > 0; i--) {
+      for (let i = result.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-
-        [symbols[i], symbols[j]] =
-          [symbols[j], symbols[i]];
+        [result[i], result[j]] = [result[j], result[i]];
       }
 
-      gameState.symbols = symbols;
-      gameState.open = [];
-      gameState.matched = [];
-      gameState.moves = 0;
-      gameState.locked = false;
+      return result;
+    }
 
-      gameContent.innerHTML = `
-        <p>Encontre os quatro pares de símbolos.</p>
+    function setGameMessage(message) {
+      $("gameMessage").textContent = message;
+    }
 
-        <p>
-          Tentativas:
-          <strong id="memoryMoves">0</strong>
-        </p>
+    // --------------------------------------------------
+    // JOGO 1: MEMÓRIA
+    // --------------------------------------------------
 
-        <div class="memory-grid" id="memoryGrid"></div>
+    function startMemory() {
+      const symbols = ["⚡", "♠️", "♦️", "♣️", "♥️", "👑", "⭐", "🔱"];
+      const cards = shuffle([...symbols, ...symbols]);
 
-        <div class="game-controls">
-          <button class="button button-outline" onclick="renderMemoryGame()">
-            Reiniciar jogo
-          </button>
+      memoryState = {
+        cards,
+        revealed: [],
+        matched: [],
+        moves: 0,
+        locked: false
+      };
+
+      renderMemory();
+    }
+
+    function renderMemory() {
+      if (currentGame !== "memory" || !memoryState) return;
+
+      const state = memoryState;
+
+      $("gameContent").innerHTML = `
+        <div class="game-center">
+          <p id="memoryStats">Jogadas: ${state.moves} · Pares: ${state.matched.length / 2}/8</p>
+          <div class="game-board" id="memoryBoard"></div>
+          <div class="game-actions">
+            <button class="btn btn-outline" id="memoryRestart" type="button">Recomeçar</button>
+          </div>
         </div>
       `;
 
-      const grid = document.getElementById("memoryGrid");
+      const board = $("memoryBoard");
 
-      symbols.forEach(function (symbol, index) {
+      state.cards.forEach((symbol, index) => {
         const button = document.createElement("button");
-
+        button.type = "button";
         button.className = "memory-card";
-        button.textContent = "❔";
-        button.setAttribute("aria-label", "Carta fechada");
 
-        button.addEventListener("click", function () {
-          memoryFlip(index);
-        });
+        const visible =
+          state.revealed.includes(index) ||
+          state.matched.includes(index);
 
-        grid.appendChild(button);
+        button.textContent = visible ? symbol : "✦";
+        button.setAttribute("aria-label", visible ? symbol : "Carta fechada");
+
+        if (visible) button.classList.add("revealed");
+        if (state.matched.includes(index)) button.classList.add("matched");
+
+        button.addEventListener("click", () => flipMemory(index));
+
+        board.appendChild(button);
       });
 
-      clearGameResult();
+      $("memoryRestart").addEventListener("click", startMemory);
     }
 
-    function memoryFlip(index) {
-      if (currentGame !== "memory") return;
-      if (gameState.locked) return;
-      if (gameState.matched.includes(index)) return;
-      if (gameState.open.includes(index)) return;
+    function flipMemory(index) {
+      const state = memoryState;
 
-      gameState.open.push(index);
+      if (
+        !state ||
+        state.locked ||
+        state.revealed.includes(index) ||
+        state.matched.includes(index)
+      ) return;
 
-      const buttons =
-        document.querySelectorAll(".memory-card");
+      state.revealed.push(index);
 
-      buttons[index].textContent = gameState.symbols[index];
-      buttons[index].setAttribute(
-        "aria-label",
-        "Símbolo " + gameState.symbols[index]
-      );
+      if (state.revealed.length < 2) {
+        renderMemory();
+        return;
+      }
 
-      if (gameState.open.length === 2) {
-        gameState.moves++;
+      state.moves++;
 
-        document.getElementById("memoryMoves").textContent =
-          gameState.moves;
+      const [first, second] = state.revealed;
 
-        const first = gameState.open[0];
-        const second = gameState.open[1];
+      if (state.cards[first] === state.cards[second]) {
+        state.matched.push(first, second);
+        state.revealed = [];
+        renderMemory();
 
-        if (
-          gameState.symbols[first] ===
-          gameState.symbols[second]
-        ) {
-          gameState.matched.push(first, second);
-          gameState.open = [];
-
-          if (gameState.matched.length === 8) {
-            showGameResult(
-              "🏆 Parabéns! Você encontrou todos os pares em " +
-              gameState.moves +
-              " tentativas."
-            );
-          }
-
-        } else {
-          gameState.locked = true;
-
-          setTimeout(function () {
-            if (currentGame !== "memory") return;
-
-            const currentButtons =
-              document.querySelectorAll(".memory-card");
-
-            currentButtons[first].textContent = "❔";
-            currentButtons[second].textContent = "❔";
-
-            gameState.open = [];
-            gameState.locked = false;
-
-          }, 750);
+        if (state.matched.length === state.cards.length) {
+          setGameMessage(`Parabéns! Você encontrou todos os pares em ${state.moves} jogadas.`);
         }
+
+      } else {
+        state.locked = true;
+        renderMemory();
+
+        setTimeout(() => {
+          if (currentGame !== "memory" || !memoryState) return;
+
+          state.revealed = [];
+          state.locked = false;
+          renderMemory();
+        }, 850);
       }
     }
 
-    /* ======================================================
-       JOGO 2 — SEQUÊNCIA DE ZEUS
-       ====================================================== */
+    // --------------------------------------------------
+    // JOGO 2: SEQUÊNCIA
+    // --------------------------------------------------
 
-    function renderSequenceGame() {
-      gameTitle.textContent = "🔢 Sequência de Zeus";
+    function startSequence() {
+      sequenceState = {
+        round: 1,
+        numbers: [],
+        showing: false
+      };
 
-      gameState.level = 1;
-      gameState.answer = "";
-      gameState.showing = false;
-
-      gameContent.innerHTML = `
-        <p>
-          Memorize a sequência exibida e digite os números na
-          mesma ordem.
-        </p>
-
-        <p>
-          Nível:
-          <strong id="sequenceLevel">1</strong>
-        </p>
-
-        <div class="sequence-display" id="sequenceDisplay">
-          ?
+      $("gameContent").innerHTML = `
+        <div class="sequence-display" id="sequenceDisplay">?</div>
+        <div class="sequence-input">
+          <div class="field">
+            <label for="sequenceAnswer">Digite os números na ordem apresentada</label>
+            <input id="sequenceAnswer" inputmode="numeric" autocomplete="off" placeholder="Ex.: 4271">
+          </div>
         </div>
-
-        <div class="field">
-          <label for="sequenceInput">Digite a sequência</label>
-
-          <input
-            id="sequenceInput"
-            type="text"
-            inputmode="numeric"
-            autocomplete="off"
-            placeholder="Ex.: 123"
-            style="max-width:300px;text-align:center;"
-          >
-        </div>
-
-        <div class="game-controls">
-          <button class="button button-gold" id="sequenceStart">
-            Mostrar sequência
-          </button>
-
-          <button class="button button-outline" id="sequenceCheck">
-            Conferir
-          </button>
+        <div class="game-actions">
+          <button class="btn btn-gold" id="sequenceStart" type="button">Mostrar sequência</button>
+          <button class="btn btn-outline" id="sequenceCheck" type="button">Conferir resposta</button>
         </div>
       `;
 
-      document.getElementById("sequenceStart")
-        .addEventListener("click", showSequence);
+      $("sequenceStart").addEventListener("click", showSequence);
+      $("sequenceCheck").addEventListener("click", checkSequence);
 
-      document.getElementById("sequenceCheck")
-        .addEventListener("click", checkSequence);
+      $("sequenceAnswer").addEventListener("keydown", (event) => {
+        if (event.key === "Enter") checkSequence();
+      });
 
-      clearGameResult();
+      showSequence();
     }
 
     function showSequence() {
-      if (currentGame !== "sequence") return;
+      if (!sequenceState || currentGame !== "sequence") return;
 
-      const length = Math.min(2 + gameState.level, 9);
-      let sequence = "";
+      const state = sequenceState;
+      state.numbers = Array.from(
+        { length: Math.min(3 + state.round, 9) },
+        () => Math.floor(Math.random() * 10)
+      );
+      state.showing = true;
 
-      for (let i = 0; i < length; i++) {
-        sequence += Math.floor(Math.random() * 10);
-      }
+      $("sequenceAnswer").value = "";
+      $("sequenceAnswer").disabled = true;
+      $("sequenceDisplay").textContent = state.numbers.join(" ");
 
-      gameState.answer = sequence;
-      gameState.showing = true;
+      setGameMessage(`Rodada ${state.round}: memorize a sequência.`);
 
-      const display =
-        document.getElementById("sequenceDisplay");
+      $("sequenceStart").disabled = true;
+      $("sequenceCheck").disabled = true;
 
-      const input =
-        document.getElementById("sequenceInput");
+      setTimeout(() => {
+        if (currentGame !== "sequence" || !sequenceState) return;
 
-      input.value = "";
-      input.disabled = true;
-
-      display.textContent = sequence;
-      showGameResult("Memorize!");
-
-      setTimeout(function () {
-        if (currentGame !== "sequence") return;
-
-        display.textContent = "• ".repeat(length);
-        input.disabled = false;
-        input.focus();
-
-        gameState.showing = false;
-
-        showGameResult("Agora digite a sequência.");
-      }, 1800 + length * 250);
+        $("sequenceDisplay").textContent = "• • •";
+        $("sequenceAnswer").disabled = false;
+        $("sequenceStart").disabled = false;
+        $("sequenceCheck").disabled = false;
+        $("sequenceAnswer").focus();
+      }, Math.max(1300, state.numbers.length * 450));
     }
 
     function checkSequence() {
-      if (currentGame !== "sequence") return;
+      if (!sequenceState || !sequenceState.showing) return;
 
-      if (gameState.showing) {
-        showGameResult("Espere a sequência terminar.");
+      const answer = $("sequenceAnswer").value.replace(/\s/g, "");
+      const correct = sequenceState.numbers.join("");
+
+      if (!answer) {
+        setGameMessage("Digite a sequência antes de conferir.");
         return;
       }
 
-      if (!gameState.answer) {
-        showGameResult("Clique em Mostrar sequência primeiro.");
-        return;
-      }
+      sequenceState.showing = false;
 
-      const input =
-        document.getElementById("sequenceInput");
+      if (answer === correct) {
+        sequenceState.round++;
+        setGameMessage("Correto! Vamos aumentar o desafio.");
+        $("sequenceDisplay").textContent = "✓";
 
-      if (input.value === gameState.answer) {
-        gameState.level++;
-
-        document.getElementById("sequenceLevel").textContent =
-          gameState.level;
-
-        showGameResult("✅ Correto! Você avançou de nível.");
-
-        gameState.answer = "";
+        setTimeout(() => {
+          if (currentGame === "sequence") showSequence();
+        }, 700);
 
       } else {
-        showGameResult(
-          "❌ Não foi dessa vez. Tente novamente!"
+        setGameMessage(
+          `Fim desta rodada. A sequência era ${correct}. Você chegou à rodada ${sequenceState.round}.`
         );
 
-        gameState.level = 1;
+        $("sequenceDisplay").textContent = "↻";
+        $("sequenceStart").textContent = "Tentar novamente";
+        $("sequenceStart").disabled = false;
 
-        document.getElementById("sequenceLevel").textContent =
-          "1";
-
-        gameState.answer = "";
-      }
-    }
-
-    /* ======================================================
-       JOGO 3 — DESAFIO DAS CARTAS
-       ====================================================== */
-
-    function renderCardsGame() {
-      gameTitle.textContent = "🃏 Desafio das Cartas";
-
-      gameContent.innerHTML = `
-        <p>
-          Retire duas cartas e veja qual possui o maior valor.
-        </p>
-
-        <div class="cards-row" id="cardsRow">
-          <div class="playing-card">?</div>
-          <div class="playing-card">?</div>
-        </div>
-
-        <div class="game-controls">
-          <button class="button button-gold" onclick="drawCards()">
-            Tirar cartas
-          </button>
-        </div>
-
-        <p class="muted" style="margin-top:15px;">
-          A = 1, J = 11, Q = 12, K = 13.
-        </p>
-      `;
-
-      clearGameResult();
-    }
-
-    function drawCards() {
-      if (currentGame !== "cards") return;
-
-      const deck = [
-        { name: "A", value: 1 },
-        { name: "2", value: 2 },
-        { name: "3", value: 3 },
-        { name: "4", value: 4 },
-        { name: "5", value: 5 },
-        { name: "6", value: 6 },
-        { name: "7", value: 7 },
-        { name: "8", value: 8 },
-        { name: "9", value: 9 },
-        { name: "10", value: 10 },
-        { name: "J", value: 11 },
-        { name: "Q", value: 12 },
-        { name: "K", value: 13 }
-      ];
-
-      const suits = ["♠", "♥", "♦", "♣"];
-
-      function randomCard() {
-        const card = deck[
-          Math.floor(Math.random() * deck.length)
-        ];
-
-        const suit = suits[
-          Math.floor(Math.random() * suits.length)
-        ];
-
-        return {
-          name: card.name,
-          value: card.value,
-          suit: suit
+        $("sequenceStart").onclick = () => {
+          $("sequenceStart").textContent = "Mostrar sequência";
+          sequenceState.round = 1;
+          sequenceState.showing = false;
+          showSequence();
         };
       }
-
-      const first = randomCard();
-      const second = randomCard();
-
-      const row = document.getElementById("cardsRow");
-
-      row.innerHTML = "";
-
-      [first, second].forEach(function (card) {
-        const div = document.createElement("div");
-
-        div.className =
-          "playing-card" +
-          (card.suit === "♥" || card.suit === "♦"
-            ? " red-suit"
-            : "");
-
-        div.textContent = card.name + card.suit;
-
-        row.appendChild(div);
-      });
-
-      if (first.value > second.value) {
-        showGameResult("A primeira carta tem o maior valor!");
-      } else if (second.value > first.value) {
-        showGameResult("A segunda carta tem o maior valor!");
-      } else {
-        showGameResult("Empate! As duas cartas têm o mesmo valor.");
-      }
     }
 
-    /* ======================================================
-       JOGO 4 — BATALHA MITOLÓGICA
-       ====================================================== */
+    // --------------------------------------------------
+    // JOGO 3: BATALHA DE CARTAS RECREATIVA
+    // --------------------------------------------------
 
-    function renderBattleGame() {
-      gameTitle.textContent = "🛡️ Batalha Mitológica";
+    const suitSymbols = ["♠", "♥", "♦", "♣"];
+    const cardRanks = [
+      { label: "2", value: 2 }, { label: "3", value: 3 },
+      { label: "4", value: 4 }, { label: "5", value: 5 },
+      { label: "6", value: 6 }, { label: "7", value: 7 },
+      { label: "8", value: 8 }, { label: "9", value: 9 },
+      { label: "10", value: 10 }, { label: "J", value: 11 },
+      { label: "Q", value: 12 }, { label: "K", value: 13 },
+      { label: "A", value: 14 }
+    ];
 
-      gameContent.innerHTML = `
-        <p>Escolha seu personagem para começar o desafio.</p>
+    function randomCard() {
+      const rank = cardRanks[Math.floor(Math.random() * cardRanks.length)];
+      const suit = suitSymbols[Math.floor(Math.random() * suitSymbols.length)];
 
-        <div class="game-controls">
+      return {
+        label: rank.label,
+        value: rank.value,
+        suit,
+        red: suit === "♥" || suit === "♦"
+      };
+    }
 
-          <button
-            class="choice-button"
-            onclick="battleChoice('zeus')"
-            aria-label="Escolher Zeus"
-          >
-            ⚡
-            <br>
-            <span style="font-size:0.75rem;">Zeus</span>
-          </button>
+    function cardHTML(card) {
+      return `<span class="playing-card ${card.red ? "red" : ""}">${card.label}${card.suit}</span>`;
+    }
 
-          <button
-            class="choice-button"
-            onclick="battleChoice('athena')"
-            aria-label="Escolher Atena"
-          >
-            🛡️
-            <br>
-            <span style="font-size:0.75rem;">Atena</span>
-          </button>
+    function startBattle() {
+      battleState = { rounds: 0, points: 0, left: null, right: null };
 
-          <button
-            class="choice-button"
-            onclick="battleChoice('dragon')"
-            aria-label="Escolher Dragão"
-          >
-            🐉
-            <br>
-            <span style="font-size:0.75rem;">Dragão</span>
-          </button>
-
+      $("gameContent").innerHTML = `
+        <div class="game-center">
+          <p id="battleStats">Rodadas: 0 · Acertos: 0</p>
+          <div id="battleCards"></div>
+          <p>Qual carta possui o maior valor?</p>
+          <div class="game-actions">
+            <button class="btn btn-outline" id="battleLeft" type="button">Carta esquerda</button>
+            <button class="btn btn-outline" id="battleRight" type="button">Carta direita</button>
+          </div>
+          <div class="game-actions">
+            <button class="btn btn-gold" id="battleNext" type="button">Nova rodada</button>
+          </div>
         </div>
-
-        <div id="battleDisplay" style="margin-top:22px;"></div>
       `;
 
-      clearGameResult();
+      $("battleLeft").addEventListener("click", () => chooseBattle("left"));
+      $("battleRight").addEventListener("click", () => chooseBattle("right"));
+      $("battleNext").addEventListener("click", nextBattle);
+
+      nextBattle();
     }
 
-    function battleChoice(choice) {
-      if (currentGame !== "battle") return;
+    function nextBattle() {
+      if (!battleState) return;
 
-      const characters = {
-        zeus: {
-          name: "Zeus",
-          emoji: "⚡"
-        },
+      battleState.left = randomCard();
+      battleState.right = randomCard();
 
-        athena: {
-          name: "Atena",
-          emoji: "🛡️"
-        },
+      $("battleCards").innerHTML =
+        cardHTML(battleState.left) + cardHTML(battleState.right);
 
-        dragon: {
-          name: "Dragão",
-          emoji: "🐉"
+      $("battleStats").textContent =
+        `Rodadas: ${battleState.rounds} · Acertos: ${battleState.points}`;
+
+      $("battleLeft").disabled = false;
+      $("battleRight").disabled = false;
+      setGameMessage("Escolha a carta de maior valor.");
+    }
+
+    function chooseBattle(side) {
+      if (!battleState) return;
+
+      const left = battleState.left;
+      const right = battleState.right;
+
+      if (!left || !right) return;
+
+      battleState.rounds++;
+
+      if (left.value === right.value) {
+        setGameMessage("Empate! Nenhuma carta possui valor maior.");
+      } else {
+        const correctSide = left.value > right.value ? "left" : "right";
+
+        if (side === correctSide) {
+          battleState.points++;
+          setGameMessage("Resposta correta! Bom trabalho.");
+        } else {
+          setGameMessage("Não foi dessa vez. Compare os valores e tente outra rodada.");
         }
+      }
+
+      $("battleStats").textContent =
+        `Rodadas: ${battleState.rounds} · Acertos: ${battleState.points}`;
+
+      $("battleLeft").disabled = true;
+      $("battleRight").disabled = true;
+    }
+
+    // --------------------------------------------------
+    // JOGO 4: PACIÊNCIA SIMPLIFICADA
+    // --------------------------------------------------
+
+    function startSolitaire() {
+      const deck = [];
+
+      for (const suit of suitSymbols) {
+        for (const rank of cardRanks) {
+          deck.push({
+            label: rank.label,
+            value: rank.value,
+            suit,
+            red: suit === "♥" || suit === "♦"
+          });
+        }
+      }
+
+      solitaireState = {
+        deck: shuffle(deck),
+        piles: [[], [], [], []],
+        selected: null
       };
 
-      const keys = Object.keys(characters);
-
-      const opponentKey =
-        keys[Math.floor(Math.random() * keys.length)];
-
-      const player = characters[choice];
-      const opponent = characters[opponentKey];
-
-      const display =
-        document.getElementById("battleDisplay");
-
-      display.innerHTML = "";
-
-      const matchup = document.createElement("p");
-
-      matchup.style.fontSize = "1.4rem";
-      matchup.textContent =
-        player.emoji + " " + player.name +
-        "  VS  " +
-        opponent.emoji + " " + opponent.name;
-
-      display.appendChild(matchup);
-
-      if (choice === opponentKey) {
-        showGameResult("🤝 Empate! Tente outra rodada.");
-      } else if (
-        (choice === "zeus" && opponentKey === "dragon") ||
-        (choice === "dragon" && opponentKey === "athena") ||
-        (choice === "athena" && opponentKey === "zeus")
-      ) {
-        showGameResult("🏆 Você venceu este desafio!");
-      } else {
-        showGameResult("O adversário venceu desta vez. Tente novamente!");
-      }
-    }
-
-    /* ======================================================
-       JOGO 5 — DESAFIO DOS NAIPES
-       ====================================================== */
-
-    function renderSuitsGame() {
-      gameTitle.textContent = "♠️ Desafio dos Naipes";
-
-      gameState.suitScore = 0;
-      gameState.suitAnswer = "";
-
-      gameContent.innerHTML = `
-        <p>
-          Identifique corretamente o naipe da carta.
-        </p>
-
-        <p>
-          Acertos:
-          <strong id="suitScore">0</strong>
-        </p>
-
-        <div class="cards-row">
-          <div class="playing-card" id="suitCard">?</div>
-        </div>
-
-        <div class="game-controls">
-
-          <button
-            class="choice-button"
-            onclick="checkSuit('♠')"
-          >
-            ♠
-          </button>
-
-          <button
-            class="choice-button"
-            onclick="checkSuit('♥')"
-          >
-            ♥
-          </button>
-
-          <button
-            class="choice-button"
-            onclick="checkSuit('♦')"
-          >
-            ♦
-          </button>
-
-          <button
-            class="choice-button"
-            onclick="checkSuit('♣')"
-          >
-            ♣
-          </button>
-
-        </div>
-
-        <div class="game-controls">
-          <button class="button button-outline" onclick="nextSuitCard()">
-            Próxima carta
-          </button>
+      $("gameContent").innerHTML = `
+        <div class="game-center">
+          <p>Toque em uma carta para selecioná-la e depois toque na pilha de destino.
+             Organize cada naipe em ordem crescente, do 2 ao Ás.</p>
+          <div class="game-actions">
+            <button class="btn btn-gold" id="solitaireDeal" type="button">Distribuir cartas</button>
+            <button class="btn btn-outline" id="solitaireReset" type="button">Recomeçar</button>
+          </div>
+          <div id="solitaireBoard" style="margin-top:20px"></div>
         </div>
       `;
 
-      nextSuitCard();
-      clearGameResult();
+      $("solitaireDeal").addEventListener("click", dealSolitaire);
+      $("solitaireReset").addEventListener("click", startSolitaire);
+
+      renderSolitaire();
     }
 
-    function nextSuitCard() {
-      if (currentGame !== "suits") return;
+    function dealSolitaire() {
+      if (!solitaireState) return;
 
-      const values = [
-        "A", "2", "3", "4", "5", "6", "7",
-        "8", "9", "10", "J", "Q", "K"
-      ];
+      solitaireState.deck = shuffle(solitaireState.deck);
+      solitaireState.piles = [[], [], [], []];
+      solitaireState.selected = null;
 
-      const suits = ["♠", "♥", "♦", "♣"];
-
-      const value =
-        values[Math.floor(Math.random() * values.length)];
-
-      const suit =
-        suits[Math.floor(Math.random() * suits.length)];
-
-      gameState.suitAnswer = suit;
-
-      const card = document.getElementById("suitCard");
-
-      card.textContent = value + suit;
-
-      card.className =
-        "playing-card" +
-        (suit === "♥" || suit === "♦"
-          ? " red-suit"
-          : "");
-
-      showGameResult("Qual é o naipe desta carta?");
+      renderSolitaire();
+      setGameMessage("Distribuição pronta. Selecione uma carta.");
     }
 
-    function checkSuit(suit) {
-      if (currentGame !== "suits") return;
+    function renderSolitaire() {
+      if (!solitaireState || currentGame !== "solitaire") return;
 
-      if (suit === gameState.suitAnswer) {
-        gameState.suitScore++;
+      const board = $("solitaireBoard");
+      board.innerHTML = "";
 
-        document.getElementById("suitScore").textContent =
-          gameState.suitScore;
+      solitaireState.piles.forEach((pile, pileIndex) => {
+        const wrapper = document.createElement("div");
+        wrapper.style.cssText =
+          "display:inline-block;vertical-align:top;width:23%;min-height:130px;margin:1%;padding:6px;border:1px solid var(--border);border-radius:12px;background:#090909";
 
-        showGameResult("✅ Acertou! Clique em Próxima carta.");
+        const title = document.createElement("p");
+        title.textContent = suitSymbols[pileIndex];
+        title.style.cssText = "font-size:22px;color:var(--gold);margin-bottom:7px";
+        wrapper.appendChild(title);
 
-      } else {
-        showGameResult("❌ Não foi dessa vez. Tente novamente.");
+        if (pile.length === 0) {
+          const empty = document.createElement("p");
+          empty.textContent = "Vazia";
+          empty.style.cssText = "color:var(--muted);font-size:11px";
+          wrapper.appendChild(empty);
+        }
+
+        pile.forEach((card, cardIndex) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "playing-card " + (card.red ? "red" : "");
+          button.style.cssText = "width:100%;margin:3px 0;min-height:42px;font-size:16px";
+          button.textContent = card.label + card.suit;
+
+          if (solitaireState.selected &&
+              solitaireState.selected.pileIndex === pileIndex &&
+              solitaireState.selected.cardIndex === cardIndex) {
+            button.style.border = "2px solid var(--gold-light)";
+          }
+
+          button.addEventListener("click", () => selectSolitaire(pileIndex, cardIndex));
+          wrapper.appendChild(button);
+        });
+
+        const drop = document.createElement("button");
+        drop.type = "button";
+        drop.className = "btn btn-outline btn-small";
+        drop.style.cssText = "width:100%;margin-top:7px";
+        drop.textContent = "Destino";
+
+        drop.addEventListener("click", () => moveSolitaire(pileIndex));
+        wrapper.appendChild(drop);
+
+        board.appendChild(wrapper);
+      });
+
+      const remaining = document.createElement("p");
+      remaining.style.cssText = "color:var(--muted);margin-top:15px;font-size:12px";
+      remaining.textContent = `Cartas restantes: ${solitaireState.deck.length}`;
+      board.appendChild(remaining);
+
+      if (solitaireState.piles.every((pile, i) =>
+        pile.length === 13 &&
+        pile.every((card, index) => card.suit === suitSymbols[i] && card.value === index + 2)
+      )) {
+        setGameMessage("Parabéns! Você organizou todos os naipes.");
       }
     }
 
-    /* ======================================================
-       JOGO 6 — DESAFIO DO DRAGÃO
-       ====================================================== */
+    function selectSolitaire(pileIndex, cardIndex) {
+      if (!solitaireState) return;
 
-    function renderQuizGame() {
-      gameTitle.textContent = "🐉 Desafio do Dragão";
-
-      gameState.quizIndex = 0;
-      gameState.quizScore = 0;
-
-      gameState.questions = [
-        {
-          question: "Qual é o maior planeta do Sistema Solar?",
-          answers: ["Marte", "Júpiter", "Vênus"],
-          correct: 1
-        },
-        {
-          question: "Quantos lados tem um hexágono?",
-          answers: ["Cinco", "Seis", "Oito"],
-          correct: 1
-        },
-        {
-          question: "Qual é o satélite natural da Terra?",
-          answers: ["Lua", "Sol", "Marte"],
-          correct: 0
-        },
-        {
-          question: "Qual é o resultado de 7 × 8?",
-          answers: ["54", "56", "64"],
-          correct: 1
-        }
-      ];
-
-      showQuizQuestion();
+      solitaireState.selected = { pileIndex, cardIndex };
+      renderSolitaire();
+      setGameMessage("Carta selecionada. Escolha uma pilha de destino.");
     }
 
-    function showQuizQuestion() {
-      if (currentGame !== "quiz") return;
+    function moveSolitaire(destinationIndex) {
+      if (!solitaireState) return;
 
-      const index = gameState.quizIndex;
-      const questions = gameState.questions;
+      const selected = solitaireState.selected;
 
-      if (index >= questions.length) {
-        gameContent.innerHTML = `
-          <h3 style="color:var(--gold);margin-bottom:15px;">
-            Desafio concluído!
-          </h3>
-
-          <p>
-            Você acertou ${gameState.quizScore} de
-            ${questions.length} perguntas.
-          </p>
-
-          <div class="game-controls">
-            <button class="button button-gold" onclick="renderQuizGame()">
-              Jogar novamente
-            </button>
-          </div>
-        `;
-
-        showGameResult("🏆 Parabéns por completar o desafio!");
+      if (!selected) {
+        setGameMessage("Selecione uma carta primeiro.");
         return;
       }
 
-      const item = questions[index];
+      if (selected.pileIndex === destinationIndex) {
+        solitaireState.selected = null;
+        renderSolitaire();
+        return;
+      }
 
-      gameContent.innerHTML = `
-        <p>
-          Pergunta ${index + 1} de ${questions.length}
-        </p>
+      const source = solitaireState.piles[selected.pileIndex];
+      const destination = solitaireState.piles[destinationIndex];
+      const card = source[selected.cardIndex];
 
-        <h3 style="margin:18px 0;color:var(--gold-light);">
-          ${item.question}
-        </h3>
+      // Movimento permitido apenas para a próxima carta do mesmo naipe.
+      const expectedValue = destination.length + 2;
 
-        <div
-          class="game-controls"
-          id="quizAnswers"
-          style="flex-direction:column;max-width:360px;margin:20px auto;"
-        ></div>
+      if (
+        selected.cardIndex === source.length - 1 &&
+        card.suit === suitSymbols[destinationIndex] &&
+        card.value === expectedValue
+      ) {
+        source.pop();
+        destination.push(card);
+        solitaireState.selected = null;
+        setGameMessage("Boa! Movimento válido.");
+      } else {
+        setGameMessage("Movimento inválido. Confira o naipe e a ordem crescente.");
+      }
+
+      renderSolitaire();
+    }
+
+    // --------------------------------------------------
+    // JOGO 5: DESAFIO DOS NAIPES
+    // --------------------------------------------------
+
+    function startSuits() {
+      suitsState = {
+        rounds: 0,
+        points: 0,
+        target: null
+      };
+
+      $("gameContent").innerHTML = `
+        <div class="game-center">
+          <p id="suitsStats">Rodadas: 0 · Acertos: 0</p>
+          <div class="sequence-display" id="suitsTarget">?</div>
+          <p>Selecione o símbolo solicitado.</p>
+          <div class="suits-grid" id="suitsGrid"></div>
+          <div class="game-actions">
+            <button class="btn btn-gold" id="suitsNext" type="button">Novo desafio</button>
+          </div>
+        </div>
       `;
 
-      const answers =
-        document.getElementById("quizAnswers");
+      const grid = $("suitsGrid");
 
-      item.answers.forEach(function (answer, answerIndex) {
+      suitSymbols.forEach((suit) => {
         const button = document.createElement("button");
-
-        button.className = "button button-outline";
-        button.style.width = "100%";
-        button.textContent = answer;
-
-        button.addEventListener("click", function () {
-          if (currentGame !== "quiz") return;
-
-          if (answerIndex === item.correct) {
-            gameState.quizScore++;
-
-            showGameResult("✅ Resposta correta!");
-          } else {
-            showGameResult("❌ Resposta incorreta.");
-          }
-
-          answers.querySelectorAll("button").forEach(function (b) {
-            b.disabled = true;
-          });
-
-          const nextButton = document.createElement("button");
-
-          nextButton.className = "button button-gold";
-          nextButton.style.marginTop = "10px";
-          nextButton.textContent =
-            index === questions.length - 1
-              ? "Ver resultado"
-              : "Próxima pergunta";
-
-          nextButton.addEventListener("click", function () {
-            gameState.quizIndex++;
-            showQuizQuestion();
-          });
-
-          answers.appendChild(nextButton);
-        });
-
-        answers.appendChild(button);
+        button.type = "button";
+        button.className = "suit-btn " +
+          ((suit === "♥" || suit === "♦") ? "red-suit" : "");
+        button.textContent = suit;
+        button.setAttribute("aria-label", "Naipe " + suit);
+        button.addEventListener("click", () => chooseSuit(suit));
+        grid.appendChild(button);
       });
 
-      clearGameResult();
+      $("suitsNext").addEventListener("click", nextSuitChallenge);
+
+      nextSuitChallenge();
     }
 
-    /* ======================================================
-       INICIALIZAÇÃO
-       ====================================================== */
+    function nextSuitChallenge() {
+      if (!suitsState) return;
 
-    async function initializeApp() {
-      try {
-        const {
-          data: { session },
-          error
-        } = await supabaseClient.auth.getSession();
+      suitsState.target = suitSymbols[Math.floor(Math.random() * suitSymbols.length)];
+      $("suitsTarget").textContent = suitsState.target;
+      setGameMessage("Qual é o naipe solicitado?");
+    }
 
-        if (error) {
-          throw error;
-        }
+    function chooseSuit(suit) {
+      if (!suitsState || !suitsState.target) return;
 
-        updateAccountUI(session ? session.user : null);
+      suitsState.rounds++;
 
-      } catch (error) {
-        updateAccountUI(null);
-
-        showAuthMessage(
-          "Não foi possível verificar sua conta. Atualize a página e tente novamente."
-        );
+      if (suit === suitsState.target) {
+        suitsState.points++;
+        setGameMessage("Acertou! Continue praticando.");
+      } else {
+        setGameMessage("Quase! Observe o símbolo e tente outra rodada.");
       }
+
+      $("suitsStats").textContent =
+        `Rodadas: ${suitsState.rounds} · Acertos: ${suitsState.points}`;
+
+      suitsState.target = null;
+      $("suitsTarget").textContent = "✓";
     }
 
-    initializeApp();
-  </script>
+    // --------------------------------------------------
+    // INICIALIZAÇÃO
+    // --------------------------------------------------
 
+    refreshSession();
+  </script>
 </body>
 </html>
