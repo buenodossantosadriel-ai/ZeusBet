@@ -1,1689 +1,2559 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>ZeusBet | Jogos de Cartas</title>
-<meta name="theme-color" content="#090909">
-<meta name="description" content="ZeusBet: jogos de cartas recreativos e desafios de habilidade.">
-
-<style>
-:root {
-  --gold: #f5c542;
-  --gold-light: #ffe9a0;
-  --bg: #090909;
-  --panel: #171717;
-  --text: #fff;
-  --muted: #b9b9b9;
-  --border: #383838;
-  --green: #2ecc71;
-  --red: #ff6464;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-[hidden] {
-  display: none !important;
-}
-
-body {
-  background:
-    radial-gradient(ellipse at top, #30230a 0%, #111 38%, #080808 78%);
-  color: var(--text);
-  font-family: Arial, Helvetica, sans-serif;
-  min-height: 100vh;
-  line-height: 1.6;
-}
-
-button, input, select {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-}
-
-button:disabled {
-  opacity: .45;
-  cursor: not-allowed;
-}
-
-header {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  background: rgba(8,8,8,.97);
-  border-bottom: 1px solid #594719;
-  backdrop-filter: blur(12px);
-}
-
-.navbar {
-  max-width: 1150px;
-  margin: auto;
-  padding: 15px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.logo {
-  color: var(--gold);
-  font-size: 1.8rem;
-  font-weight: 900;
-  letter-spacing: 2px;
-  text-decoration: none;
-}
-
-.nav-actions {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  flex-wrap: wrap;
-}
-
-.user-label {
-  color: var(--muted);
-  font-size: .85rem;
-  overflow-wrap: anywhere;
-}
-
-.container {
-  width: min(1100px, 92%);
-  margin: auto;
-}
-
-.hero {
-  text-align: center;
-  padding: 65px 15px 35px;
-}
-
-.badge {
-  display: inline-block;
-  padding: 5px 14px;
-  border: 1px solid #72591b;
-  border-radius: 25px;
-  background: #211a0b;
-  color: var(--gold-light);
-  font-size: .82rem;
-  margin-bottom: 18px;
-}
-
-.hero h1 {
-  color: var(--gold);
-  font-size: clamp(2.6rem, 9vw, 5rem);
-  line-height: 1.1;
-  text-shadow: 0 0 25px #f5c54225;
-}
-
-.hero p {
-  max-width: 650px;
-  color: var(--muted);
-  margin: 18px auto 24px;
-}
-
-.button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  border-radius: 9px;
-  padding: 11px 17px;
-  font-weight: bold;
-  transition: filter .2s, transform .2s;
-}
-
-.button:hover {
-  filter: brightness(1.1);
-  transform: translateY(-1px);
-}
-
-.gold {
-  background: linear-gradient(135deg, var(--gold-light), #d5a51a);
-  color: #171000;
-}
-
-.dark {
-  background: #292929;
-  border: 1px solid #444;
-  color: white;
-}
-
-.danger {
-  background: #471a1a;
-  border: 1px solid #7b2929;
-  color: white;
-}
-
-.section {
-  padding: 30px 0 45px;
-}
-
-.section-title {
-  color: var(--gold);
-  text-align: center;
-  font-size: clamp(1.7rem, 5vw, 2.3rem);
-  margin-bottom: 8px;
-}
-
-.section-description {
-  color: var(--muted);
-  text-align: center;
-  max-width: 680px;
-  margin: 0 auto 25px;
-}
-
-.notice {
-  max-width: 850px;
-  margin: 25px auto;
-  padding: 13px 16px;
-  border: 1px solid #5b491b;
-  border-radius: 10px;
-  background: #17150e;
-  color: #e7d9a7;
-  font-size: .9rem;
-}
-
-.auth-card {
-  max-width: 440px;
-  margin: auto;
-  padding: 25px;
-  border: 1px solid #4b3b17;
-  border-radius: 15px;
-  background: var(--panel);
-}
-
-.auth-card h2 {
-  text-align: center;
-  color: var(--gold);
-  margin-bottom: 6px;
-}
-
-.auth-card > p {
-  text-align: center;
-  color: var(--muted);
-  margin-bottom: 20px;
-}
-
-.field {
-  margin-bottom: 15px;
-}
-
-.field label {
-  display: block;
-  margin-bottom: 6px;
-}
-
-.field input {
-  width: 100%;
-  padding: 12px;
-  background: #0d0d0d;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  color: white;
-}
-
-.field input:focus {
-  outline: 2px solid var(--gold);
-  outline-offset: 1px;
-}
-
-.full {
-  width: 100%;
-}
-
-.auth-links {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  margin-top: 15px;
-}
-
-.text-button {
-  background: none;
-  border: none;
-  color: var(--gold-light);
-  text-decoration: underline;
-  padding: 5px;
-}
-
-.message {
-  display: none;
-  padding: 10px;
-  margin-top: 14px;
-  border-radius: 8px;
-  overflow-wrap: anywhere;
-  font-size: .9rem;
-}
-
-.message.visible {
-  display: block;
-}
-
-.message.success {
-  background: #102b1b;
-  color: #9bf0ba;
-}
-
-.message.error {
-  background: #351515;
-  color: #ffb0b0;
-}
-
-.account-box {
-  max-width: 700px;
-  margin: auto;
-  padding: 20px;
-  background: var(--panel);
-  border: 1px solid #4b3b17;
-  border-radius: 12px;
-  text-align: center;
-}
-
-.account-box p {
-  color: var(--muted);
-  margin: 8px 0 15px;
-  overflow-wrap: anywhere;
-}
-
-.games-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 17px;
-}
-
-.game-card {
-  padding: 23px 17px;
-  border-radius: 14px;
-  background: linear-gradient(155deg, #242424, #101010);
-  border: 1px solid #4c3d1c;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.game-card h3 {
-  color: var(--gold);
-  margin: 8px 0;
-}
-
-.game-card p {
-  color: var(--muted);
-  font-size: .9rem;
-  margin-bottom: 16px;
-}
-
-.game-icon {
-  font-size: 3.3rem;
-  line-height: 1.3;
-}
-
-.game-card .button {
-  margin-top: auto;
-}
-
-.tag {
-  display: inline-block;
-  margin-top: 8px;
-  padding: 3px 9px;
-  border-radius: 20px;
-  border: 1px solid #245b39;
-  background: #10271a;
-  color: #a9f3c1;
-  font-size: .72rem;
-}
-
-.game-panel {
-  margin-top: 28px;
-  padding: 22px;
-  background: #121212;
-  border: 1px solid #594719;
-  border-radius: 15px;
-  text-align: center;
-}
-
-.game-panel h3 {
-  color: var(--gold);
-  font-size: 1.5rem;
-  margin-bottom: 8px;
-}
-
-.game-panel p {
-  color: var(--muted);
-}
-
-.game-toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 9px;
-  justify-content: center;
-  margin: 16px 0;
-}
-
-.playing-area {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 9px;
-  margin: 20px 0;
-  min-height: 70px;
-}
-
-.card {
-  width: 62px;
-  height: 88px;
-  flex: 0 0 auto;
-  border-radius: 8px;
-  border: 2px solid #d6b65b;
-  background: linear-gradient(145deg, #fff, #e6e1d5);
-  color: #171717;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  font-size: 1.5rem;
-  font-weight: bold;
-  box-shadow: 0 3px 8px #0005;
-}
-
-.card.red {
-  color: #c52323;
-}
-
-.card.back {
-  color: var(--gold);
-  background: repeating-linear-gradient(
-    45deg, #21190b, #21190b 5px, #392b10 5px, #392b10 10px
-  );
-}
-
-.card:focus-visible {
-  outline: 3px solid white;
-  outline-offset: 2px;
-}
-
-.card.small {
-  width: 47px;
-  height: 67px;
-  font-size: 1.15rem;
-}
-
-.memory-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 62px));
-  justify-content: center;
-  gap: 8px;
-  margin: 20px auto;
-}
-
-.memory-grid .card {
-  width: 100%;
-}
-
-.sequence-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-  margin: 18px 0;
-}
-
-.score {
-  color: var(--gold-light) !important;
-  font-weight: bold;
-  margin: 12px 0;
-}
-
-.game-message {
-  min-height: 28px;
-  margin: 12px 0;
-  color: var(--gold-light) !important;
-}
-
-.footer {
-  margin-top: 35px;
-  padding: 26px 15px;
-  border-top: 1px solid #292929;
-  text-align: center;
-  color: #999;
-  font-size: .84rem;
-}
-
-.footer p + p {
-  margin-top: 6px;
-}
-
-@media (max-width: 750px) {
-  .games-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 480px) {
-  .navbar {
-    justify-content: center;
-  }
-
-  .nav-actions {
-    justify-content: center;
-  }
-
-  .games-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .hero {
-    padding-top: 45px;
-  }
-
-  .auth-card {
-    padding: 20px;
-  }
-
-  .game-panel {
-    padding: 14px 8px;
-  }
-
-  .card {
-    width: 53px;
-    height: 77px;
-  }
-
-  .memory-grid {
-    grid-template-columns: repeat(4, minmax(0, 53px));
-  }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ZeusBet | Jogos Demonstrativos</title>
+
+  <meta
+    name="description"
+    content="ZeusBet: uma experiência de jogos demonstrativos com visual premium, animações e desafios recreativos."
+  >
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root {
+      --gold: #f7c948;
+      --gold-light: #ffe99a;
+      --gold-dark: #b88618;
+      --black: #080808;
+      --panel: #141414;
+      --text: #ffffff;
+      --muted: #b8b8b8;
+      --green: #4ade80;
+      --red: #ff6565;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--text);
+      background:
+        radial-gradient(
+          circle at 15% 10%,
+          rgba(247, 201, 72, 0.12),
+          transparent 30%
+        ),
+        radial-gradient(
+          circle at 90% 40%,
+          rgba(184, 134, 24, 0.09),
+          transparent 28%
+        ),
+        var(--black);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -50%;
+      z-index: -1;
+      pointer-events: none;
+      background:
+        radial-gradient(
+          circle,
+          rgba(247, 201, 72, 0.04) 0,
+          transparent 55%
+        );
+      animation: backgroundDrift 18s ease-in-out infinite alternate;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1150px, 92%);
+      margin: auto;
+    }
+
+    .gold {
+      color: var(--gold);
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    /* CABEÇALHO */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid rgba(247, 201, 72, 0.25);
+      background: rgba(8, 8, 8, 0.91);
+      backdrop-filter: blur(14px);
+    }
+
+    .nav {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+      font-size: 1.55rem;
+      letter-spacing: 1px;
+    }
+
+    .brand-icon {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      color: var(--gold);
+      box-shadow: 0 0 20px rgba(247, 201, 72, 0.18);
+      animation: emblemFloat 3s ease-in-out infinite;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .nav-links a {
+      color: #ddd;
+      font-size: 0.9rem;
+      transition: color 0.25s;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    .button {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 12px 19px;
+      border: 1px solid var(--gold);
+      border-radius: 10px;
+      font-weight: 800;
+      transition:
+        transform 0.25s,
+        box-shadow 0.25s,
+        background 0.25s;
+    }
+
+    .button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(247, 201, 72, 0.22);
+    }
+
+    .button-gold {
+      color: #111;
+      background: linear-gradient(
+        135deg,
+        var(--gold-light),
+        var(--gold),
+        var(--gold-dark)
+      );
+    }
+
+    .button-outline {
+      color: var(--gold);
+      background: transparent;
+    }
+
+    .button-outline:hover {
+      color: #111;
+      background: var(--gold);
+    }
+
+    .button-small {
+      min-height: 38px;
+      padding: 9px 13px;
+      font-size: 0.85rem;
+    }
+
+    /* HERO */
+
+    .hero {
+      position: relative;
+      padding: 76px 0 58px;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 790px;
+      margin: auto;
+      text-align: center;
+      animation: heroEnter 0.9s ease both;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 9px 15px;
+      margin-bottom: 22px;
+      border: 1px solid rgba(247, 201, 72, 0.5);
+      border-radius: 30px;
+      color: var(--gold-light);
+      background: rgba(247, 201, 72, 0.07);
+      font-size: 0.82rem;
+      letter-spacing: 1px;
+    }
+
+    .hero h1 {
+      margin-bottom: 20px;
+      font-size: clamp(2.6rem, 7vw, 5.3rem);
+      line-height: 1.04;
+      font-weight: 950;
+      letter-spacing: -2px;
+    }
+
+    .shimmer {
+      color: var(--gold);
+      background: linear-gradient(
+        100deg,
+        #b88618,
+        #ffe99a,
+        #f7c948,
+        #fff1b5,
+        #b88618
+      );
+      background-size: 250% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: goldShimmer 5s linear infinite;
+    }
+
+    .hero p {
+      max-width: 620px;
+      margin: 0 auto 28px;
+      color: #c6c6c6;
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .hero-art {
+      position: relative;
+      width: 170px;
+      height: 170px;
+      margin: 38px auto 0;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(247, 201, 72, 0.35);
+      border-radius: 50%;
+      background: radial-gradient(
+        circle,
+        rgba(247, 201, 72, 0.16),
+        rgba(247, 201, 72, 0.02) 65%,
+        transparent
+      );
+      animation: orbitPulse 4s ease-in-out infinite;
+    }
+
+    .hero-art::before,
+    .hero-art::after {
+      content: "";
+      position: absolute;
+      inset: -13px;
+      border: 1px solid rgba(247, 201, 72, 0.22);
+      border-radius: 50%;
+      animation: ringRotate 16s linear infinite;
+    }
+
+    .hero-art::after {
+      inset: -27px;
+      border-style: dashed;
+      animation-direction: reverse;
+      animation-duration: 30s;
+    }
+
+    .hero-emoji {
+      font-size: 5.2rem;
+      filter: drop-shadow(0 0 20px rgba(247, 201, 72, 0.35));
+      animation: characterFloat 3s ease-in-out infinite;
+    }
+
+    /* FAIXA INFORMATIVA */
+
+    .info-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 65px;
+    }
+
+    .info-item {
+      padding: 19px;
+      text-align: center;
+      border: 1px solid rgba(247, 201, 72, 0.2);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .info-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--gold);
+      font-size: 1.05rem;
+    }
+
+    .info-item span {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    /* SEÇÕES */
+
+    section.content-section {
+      padding: 25px 0 65px;
+    }
+
+    .section-heading {
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .section-heading h2 {
+      margin-bottom: 12px;
+      font-size: clamp(1.8rem, 5vw, 2.7rem);
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* CONTA */
+
+    .account-card {
+      max-width: 560px;
+      margin: auto;
+      padding: 28px;
+      border: 1px solid rgba(247, 201, 72, 0.35);
+      border-radius: 20px;
+      background: linear-gradient(
+        145deg,
+        rgba(255, 255, 255, 0.055),
+        rgba(255, 255, 255, 0.015)
+      );
+      box-shadow: 0 18px 55px rgba(0, 0, 0, 0.25);
+    }
+
+    .account-card h3 {
+      margin-bottom: 10px;
+      color: var(--gold);
+      font-size: 1.4rem;
+    }
+
+    .account-card > p {
+      margin-bottom: 20px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .field {
+      margin-bottom: 15px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 8px;
+      color: #eee;
+      font-size: 0.9rem;
+    }
+
+    .field input {
+      width: 100%;
+      min-height: 47px;
+      padding: 12px 14px;
+      border: 1px solid #3c3c3c;
+      border-radius: 9px;
+      outline: none;
+      color: white;
+      background: #0b0b0b;
+      transition: border 0.2s, box-shadow 0.2s;
+    }
+
+    .field input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(247, 201, 72, 0.1);
+    }
+
+    .account-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .account-actions .button {
+      flex: 1;
+    }
+
+    .text-button {
+      margin-top: 15px;
+      border: none;
+      color: var(--gold);
+      background: none;
+      text-decoration: underline;
+    }
+
+    .status-message {
+      display: none;
+      margin-top: 16px;
+      padding: 12px;
+      border: 1px solid rgba(247, 201, 72, 0.35);
+      border-radius: 9px;
+      color: var(--gold-light);
+      background: rgba(247, 201, 72, 0.07);
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .status-message.show {
+      display: block;
+    }
+
+    .account-logged {
+      text-align: center;
+    }
+
+    .account-logged .account-icon {
+      margin-bottom: 12px;
+      font-size: 2.5rem;
+    }
+
+    .account-logged p {
+      margin: 12px 0 20px;
+      color: var(--muted);
+      overflow-wrap: anywhere;
+    }
+
+    /* CARTÕES DOS JOGOS */
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .game-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-height: 300px;
+      padding: 24px;
+      overflow: hidden;
+      border: 1px solid rgba(247, 201, 72, 0.28);
+      border-radius: 17px;
+      background: linear-gradient(
+        150deg,
+        #191919,
+        #0d0d0d
+      );
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.22);
+      animation: cardEnter 0.7s ease both;
+      transition:
+        transform 0.3s,
+        border-color 0.3s,
+        box-shadow 0.3s;
+    }
+
+    .game-card:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    .game-card:nth-child(3) {
+      animation-delay: 0.2s;
+    }
+
+    .game-card:nth-child(4) {
+      animation-delay: 0.3s;
+    }
+
+    .game-card:nth-child(5) {
+      animation-delay: 0.4s;
+    }
+
+    .game-card:hover {
+      transform: translateY(-9px);
+      border-color: var(--gold);
+      box-shadow: 0 18px 45px rgba(247, 201, 72, 0.11);
+    }
+
+    .game-card::before {
+      content: "";
+      position: absolute;
+      top: -80px;
+      right: -70px;
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      background: rgba(247, 201, 72, 0.055);
+      transition: transform 0.4s;
+    }
+
+    .game-card:hover::before {
+      transform: scale(1.5);
+    }
+
+    .game-art {
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 115px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(247, 201, 72, 0.13);
+      border-radius: 13px;
+      background: radial-gradient(
+        circle,
+        rgba(247, 201, 72, 0.12),
+        transparent 70%
+      );
+    }
+
+    .game-emoji {
+      font-size: 4rem;
+      filter: drop-shadow(0 0 14px rgba(247, 201, 72, 0.16));
+      animation: characterFloat 4s ease-in-out infinite;
+      transition: transform 0.3s;
+    }
+
+    .game-card:hover .game-emoji {
+      transform: scale(1.12) rotate(-4deg);
+    }
+
+    .game-card h3 {
+      position: relative;
+      margin-bottom: 10px;
+      font-size: 1.18rem;
+    }
+
+    .game-card p {
+      position: relative;
+      flex: 1;
+      margin-bottom: 20px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    .game-card .button {
+      position: relative;
+      width: 100%;
+    }
+
+    .game-tag {
+      display: inline-block;
+      margin-bottom: 12px;
+      color: var(--gold);
+      font-size: 0.73rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* JOGO ABERTO */
+
+    .game-panel {
+      display: none;
+      margin: 28px auto 0;
+      padding: 25px;
+      border: 1px solid var(--gold-dark);
+      border-radius: 18px;
+      background: #111;
+      animation: modalEnter 0.35s ease both;
+    }
+
+    .game-panel.active {
+      display: block;
+    }
+
+    .game-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .game-top h3 {
+      color: var(--gold);
+      font-size: 1.35rem;
+    }
+
+    .game-content {
+      text-align: center;
+    }
+
+    .game-content p {
+      margin-bottom: 16px;
+      color: #ccc;
+      line-height: 1.6;
+    }
+
+    .game-result {
+      min-height: 28px;
+      margin-top: 18px;
+      color: var(--gold-light);
+      font-weight: 700;
+    }
+
+    .game-controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .memory-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 70px));
+      justify-content: center;
+      gap: 9px;
+      margin: 20px auto;
+    }
+
+    .memory-card {
+      display: grid;
+      place-items: center;
+      min-height: 70px;
+      border: 1px solid var(--gold-dark);
+      border-radius: 10px;
+      color: var(--gold);
+      background: #202020;
+      font-size: 1.65rem;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .memory-card:hover {
+      transform: scale(1.05);
+      background: #302712;
+    }
+
+    .sequence-display {
+      min-height: 90px;
+      display: grid;
+      place-items: center;
+      margin: 20px auto;
+      padding: 15px;
+      border: 1px solid rgba(247, 201, 72, 0.25);
+      border-radius: 12px;
+      color: var(--gold);
+      background: #090909;
+      font-size: 2rem;
+      letter-spacing: 8px;
+    }
+
+    .choice-button {
+      min-width: 90px;
+      min-height: 70px;
+      padding: 12px;
+      border: 1px solid var(--gold-dark);
+      border-radius: 12px;
+      color: var(--gold);
+      background: #1a1a1a;
+      font-size: 1.6rem;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .choice-button:hover {
+      transform: translateY(-3px);
+      background: #302712;
+    }
+
+    .cards-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin: 22px 0;
+    }
+
+    .playing-card {
+      display: grid;
+      place-items: center;
+      width: 75px;
+      height: 105px;
+      border: 1px solid var(--gold);
+      border-radius: 10px;
+      color: #171717;
+      background: #f4f0e6;
+      font-size: 2rem;
+      box-shadow: 0 7px 15px rgba(0, 0, 0, 0.25);
+    }
+
+    .playing-card.red-suit {
+      color: #c42d2d;
+    }
+
+    /* RODAPÉ */
+
+    footer {
+      margin-top: 35px;
+      padding: 32px 0;
+      border-top: 1px solid rgba(247, 201, 72, 0.2);
+      color: #a8a8a8;
+      text-align: center;
+      font-size: 0.86rem;
+      line-height: 1.8;
+    }
+
+    footer strong {
+      color: var(--gold);
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 18px;
+      margin: 12px 0;
+    }
+
+    .footer-links a:hover {
+      color: var(--gold);
+    }
+
+    /* ANIMAÇÕES */
+
+    @keyframes backgroundDrift {
+      from {
+        transform: translate(-2%, -1%);
+      }
+
+      to {
+        transform: translate(3%, 2%);
+      }
+    }
+
+    @keyframes emblemFloat {
+      0%, 100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-4px);
+      }
+    }
+
+    @keyframes goldShimmer {
+      to {
+        background-position: 250% center;
+      }
+    }
+
+    @keyframes heroEnter {
+      from {
+        opacity: 0;
+        transform: translateY(25px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes orbitPulse {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(247, 201, 72, 0.05);
+      }
+
+      50% {
+        box-shadow: 0 0 45px rgba(247, 201, 72, 0.15);
+      }
+    }
+
+    @keyframes ringRotate {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes characterFloat {
+      0%, 100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-7px);
+      }
+    }
+
+    @keyframes cardEnter {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes modalEnter {
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.99);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* RESPONSIVIDADE */
+
+    @media (max-width: 850px) {
+      .games-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .nav-links {
+        gap: 12px;
+      }
+    }
+
+    @media (max-width: 580px) {
+      .nav {
+        min-height: 68px;
+      }
+
+      .brand {
+        font-size: 1.25rem;
+      }
+
+      .brand-icon {
+        width: 38px;
+        height: 38px;
+      }
+
+      .nav-links a:not(.button) {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 55px;
+      }
+
+      .hero h1 {
+        letter-spacing: -1px;
+      }
+
+      .hero-art {
+        width: 135px;
+        height: 135px;
+      }
+
+      .hero-emoji {
+        font-size: 4.2rem;
+      }
+
+      .info-strip {
+        grid-template-columns: 1fr;
+        gap: 9px;
+        margin-bottom: 45px;
+      }
+
+      .games-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .game-card {
+        min-height: 285px;
+      }
+
+      .account-card {
+        padding: 21px;
+      }
+
+      .game-panel {
+        padding: 17px;
+      }
+
+      .game-top {
+        align-items: flex-start;
+      }
+
+      .memory-grid {
+        grid-template-columns: repeat(4, minmax(0, 58px));
+      }
+
+      .memory-card {
+        min-height: 58px;
+      }
+
+      .playing-card {
+        width: 60px;
+        height: 88px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
 </head>
 
 <body>
-<header>
-  <nav class="navbar">
-    <a href="#" class="logo">ZEUSBET</a>
 
-    <div class="nav-actions">
-      <span id="userLabel" class="user-label" hidden></span>
+  <!-- CABEÇALHO -->
 
-      <button id="loginNav" class="button dark" type="button">
-        Entrar
-      </button>
+  <header>
+    <div class="container nav">
 
-      <button id="registerNav" class="button gold" type="button">
-        Criar conta
-      </button>
+      <a class="brand" href="#inicio" aria-label="ZeusBet início">
+        <span class="brand-icon">⚡</span>
+        <span>ZEUS<span class="gold">BET</span></span>
+      </a>
 
-      <button id="logoutButton" class="button danger" type="button" hidden>
-        Sair
-      </button>
+      <nav class="nav-links" aria-label="Navegação principal">
+        <a href="#inicio">Início</a>
+        <a href="#jogos">Jogos</a>
+        <a href="#conta">Minha conta</a>
+
+        <a class="button button-gold button-small" href="#conta">
+          Entrar
+        </a>
+      </nav>
+
     </div>
-  </nav>
-</header>
+  </header>
 
-<main>
-  <section class="hero">
-    <span class="badge">♠ ENTRETENIMENTO E DESAFIOS ♦</span>
+  <main>
 
-    <h1>ZEUSBET</h1>
+    <!-- HERO -->
 
-    <p>
-      Entre no universo das cartas, teste sua memória,
-      desenvolva suas estratégias e divirta-se com desafios
-      recreativos.
-    </p>
+    <section class="hero" id="inicio">
+      <div class="container">
 
-    <button id="heroButton" class="button gold" type="button">
-      Conhecer os jogos
-    </button>
+        <div class="hero-content">
 
-    <div class="notice">
-      <strong>Modo recreativo:</strong>
-      todos os jogos desta página são destinados ao entretenimento.
-      Não existem apostas, depósitos, saques ou prêmios em dinheiro.
+          <span class="hero-badge">
+            ✦ EXPERIÊNCIA PREMIUM ✦
+          </span>
+
+          <h1>
+            ENTRE NO UNIVERSO<br>
+            <span class="shimmer">ZEUSBET</span>
+          </h1>
+
+          <p>
+            Descubra desafios recreativos, teste sua memória,
+            exercite sua estratégia e divirta-se em uma experiência
+            com visual premium, animações e inspiração na mitologia.
+          </p>
+
+          <div class="hero-buttons">
+            <a class="button button-gold" href="#jogos">
+              🎮 Explorar jogos
+            </a>
+
+            <a class="button button-outline" href="#conta">
+              👤 Criar minha conta
+            </a>
+          </div>
+
+          <div class="hero-art" aria-hidden="true">
+            <span class="hero-emoji">⚡</span>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- INFORMAÇÕES -->
+
+    <div class="container">
+      <div class="info-strip">
+
+        <div class="info-item">
+          <strong>🎮 Jogos recreativos</strong>
+          <span>Desafios para se divertir</span>
+        </div>
+
+        <div class="info-item">
+          <strong>🔐 Área de conta</strong>
+          <span>Entre para liberar os jogos</span>
+        </div>
+
+        <div class="info-item">
+          <strong>✨ Visual premium</strong>
+          <span>Animações e efeitos dourados</span>
+        </div>
+
+      </div>
     </div>
-  </section>
 
-  <!-- LOGIN E CADASTRO -->
-  <section id="authSection" class="container section">
-    <div class="auth-card">
-      <h2 id="authTitle">Entre na sua conta</h2>
+    <!-- CONTA: CADASTRO E LOGIN -->
 
-      <p id="authDescription">
-        Entre ou crie sua conta para visualizar os jogos.
+    <section class="content-section" id="conta">
+      <div class="container">
+
+        <div class="section-heading">
+          <h2>Sua <span class="gold">conta</span></h2>
+
+          <p>
+            Faça login ou crie sua conta para acessar os jogos.
+          </p>
+        </div>
+
+        <div class="account-card">
+
+          <!-- FORMULÁRIO EXIBIDO QUANDO ESTÁ DESLOGADO -->
+
+          <div id="authForm">
+
+            <h3>🔐 Acesse sua conta</h3>
+
+            <p>
+              Entre com seu e-mail e senha. Se ainda não tiver cadastro,
+              crie uma conta gratuitamente.
+            </p>
+
+            <form id="loginForm">
+
+              <div class="field">
+                <label for="email">E-mail</label>
+
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="seuemail@exemplo.com"
+                  autocomplete="email"
+                  required
+                >
+              </div>
+
+              <div class="field">
+                <label for="password">Senha</label>
+
+                <input
+                  id="password"
+                  type="password"
+                  placeholder="Digite sua senha"
+                  autocomplete="current-password"
+                  minlength="6"
+                  required
+                >
+              </div>
+
+              <div class="account-actions">
+
+                <button
+                  class="button button-gold"
+                  type="submit"
+                  id="loginButton"
+                >
+                  Entrar
+                </button>
+
+                <button
+                  class="button button-outline"
+                  type="button"
+                  id="signupButton"
+                >
+                  Criar conta
+                </button>
+
+              </div>
+
+            </form>
+
+            <button
+              type="button"
+              class="text-button"
+              id="resetButton"
+            >
+              Esqueci minha senha
+            </button>
+
+          </div>
+
+          <!-- ÁREA EXIBIDA QUANDO ESTÁ LOGADO -->
+
+          <div id="loggedArea" class="account-logged" hidden>
+
+            <div class="account-icon">✅</div>
+
+            <h3>Você está conectado!</h3>
+
+            <p id="userEmail"></p>
+
+            <p>
+              Sua conta está ativa. Os jogos estão liberados
+              para você nesta sessão.
+            </p>
+
+            <a class="button button-gold" href="#jogos">
+              Acessar jogos
+            </a>
+
+            <div style="margin-top: 16px;">
+              <button
+                type="button"
+                class="button button-outline"
+                id="logoutButton"
+              >
+                Sair da conta
+              </button>
+            </div>
+
+          </div>
+
+          <div
+            class="status-message"
+            id="authMessage"
+            role="status"
+            aria-live="polite"
+          ></div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- JOGOS -->
+
+    <section class="content-section" id="jogos">
+      <div class="container">
+
+        <div class="section-heading">
+          <h2>Escolha seu <span class="gold">desafio</span></h2>
+
+          <p>
+            Entre na sua conta para liberar os jogos demonstrativos.
+            Todos os desafios abaixo são recreativos.
+          </p>
+        </div>
+
+        <div class="games-grid">
+
+          <!-- JOGO 1 -->
+
+          <article class="game-card">
+
+            <div class="game-art">
+              <span class="game-emoji">🧠</span>
+            </div>
+
+            <span class="game-tag">Memória</span>
+
+            <h3>Memória Divina</h3>
+
+            <p>
+              Encontre os pares de símbolos e teste sua memória
+              neste desafio visual.
+            </p>
+
+            <button
+              class="button button-gold"
+              onclick="openGame('memory')"
+            >
+              Jogar agora
+            </button>
+
+          </article>
+
+          <!-- JOGO 2 -->
+
+          <article class="game-card">
+
+            <div class="game-art">
+              <span class="game-emoji">🔢</span>
+            </div>
+
+            <span class="game-tag">Concentração</span>
+
+            <h3>Sequência de Zeus</h3>
+
+            <p>
+              Observe a sequência numérica e tente repeti-la
+              sem cometer erros.
+            </p>
+
+            <button
+              class="button button-gold"
+              onclick="openGame('sequence')"
+            >
+              Jogar agora
+            </button>
+
+          </article>
+
+          <!-- JOGO 3 -->
+
+          <article class="game-card">
+
+            <div class="game-art">
+              <span class="game-emoji">🃏</span>
+            </div>
+
+            <span class="game-tag">Cartas</span>
+
+            <h3>Desafio das Cartas</h3>
+
+            <p>
+              Tire duas cartas demonstrativas e compare seus valores.
+              Um desafio simples de estratégia e sorte.
+            </p>
+
+            <button
+              class="button button-gold"
+              onclick="openGame('cards')"
+            >
+              Jogar agora
+            </button>
+
+          </article>
+
+          <!-- JOGO 4 -->
+
+          <article class="game-card">
+
+            <div class="game-art">
+              <span class="game-emoji">🛡️</span>
+            </div>
+
+            <span class="game-tag">Estratégia</span>
+
+            <h3>Batalha Mitológica</h3>
+
+            <p>
+              Escolha um personagem da mitologia e enfrente
+              um adversário em uma batalha recreativa.
+            </p>
+
+            <button
+              class="button button-gold"
+              onclick="openGame('battle')"
+            >
+              Jogar agora
+            </button>
+
+          </article>
+
+          <!-- JOGO 5 -->
+
+          <article class="game-card">
+
+            <div class="game-art">
+              <span class="game-emoji">♠️</span>
+            </div>
+
+            <span class="game-tag">Cartas</span>
+
+            <h3>Desafio dos Naipes</h3>
+
+            <p>
+              Identifique o naipe da carta exibida e acumule
+              acertos neste exercício de atenção.
+            </p>
+
+            <button
+              class="button button-gold"
+              onclick="openGame('suits')"
+            >
+              Jogar agora
+            </button>
+
+          </article>
+
+          <!-- JOGO 6 -->
+
+          <article class="game-card">
+
+            <div class="game-art">
+              <span class="game-emoji">🐉</span>
+            </div>
+
+            <span class="game-tag">Conhecimento</span>
+
+            <h3>Desafio do Dragão</h3>
+
+            <p>
+              Responda a perguntas rápidas e teste seus conhecimentos
+              em um pequeno quiz.
+            </p>
+
+            <button
+              class="button button-gold"
+              onclick="openGame('quiz')"
+            >
+              Jogar agora
+            </button>
+
+          </article>
+
+        </div>
+
+        <!-- ÁREA ONDE OS JOGOS SÃO EXIBIDOS -->
+
+        <div class="game-panel" id="gamePanel">
+
+          <div class="game-top">
+
+            <h3 id="gameTitle">Jogo</h3>
+
+            <button
+              class="button button-outline button-small"
+              onclick="closeGame()"
+            >
+              ✕ Fechar
+            </button>
+
+          </div>
+
+          <div class="game-content" id="gameContent"></div>
+
+          <div
+            class="game-result"
+            id="gameResult"
+            role="status"
+            aria-live="polite"
+          ></div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- RODAPÉ -->
+
+  <footer>
+    <div class="container">
+
+      <strong>ZEUSBET</strong>
+
+      <div class="footer-links">
+        <a href="#inicio">Início</a>
+        <a href="#jogos">Jogos</a>
+        <a href="#conta">Minha conta</a>
+      </div>
+
+      <p>
+        Plataforma demonstrativa de jogos recreativos.
+        Sem apostas, depósitos ou prêmios em dinheiro.
       </p>
 
-      <form id="authForm">
-        <div class="field" id="nameField" hidden>
-          <label for="nameInput">Nome</label>
-          <input id="nameInput" type="text" maxlength="80"
-                 autocomplete="name" placeholder="Seu nome">
-        </div>
+      <p>
+        © <span id="year"></span> ZeusBet — Todos os direitos reservados.
+      </p>
 
-        <div class="field">
-          <label for="emailInput">E-mail</label>
-          <input id="emailInput" type="email" required
-                 autocomplete="email" placeholder="voce@exemplo.com">
-        </div>
-
-        <div class="field">
-          <label for="passwordInput">Senha</label>
-          <input id="passwordInput" type="password" required
-                 minlength="6" autocomplete="current-password"
-                 placeholder="Mínimo de 6 caracteres">
-        </div>
-
-        <button id="submitAuth" class="button gold full" type="submit">
-          Entrar
-        </button>
-      </form>
-
-      <div class="auth-links">
-        <button id="switchAuth" class="text-button" type="button">
-          Ainda não tem conta? Cadastre-se
-        </button>
-
-        <button id="forgotPassword" class="text-button" type="button">
-          Esqueci minha senha
-        </button>
-      </div>
-
-      <div id="authMessage" class="message"
-           role="status" aria-live="polite"></div>
     </div>
-  </section>
+  </footer>
 
-  <!-- CONTA CONECTADA -->
-  <section id="accountSection" class="container section" hidden>
-    <div class="account-box">
-      <h2>Bem-vindo ao ZeusBet!</h2>
-      <p id="welcomeText">Sua conta está conectada.</p>
-      <button id="showGamesButton" class="button gold" type="button">
-        Acessar jogos
-      </button>
-    </div>
-  </section>
+  <script>
+    /* ======================================================
+       CONFIGURAÇÃO DO SUPABASE
+       ====================================================== */
 
-  <!-- JOGOS -->
-  <section id="gamesSection" class="container section" hidden>
-    <h2 class="section-title">Mesa de Jogos</h2>
+    const SUPABASE_URL =
+      "https://gtgjxojobbljrvwppfzi.supabase.co";
 
-    <p class="section-description">
-      Escolha um desafio. Cada jogo funciona sem apostas
-      e sem recompensas financeiras.
-    </p>
+    const SUPABASE_ANON_KEY =
+      "sb_publishable_M91qcsHQee_BH4qvIn2oJA_oLKWpY--";
 
-    <div class="games-grid">
-      <article class="game-card">
-        <div class="game-icon">🃏</div>
-        <h3>Memória de Cartas</h3>
-        <p>Encontre todos os pares e teste sua memória.</p>
-        <span class="tag">DESAFIO DE MEMÓRIA</span>
-        <br><br>
-        <button class="button gold full" data-game="memory">
-          Jogar
-        </button>
-      </article>
-
-      <article class="game-card">
-        <div class="game-icon">♠️</div>
-        <h3>Desafio de Sequência</h3>
-        <p>Coloque as cartas na ordem correta.</p>
-        <span class="tag">LÓGICA</span>
-        <br><br>
-        <button class="button gold full" data-game="sequence">
-          Jogar
-        </button>
-      </article>
-
-      <article class="game-card">
-        <div class="game-icon">♥️</div>
-        <h3>Batalha de Cartas</h3>
-        <p>Compare cartas com um adversário virtual.</p>
-        <span class="tag">CONTRA O COMPUTADOR</span>
-        <br><br>
-        <button class="button gold full" data-game="battle">
-          Jogar
-        </button>
-      </article>
-
-      <article class="game-card">
-        <div class="game-icon">♦️</div>
-        <h3>Paciência Simplificada</h3>
-        <p>Organize as cartas do ás ao rei.</p>
-        <span class="tag">ESTRATÉGIA</span>
-        <br><br>
-        <button class="button gold full" data-game="patience">
-          Jogar
-        </button>
-      </article>
-
-      <article class="game-card">
-        <div class="game-icon">♣️</div>
-        <h3>Desafio de Naipes</h3>
-        <p>Descubra o naipe pedido antes de acabar o tempo de tentativas.</p>
-        <span class="tag">ATENÇÃO</span>
-        <br><br>
-        <button class="button gold full" data-game="suits">
-          Jogar
-        </button>
-      </article>
-    </div>
-
-    <!-- ÁREA DOS JOGOS -->
-    <div id="gamePanel" class="game-panel" hidden>
-      <h3 id="gameTitle">Jogo</h3>
-      <p id="gameDescription"></p>
-
-      <div id="gameScore" class="score"></div>
-
-      <div id="gameContent"></div>
-
-      <p id="gameMessage" class="game-message"
-         aria-live="polite"></p>
-
-      <div class="game-toolbar">
-        <button id="restartGame" class="button gold" type="button">
-          Reiniciar
-        </button>
-
-        <button id="closeGame" class="button dark" type="button">
-          Voltar aos jogos
-        </button>
-      </div>
-    </div>
-  </section>
-</main>
-
-<footer class="footer">
-  <p><strong>ZEUSBET</strong> — Jogos recreativos de cartas.</p>
-  <p>Esta página não realiza apostas nem distribui prêmios em dinheiro.</p>
-</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-"use strict";
-
-/* =========================================================
-   SUPABASE
-   Mantém a configuração existente do projeto.
-   Nunca coloque uma chave secreta/service_role no navegador.
-========================================================= */
-
-const SUPABASE_URL =
-  "https://gtgjxojobbljrvwppfzi.supabase.co";
-
-const SUPABASE_KEY =
-  "sb_publishable_M91qcsHQee_BH4qvIn2oJA_oLKWpY--";
-
-const db = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-
-let currentUser = null;
-let authMode = "login";
-let currentGame = null;
-let gameState = {};
-let gameVersion = 0;
-
-const $ = id => document.getElementById(id);
-
-function showAuthMessage(text, type = "success") {
-  $("authMessage").textContent = text;
-  $("authMessage").className = "message visible " + type;
-}
-
-function clearAuthMessage() {
-  $("authMessage").textContent = "";
-  $("authMessage").className = "message";
-}
-
-function showGameMessage(text) {
-  $("gameMessage").textContent = text;
-}
-
-function shuffle(array) {
-  const result = [...array];
-
-  for (let i = result.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [result[i], result[j]] = [result[j], result[i]];
-  }
-
-  return result;
-}
-
-/* =========================================================
-   AUTENTICAÇÃO
-========================================================= */
-
-function setAuthMode(mode) {
-  authMode = mode;
-  clearAuthMessage();
-
-  $("authTitle").textContent =
-    mode === "register" ? "Crie sua conta" : "Entre na sua conta";
-
-  $("authDescription").textContent =
-    mode === "register"
-      ? "Preencha os dados para criar sua conta."
-      : "Entre para acessar os jogos.";
-
-  $("nameField").hidden = mode !== "register";
-
-  $("submitAuth").textContent =
-    mode === "register" ? "Criar conta" : "Entrar";
-
-  $("switchAuth").textContent =
-    mode === "register"
-      ? "Já tem conta? Entre aqui"
-      : "Ainda não tem conta? Cadastre-se";
-
-  $("authSection").hidden = false;
-
-  $("authSection").scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
-}
-
-$("loginNav").addEventListener("click", () => setAuthMode("login"));
-
-$("registerNav").addEventListener("click", () => setAuthMode("register"));
-
-$("switchAuth").addEventListener("click", () => {
-  setAuthMode(authMode === "login" ? "register" : "login");
-});
-
-$("heroButton").addEventListener("click", () => {
-  if (currentUser) {
-    showGames();
-  } else {
-    setAuthMode("login");
-  }
-});
-
-$("authForm").addEventListener("submit", async event => {
-  event.preventDefault();
-  clearAuthMessage();
-
-  const email = $("emailInput").value.trim();
-  const password = $("passwordInput").value;
-  const name = $("nameInput").value.trim();
-  const button = $("submitAuth");
-
-  button.disabled = true;
-  button.textContent = "Aguarde...";
-
-  try {
-    if (authMode === "register") {
-      const { data, error } = await db.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            display_name: name
-          }
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY,
+      {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true
         }
-      });
+      }
+    );
 
-      if (error) throw error;
+    /* ======================================================
+       ELEMENTOS DA PÁGINA
+       ====================================================== */
 
-      if (data.session) {
-        currentUser = data.user;
-        updateAuthUI();
-        showAuthMessage("Conta criada com sucesso!");
+    const authForm = document.getElementById("authForm");
+    const loggedArea = document.getElementById("loggedArea");
+    const userEmail = document.getElementById("userEmail");
+    const authMessage = document.getElementById("authMessage");
+
+    const loginForm = document.getElementById("loginForm");
+    const loginButton = document.getElementById("loginButton");
+    const signupButton = document.getElementById("signupButton");
+    const resetButton = document.getElementById("resetButton");
+    const logoutButton = document.getElementById("logoutButton");
+
+    const gamePanel = document.getElementById("gamePanel");
+    const gameTitle = document.getElementById("gameTitle");
+    const gameContent = document.getElementById("gameContent");
+    const gameResult = document.getElementById("gameResult");
+
+    let currentUser = null;
+    let currentGame = null;
+    let gameState = {};
+
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+
+    /* ======================================================
+       MENSAGENS
+       ====================================================== */
+
+    function showAuthMessage(message) {
+      authMessage.textContent = message;
+      authMessage.classList.add("show");
+    }
+
+    function clearAuthMessage() {
+      authMessage.textContent = "";
+      authMessage.classList.remove("show");
+    }
+
+    function showGameResult(message) {
+      gameResult.textContent = message;
+    }
+
+    function clearGameResult() {
+      gameResult.textContent = "";
+    }
+
+    /* ======================================================
+       ATUALIZAÇÃO DO ESTADO DA CONTA
+       ====================================================== */
+
+    function updateAccountUI(user) {
+      currentUser = user || null;
+
+      if (currentUser) {
+        authForm.hidden = true;
+        loggedArea.hidden = false;
+
+        userEmail.textContent =
+          currentUser.email || "Conta conectada";
+
       } else {
+        authForm.hidden = false;
+        loggedArea.hidden = true;
+
+        userEmail.textContent = "";
+        closeGame();
+      }
+    }
+
+    /* ======================================================
+       VERIFICAÇÃO REAL DA SESSÃO
+       Essa função é usada antes de abrir QUALQUER jogo.
+       ====================================================== */
+
+    async function getAuthenticatedUser() {
+      const {
+        data: { session },
+        error
+      } = await supabaseClient.auth.getSession();
+
+      if (error) {
+        throw error;
+      }
+
+      if (!session || !session.user) {
+        currentUser = null;
+        updateAccountUI(null);
+        return null;
+      }
+
+      currentUser = session.user;
+      return session.user;
+    }
+
+    /* ======================================================
+       CADASTRO
+       ====================================================== */
+
+    signupButton.addEventListener("click", async function () {
+      clearAuthMessage();
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      if (!email || !password) {
         showAuthMessage(
-          "Cadastro enviado. Confira seu e-mail para confirmar a conta."
+          "Informe seu e-mail e uma senha para criar a conta."
         );
+        return;
       }
-    } else {
-      const { data, error } = await db.auth.signInWithPassword({
-        email,
-        password
-      });
 
-      if (error) throw error;
-
-      currentUser = data.user;
-      updateAuthUI();
-    }
-  } catch (error) {
-    showAuthMessage(translateError(error.message), "error");
-  } finally {
-    button.disabled = false;
-    button.textContent =
-      authMode === "register" ? "Criar conta" : "Entrar";
-  }
-});
-
-$("forgotPassword").addEventListener("click", async () => {
-  clearAuthMessage();
-
-  const email = $("emailInput").value.trim();
-
-  if (!email) {
-    showAuthMessage(
-      "Digite seu e-mail antes de solicitar a recuperação.",
-      "error"
-    );
-    return;
-  }
-
-  try {
-    const { error } = await db.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin
-    });
-
-    if (error) throw error;
-
-    showAuthMessage(
-      "Se o e-mail estiver cadastrado, você receberá as instruções de recuperação."
-    );
-  } catch (error) {
-    showAuthMessage(translateError(error.message), "error");
-  }
-});
-
-$("logoutButton").addEventListener("click", async () => {
-  try {
-    const { error } = await db.auth.signOut();
-
-    if (error) throw error;
-
-    currentUser = null;
-    closeGame();
-    updateAuthUI();
-    setAuthMode("login");
-    showAuthMessage("Você saiu da sua conta.");
-  } catch (error) {
-    alert("Não foi possível sair: " + translateError(error.message));
-  }
-});
-
-function translateError(message) {
-  const text = String(message || "").toLowerCase();
-
-  if (text.includes("invalid login credentials")) {
-    return "E-mail ou senha incorretos.";
-  }
-
-  if (text.includes("email not confirmed")) {
-    return "Confirme seu e-mail antes de entrar.";
-  }
-
-  if (text.includes("user already registered")) {
-    return "Este e-mail já está cadastrado. Tente entrar.";
-  }
-
-  if (text.includes("password should be at least")) {
-    return "A senha precisa ter pelo menos 6 caracteres.";
-  }
-
-  if (text.includes("rate limit")) {
-    return "Muitas tentativas. Aguarde e tente novamente.";
-  }
-
-  return message || "Ocorreu um erro. Tente novamente.";
-}
-
-function updateAuthUI() {
-  const loggedIn = Boolean(currentUser);
-
-  $("loginNav").hidden = loggedIn;
-  $("registerNav").hidden = loggedIn;
-  $("logoutButton").hidden = !loggedIn;
-
-  $("userLabel").hidden = !loggedIn;
-  $("userLabel").textContent = loggedIn ? currentUser.email : "";
-
-  $("authSection").hidden = loggedIn;
-  $("accountSection").hidden = !loggedIn;
-  $("gamesSection").hidden = !loggedIn;
-
-  $("welcomeText").textContent = loggedIn
-    ? "Conta conectada: " + currentUser.email
-    : "";
-
-  if (!loggedIn) {
-    closeGame();
-  }
-}
-
-function showGames() {
-  if (!currentUser) {
-    setAuthMode("login");
-    return;
-  }
-
-  $("gamesSection").hidden = false;
-
-  $("gamesSection").scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
-}
-
-$("showGamesButton").addEventListener("click", showGames);
-
-async function initializeAuth() {
-  const { data, error } = await db.auth.getSession();
-
-  if (error) {
-    console.error("Erro ao recuperar sessão:", error.message);
-  }
-
-  currentUser = data?.session?.user || null;
-  updateAuthUI();
-}
-
-db.auth.onAuthStateChange((event, session) => {
-  currentUser = session?.user || null;
-  updateAuthUI();
-});
-
-/* =========================================================
-   BARALHO E UTILITÁRIOS
-========================================================= */
-
-const SUITS = [
-  { symbol: "♠", name: "Espadas", red: false },
-  { symbol: "♥", name: "Copas", red: true },
-  { symbol: "♦", name: "Ouros", red: true },
-  { symbol: "♣", name: "Paus", red: false }
-];
-
-const RANKS = [
-  { value: 1, label: "A" },
-  { value: 2, label: "2" },
-  { value: 3, label: "3" },
-  { value: 4, label: "4" },
-  { value: 5, label: "5" },
-  { value: 6, label: "6" },
-  { value: 7, label: "7" },
-  { value: 8, label: "8" },
-  { value: 9, label: "9" },
-  { value: 10, label: "10" },
-  { value: 11, label: "J" },
-  { value: 12, label: "Q" },
-  { value: 13, label: "K" }
-];
-
-function createDeck() {
-  const deck = [];
-
-  for (const suit of SUITS) {
-    for (const rank of RANKS) {
-      deck.push({
-        suit: suit.symbol,
-        suitName: suit.name,
-        red: suit.red,
-        value: rank.value,
-        label: rank.label,
-        id: rank.value + "-" + suit.symbol
-      });
-    }
-  }
-
-  return shuffle(deck);
-}
-
-function cardElement(card, options = {}) {
-  const button = document.createElement("button");
-
-  button.type = "button";
-  button.className =
-    "card" +
-    (card.red ? " red" : "") +
-    (options.small ? " small" : "") +
-    (options.back ? " back" : "");
-
-  button.setAttribute(
-    "aria-label",
-    options.back
-      ? "Carta virada para baixo"
-      : card.label + " de " + card.suitName
-  );
-
-  button.textContent = options.back
-    ? "★"
-    : card.label + card.suit;
-
-  return button;
-}
-
-function renderCards(cards, parent, options = {}) {
-  parent.replaceChildren();
-
-  cards.forEach(card => {
-    parent.appendChild(cardElement(card, options));
-  });
-}
-
-/* =========================================================
-   SISTEMA DOS JOGOS
-========================================================= */
-
-const GAME_INFO = {
-  memory: {
-    title: "Memória de Cartas",
-    description: "Encontre os oito pares de cartas."
-  },
-  sequence: {
-    title: "Desafio de Sequência",
-    description: "Escolha a próxima carta da sequência."
-  },
-  battle: {
-    title: "Batalha de Cartas",
-    description: "Sua carta é comparada com a carta do computador."
-  },
-  patience: {
-    title: "Paciência Simplificada",
-    description: "Organize as cartas do ás ao rei."
-  },
-  suits: {
-    title: "Desafio de Naipes",
-    description: "Encontre as cartas do naipe solicitado."
-  }
-};
-
-document.querySelectorAll("[data-game]").forEach(button => {
-  button.addEventListener("click", () => {
-    if (!currentUser) {
-      setAuthMode("login");
-      return;
-    }
-
-    startGame(button.dataset.game);
-  });
-});
-
-$("restartGame").addEventListener("click", () => {
-  if (currentGame) startGame(currentGame);
-});
-
-$("closeGame").addEventListener("click", closeGame);
-
-function startGame(id) {
-  if (!currentUser) {
-    setAuthMode("login");
-    return;
-  }
-
-  currentGame = id;
-  gameState = {};
-  gameVersion++;
-
-  const info = GAME_INFO[id];
-
-  $("gamePanel").hidden = false;
-  $("gameTitle").textContent = info.title;
-  $("gameDescription").textContent = info.description;
-  $("gameScore").textContent = "";
-  $("gameMessage").textContent = "";
-
-  const content = $("gameContent");
-  content.replaceChildren();
-
-  if (id === "memory") initMemory();
-  if (id === "sequence") initSequence();
-  if (id === "battle") initBattle();
-  if (id === "patience") initPatience();
-  if (id === "suits") initSuits();
-
-  $("gamePanel").scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
-}
-
-function closeGame() {
-  currentGame = null;
-  gameVersion++;
-  $("gamePanel").hidden = true;
-  $("gameContent").replaceChildren();
-}
-
-/* =========================================================
-   JOGO 1: MEMÓRIA
-========================================================= */
-
-function initMemory() {
-  const values = shuffle([
-    "A♠", "A♠",
-    "K♥", "K♥",
-    "Q♦", "Q♦",
-    "J♣", "J♣",
-    "10♠", "10♠",
-    "9♥", "9♥",
-    "8♦", "8♦",
-    "7♣", "7♣"
-  ]);
-
-  gameState = {
-    values,
-    opened: [],
-    matched: [],
-    moves: 0,
-    locked: false
-  };
-
-  const grid = document.createElement("div");
-  grid.className = "memory-grid";
-  grid.setAttribute("aria-label", "Tabuleiro de memória");
-
-  values.forEach((value, index) => {
-    const button = document.createElement("button");
-
-    button.type = "button";
-    button.className = "card back";
-    button.textContent = "★";
-    button.setAttribute("aria-label", "Revelar carta");
-
-    button.addEventListener("click", () => flipMemory(index));
-
-    grid.appendChild(button);
-  });
-
-  $("gameContent").appendChild(grid);
-  updateMemoryScore();
-  showGameMessage("Revele duas cartas por vez.");
-}
-
-function updateMemoryScore() {
-  $("gameScore").textContent =
-    "Jogadas: " + gameState.moves +
-    " | Pares encontrados: " + gameState.matched.length / 2;
-}
-
-function flipMemory(index) {
-  const state = gameState;
-
-  if (state.locked) return;
-  if (state.opened.includes(index)) return;
-  if (state.matched.includes(index)) return;
-
-  const buttons = $("gameContent").querySelectorAll("button");
-  buttons[index].classList.remove("back");
-  buttons[index].textContent = state.values[index];
-  buttons[index].setAttribute("aria-label", state.values[index]);
-
-  state.opened.push(index);
-
-  if (state.opened.length < 2) return;
-
-  state.moves++;
-  state.locked = true;
-  updateMemoryScore();
-
-  const [a, b] = state.opened;
-
-  if (state.values[a] === state.values[b]) {
-    state.matched.push(a, b);
-    state.opened = [];
-    state.locked = false;
-
-    buttons[a].disabled = true;
-    buttons[b].disabled = true;
-
-    updateMemoryScore();
-
-    if (state.matched.length === state.values.length) {
-      showGameMessage("Parabéns! Você encontrou todos os pares.");
-    } else {
-      showGameMessage("Par encontrado! Continue.");
-    }
-
-    return;
-  }
-
-  showGameMessage("As cartas são diferentes. Tente novamente.");
-
-  const version = gameVersion;
-
-  window.setTimeout(() => {
-    if (version !== gameVersion || currentGame !== "memory") return;
-
-    [a, b].forEach(i => {
-      buttons[i].classList.add("back");
-      buttons[i].textContent = "★";
-      buttons[i].setAttribute("aria-label", "Revelar carta");
-    });
-
-    state.opened = [];
-    state.locked = false;
-  }, 850);
-}
-
-/* =========================================================
-   JOGO 2: SEQUÊNCIA
-========================================================= */
-
-function initSequence() {
-  const start = Math.floor(Math.random() * 6) + 2;
-
-  gameState = {
-    start,
-    next: start + 3,
-    score: 0,
-    round: 1
-  };
-
-  drawSequence();
-}
-
-function drawSequence() {
-  const state = gameState;
-  const content = $("gameContent");
-  content.replaceChildren();
-
-  const row = document.createElement("div");
-  row.className = "sequence-row";
-
-  for (let i = 0; i < 3; i++) {
-    const value = state.start + i;
-    const card = document.createElement("div");
-
-    card.className = "card";
-    card.textContent = value;
-    row.appendChild(card);
-  }
-
-  const question = document.createElement("div");
-  question.className = "card back";
-  question.textContent = "?";
-  question.setAttribute("aria-label", "Próxima carta desconhecida");
-  row.appendChild(question);
-
-  content.appendChild(row);
-
-  const instruction = document.createElement("p");
-  instruction.textContent = "Qual número vem depois?";
-  content.appendChild(instruction);
-
-  const choices = shuffle([
-    state.next,
-    state.next + 1,
-    Math.max(1, state.next - 2),
-    state.next + 3
-  ]);
-
-  const options = document.createElement("div");
-  options.className = "game-toolbar";
-
-  choices.forEach(value => {
-    const button = document.createElement("button");
-
-    button.type = "button";
-    button.className = "button dark";
-    button.textContent = value;
-
-    button.addEventListener("click", () => {
-      if (value === state.next) {
-        state.score++;
-        state.round++;
-        state.start = Math.floor(Math.random() * 8) + 1;
-        state.next = state.start + 3;
-
-        $("gameScore").textContent =
-          "Acertos: " + state.score;
-
-        showGameMessage("Correto! Vamos para a próxima sequência.");
-
-        drawSequence();
-      } else {
-        showGameMessage("Não foi dessa vez. Tente outra alternativa.");
-        button.disabled = true;
+      if (password.length < 6) {
+        showAuthMessage(
+          "Sua senha deve ter pelo menos 6 caracteres."
+        );
+        return;
+      }
+
+      signupButton.disabled = true;
+      signupButton.textContent = "Criando conta...";
+
+      try {
+        const { data, error } =
+          await supabaseClient.auth.signUp({
+            email: email,
+            password: password
+          });
+
+        if (error) {
+          throw error;
+        }
+
+        if (data.session && data.user) {
+          updateAccountUI(data.user);
+
+          showAuthMessage(
+            "Cadastro concluído! Você já está conectado e pode acessar os jogos."
+          );
+
+        } else {
+          showAuthMessage(
+            "Cadastro iniciado! Confira seu e-mail para confirmar a conta, se a confirmação estiver ativada no Supabase. Depois, volte e faça login."
+          );
+        }
+
+      } catch (error) {
+        showAuthMessage(
+          "Não foi possível criar a conta: " + error.message
+        );
+
+      } finally {
+        signupButton.disabled = false;
+        signupButton.textContent = "Criar conta";
       }
     });
 
-    options.appendChild(button);
-  });
+    /* ======================================================
+       LOGIN
+       ====================================================== */
 
-  content.appendChild(options);
+    loginForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      clearAuthMessage();
 
-  $("gameScore").textContent = "Acertos: " + state.score;
-}
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
 
-/* =========================================================
-   JOGO 3: BATALHA DE CARTAS
-========================================================= */
+      if (!email || !password) {
+        showAuthMessage(
+          "Preencha seu e-mail e sua senha."
+        );
+        return;
+      }
 
-function initBattle() {
-  gameState = {
-    deck: createDeck(),
-    wins: 0,
-    losses: 0,
-    rounds: 0
-  };
+      loginButton.disabled = true;
+      loginButton.textContent = "Entrando...";
 
-  drawBattle();
-}
+      try {
+        const { data, error } =
+          await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+          });
 
-function drawBattle() {
-  const content = $("gameContent");
-  content.replaceChildren();
+        if (error) {
+          throw error;
+        }
 
-  const playerArea = document.createElement("div");
-  playerArea.className = "playing-area";
+        updateAccountUI(data.user);
 
-  const computerArea = document.createElement("div");
-  computerArea.className = "playing-area";
+        showAuthMessage(
+          "Login realizado com sucesso! Os jogos estão liberados."
+        );
 
-  const playerLabel = document.createElement("p");
-  playerLabel.textContent = "Sua carta";
+        document.getElementById("jogos").scrollIntoView({
+          behavior: "smooth"
+        });
 
-  const computerLabel = document.createElement("p");
-  computerLabel.textContent = "Carta do computador";
+      } catch (error) {
+        showAuthMessage(
+          "Não foi possível entrar: " + error.message
+        );
 
-  const playerCard = document.createElement("div");
-  playerCard.className = "card";
-  playerCard.textContent = "★";
+      } finally {
+        loginButton.disabled = false;
+        loginButton.textContent = "Entrar";
+      }
+    });
 
-  const computerCard = document.createElement("div");
-  computerCard.className = "card back";
-  computerCard.textContent = "★";
+    /* ======================================================
+       RECUPERAÇÃO DE SENHA
+       ====================================================== */
 
-  playerArea.appendChild(playerCard);
-  computerArea.appendChild(computerCard);
+    resetButton.addEventListener("click", async function () {
+      clearAuthMessage();
 
-  content.appendChild(playerLabel);
-  content.appendChild(playerArea);
-  content.appendChild(computerLabel);
-  content.appendChild(computerArea);
+      const email = document.getElementById("email").value.trim();
 
-  const button = document.createElement("button");
-  button.type = "button";
-  button.className = "button gold";
-  button.textContent = "Comprar cartas";
+      if (!email) {
+        showAuthMessage(
+          "Digite seu e-mail no campo acima antes de solicitar a recuperação."
+        );
+        return;
+      }
 
-  button.addEventListener("click", () => {
-    const state = gameState;
+      resetButton.disabled = true;
+      resetButton.textContent = "Enviando...";
 
-    if (state.deck.length < 2) {
-      showGameMessage("Baralho encerrado. Reinicie para jogar novamente.");
-      button.disabled = true;
-      return;
-    }
+      try {
+        const { error } =
+          await supabaseClient.auth.resetPasswordForEmail(email, {
+            redirectTo: window.location.origin
+          });
 
-    const player = state.deck.pop();
-    const computer = state.deck.pop();
+        if (error) {
+          throw error;
+        }
 
-    playerCard.textContent = player.label + player.suit;
-    computerCard.textContent = computer.label + computer.suit;
-    computerCard.classList.remove("back");
+        showAuthMessage(
+          "Se o e-mail estiver cadastrado e as configurações permitirem, você receberá as instruções para redefinir sua senha."
+        );
 
-    playerCard.classList.toggle("red", player.red);
-    computerCard.classList.toggle("red", computer.red);
+      } catch (error) {
+        showAuthMessage(
+          "Não foi possível solicitar a recuperação: " + error.message
+        );
 
-    state.rounds++;
+      } finally {
+        resetButton.disabled = false;
+        resetButton.textContent = "Esqueci minha senha";
+      }
+    });
 
-    if (player.value > computer.value) {
-      state.wins++;
-      showGameMessage("Você venceu esta rodada!");
-    } else if (player.value < computer.value) {
-      state.losses++;
-      showGameMessage("O computador venceu esta rodada.");
-    } else {
-      showGameMessage("Empate! Valores iguais.");
-    }
+    /* ======================================================
+       LOGOUT
+       ====================================================== */
 
-    $("gameScore").textContent =
-      "Vitórias: " + state.wins +
-      " | Derrotas: " + state.losses +
-      " | Cartas restantes: " + state.deck.length;
+    logoutButton.addEventListener("click", async function () {
+      logoutButton.disabled = true;
+      logoutButton.textContent = "Saindo...";
 
-    if (state.deck.length < 2) {
-      button.disabled = true;
-      showGameMessage("Fim do baralho! Reinicie para uma nova partida.");
-    }
-  });
+      try {
+        const { error } = await supabaseClient.auth.signOut();
 
-  content.appendChild(button);
+        if (error) {
+          throw error;
+        }
 
-  $("gameScore").textContent =
-    "Vitórias: 0 | Derrotas: 0 | Cartas restantes: 52";
-}
+        currentUser = null;
+        updateAccountUI(null);
+        closeGame();
 
-/* =========================================================
-   JOGO 4: PACIÊNCIA SIMPLIFICADA
-========================================================= */
+        showAuthMessage(
+          "Você saiu da conta. Para acessar os jogos novamente, faça login."
+        );
 
-function initPatience() {
-  gameState = {
-    deck: createDeck().filter(card => card.value <= 7),
-    piles: [[], [], [], []],
-    moves: 0
-  };
+        document.getElementById("conta").scrollIntoView({
+          behavior: "smooth"
+        });
 
-  drawPatience();
-}
+      } catch (error) {
+        showAuthMessage(
+          "Não foi possível sair da conta: " + error.message
+        );
 
-function drawPatience() {
-  const state = gameState;
-  const content = $("gameContent");
-  content.replaceChildren();
+      } finally {
+        logoutButton.disabled = false;
+        logoutButton.textContent = "Sair da conta";
+      }
+    });
 
-  const instruction = document.createElement("p");
-  instruction.textContent =
-    "Selecione uma carta e coloque-a na pilha correspondente ao naipe. " +
-    "Cada pilha deve seguir a ordem A, 2, 3, 4, 5, 6, 7.";
-  content.appendChild(instruction);
+    /* ======================================================
+       ACOMPANHAMENTO DA SESSÃO
+       Mantém a interface sincronizada com o Supabase.
+       ====================================================== */
 
-  const hand = document.createElement("div");
-  hand.className = "playing-area";
+    supabaseClient.auth.onAuthStateChange(function (event, session) {
+      currentUser = session ? session.user : null;
+      updateAccountUI(currentUser);
 
-  state.deck.forEach((card, index) => {
-    const button = cardElement(card, { small: true });
+      if (event === "SIGNED_OUT") {
+        closeGame();
+      }
+    });
 
-    button.addEventListener("click", () => {
-      state.selected = index;
+    /* ======================================================
+       CONTROLE CENTRAL DOS JOGOS
+       NUNCA abrir jogo sem verificar a sessão.
+       ====================================================== */
 
-      hand.querySelectorAll("button").forEach(el => {
-        el.style.outline = "";
+    async function openGame(gameName) {
+      clearAuthMessage();
+
+      let user;
+
+      try {
+        user = await getAuthenticatedUser();
+
+      } catch (error) {
+        showAuthMessage(
+          "Não foi possível verificar sua sessão. Tente novamente."
+        );
+
+        document.getElementById("conta").scrollIntoView({
+          behavior: "smooth"
+        });
+
+        return;
+      }
+
+      /* BLOQUEIO DE ACESSO SEM LOGIN */
+
+      if (!user) {
+        closeGame();
+
+        showAuthMessage(
+          "🔒 Para acessar os jogos, você precisa criar uma conta ou fazer login."
+        );
+
+        document.getElementById("conta").scrollIntoView({
+          behavior: "smooth"
+        });
+
+        return;
+      }
+
+      /* A sessão foi confirmada. O jogo pode abrir. */
+
+      currentGame = gameName;
+      gameState = {};
+
+      gamePanel.classList.add("active");
+      gamePanel.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
       });
 
-      button.style.outline = "3px solid #f5c542";
-      showGameMessage(
-        "Carta selecionada: " + card.label + card.suit +
-        ". Agora escolha uma pilha."
+      clearGameResult();
+
+      switch (gameName) {
+        case "memory":
+          renderMemoryGame();
+          break;
+
+        case "sequence":
+          renderSequenceGame();
+          break;
+
+        case "cards":
+          renderCardsGame();
+          break;
+
+        case "battle":
+          renderBattleGame();
+          break;
+
+        case "suits":
+          renderSuitsGame();
+          break;
+
+        case "quiz":
+          renderQuizGame();
+          break;
+
+        default:
+          closeGame();
+          break;
+      }
+    }
+
+    function closeGame() {
+      currentGame = null;
+      gameState = {};
+
+      gamePanel.classList.remove("active");
+      gameTitle.textContent = "Jogo";
+      gameContent.innerHTML = "";
+      clearGameResult();
+    }
+
+    /* ======================================================
+       JOGO 1 — MEMÓRIA DIVINA
+       ====================================================== */
+
+    function renderMemoryGame() {
+      gameTitle.textContent = "🧠 Memória Divina";
+
+      const symbols = [
+        "⚡", "🐉", "🛡️", "👑",
+        "⚡", "🐉", "🛡️", "👑"
+      ];
+
+      for (let i = symbols.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+
+        [symbols[i], symbols[j]] =
+          [symbols[j], symbols[i]];
+      }
+
+      gameState.symbols = symbols;
+      gameState.open = [];
+      gameState.matched = [];
+      gameState.moves = 0;
+      gameState.locked = false;
+
+      gameContent.innerHTML = `
+        <p>Encontre os quatro pares de símbolos.</p>
+
+        <p>
+          Tentativas:
+          <strong id="memoryMoves">0</strong>
+        </p>
+
+        <div class="memory-grid" id="memoryGrid"></div>
+
+        <div class="game-controls">
+          <button class="button button-outline" onclick="renderMemoryGame()">
+            Reiniciar jogo
+          </button>
+        </div>
+      `;
+
+      const grid = document.getElementById("memoryGrid");
+
+      symbols.forEach(function (symbol, index) {
+        const button = document.createElement("button");
+
+        button.className = "memory-card";
+        button.textContent = "❔";
+        button.setAttribute("aria-label", "Carta fechada");
+
+        button.addEventListener("click", function () {
+          memoryFlip(index);
+        });
+
+        grid.appendChild(button);
+      });
+
+      clearGameResult();
+    }
+
+    function memoryFlip(index) {
+      if (currentGame !== "memory") return;
+      if (gameState.locked) return;
+      if (gameState.matched.includes(index)) return;
+      if (gameState.open.includes(index)) return;
+
+      gameState.open.push(index);
+
+      const buttons =
+        document.querySelectorAll(".memory-card");
+
+      buttons[index].textContent = gameState.symbols[index];
+      buttons[index].setAttribute(
+        "aria-label",
+        "Símbolo " + gameState.symbols[index]
       );
-    });
 
-    hand.appendChild(button);
-  });
+      if (gameState.open.length === 2) {
+        gameState.moves++;
 
-  content.appendChild(hand);
+        document.getElementById("memoryMoves").textContent =
+          gameState.moves;
 
-  const pilesArea = document.createElement("div");
-  pilesArea.className = "playing-area";
+        const first = gameState.open[0];
+        const second = gameState.open[1];
 
-  SUITS.forEach((suit, index) => {
-    const pileButton = document.createElement("button");
+        if (
+          gameState.symbols[first] ===
+          gameState.symbols[second]
+        ) {
+          gameState.matched.push(first, second);
+          gameState.open = [];
 
-    pileButton.type = "button";
-    pileButton.className = "card back";
-    pileButton.style.width = "76px";
-    pileButton.style.height = "100px";
+          if (gameState.matched.length === 8) {
+            showGameResult(
+              "🏆 Parabéns! Você encontrou todos os pares em " +
+              gameState.moves +
+              " tentativas."
+            );
+          }
 
-    const pile = state.piles[index];
-    const top = pile[pile.length - 1];
+        } else {
+          gameState.locked = true;
 
-    pileButton.textContent =
-      top ? top.label + top.suit : suit.symbol;
+          setTimeout(function () {
+            if (currentGame !== "memory") return;
 
-    if (suit.red) pileButton.classList.add("red");
+            const currentButtons =
+              document.querySelectorAll(".memory-card");
 
-    pileButton.setAttribute(
-      "aria-label",
-      "Pilha de " + suit.name
-    );
+            currentButtons[first].textContent = "❔";
+            currentButtons[second].textContent = "❔";
 
-    pileButton.addEventListener("click", () => {
-      if (state.selected === undefined) {
-        showGameMessage("Selecione primeiro uma carta.");
+            gameState.open = [];
+            gameState.locked = false;
+
+          }, 750);
+        }
+      }
+    }
+
+    /* ======================================================
+       JOGO 2 — SEQUÊNCIA DE ZEUS
+       ====================================================== */
+
+    function renderSequenceGame() {
+      gameTitle.textContent = "🔢 Sequência de Zeus";
+
+      gameState.level = 1;
+      gameState.answer = "";
+      gameState.showing = false;
+
+      gameContent.innerHTML = `
+        <p>
+          Memorize a sequência exibida e digite os números na
+          mesma ordem.
+        </p>
+
+        <p>
+          Nível:
+          <strong id="sequenceLevel">1</strong>
+        </p>
+
+        <div class="sequence-display" id="sequenceDisplay">
+          ?
+        </div>
+
+        <div class="field">
+          <label for="sequenceInput">Digite a sequência</label>
+
+          <input
+            id="sequenceInput"
+            type="text"
+            inputmode="numeric"
+            autocomplete="off"
+            placeholder="Ex.: 123"
+            style="max-width:300px;text-align:center;"
+          >
+        </div>
+
+        <div class="game-controls">
+          <button class="button button-gold" id="sequenceStart">
+            Mostrar sequência
+          </button>
+
+          <button class="button button-outline" id="sequenceCheck">
+            Conferir
+          </button>
+        </div>
+      `;
+
+      document.getElementById("sequenceStart")
+        .addEventListener("click", showSequence);
+
+      document.getElementById("sequenceCheck")
+        .addEventListener("click", checkSequence);
+
+      clearGameResult();
+    }
+
+    function showSequence() {
+      if (currentGame !== "sequence") return;
+
+      const length = Math.min(2 + gameState.level, 9);
+      let sequence = "";
+
+      for (let i = 0; i < length; i++) {
+        sequence += Math.floor(Math.random() * 10);
+      }
+
+      gameState.answer = sequence;
+      gameState.showing = true;
+
+      const display =
+        document.getElementById("sequenceDisplay");
+
+      const input =
+        document.getElementById("sequenceInput");
+
+      input.value = "";
+      input.disabled = true;
+
+      display.textContent = sequence;
+      showGameResult("Memorize!");
+
+      setTimeout(function () {
+        if (currentGame !== "sequence") return;
+
+        display.textContent = "• ".repeat(length);
+        input.disabled = false;
+        input.focus();
+
+        gameState.showing = false;
+
+        showGameResult("Agora digite a sequência.");
+      }, 1800 + length * 250);
+    }
+
+    function checkSequence() {
+      if (currentGame !== "sequence") return;
+
+      if (gameState.showing) {
+        showGameResult("Espere a sequência terminar.");
         return;
       }
 
-      const card = state.deck[state.selected];
-      const targetPile = state.piles[index];
-      const expected = targetPile.length + 1;
-
-      if (card.suit !== suit.symbol) {
-        showGameMessage("Essa carta pertence a outro naipe.");
+      if (!gameState.answer) {
+        showGameResult("Clique em Mostrar sequência primeiro.");
         return;
       }
 
-      if (card.value !== expected) {
-        showGameMessage(
-          "Ordem incorreta. A próxima carta desta pilha deve ser " +
-          expected + "."
-        );
-        return;
-      }
+      const input =
+        document.getElementById("sequenceInput");
 
-      targetPile.push(card);
-      state.deck.splice(state.selected, 1);
-      state.selected = undefined;
-      state.moves++;
+      if (input.value === gameState.answer) {
+        gameState.level++;
 
-      drawPatience();
+        document.getElementById("sequenceLevel").textContent =
+          gameState.level;
 
-      if (state.piles.every(pile => pile.length === 7)) {
-        showGameMessage("Parabéns! Você completou todas as pilhas!");
+        showGameResult("✅ Correto! Você avançou de nível.");
+
+        gameState.answer = "";
+
       } else {
-        showGameMessage("Boa jogada! Escolha a próxima carta.");
-      }
-    });
-
-    pilesArea.appendChild(pileButton);
-  });
-
-  content.appendChild(pilesArea);
-
-  $("gameScore").textContent =
-    "Movimentos: " + state.moves +
-    " | Cartas restantes: " + state.deck.length;
-}
-
-/* =========================================================
-   JOGO 5: DESAFIO DE NAIPES
-========================================================= */
-
-function initSuits() {
-  gameState = {
-    deck: createDeck(),
-    score: 0,
-    attempts: 0,
-    target: null
-  };
-
-  nextSuitChallenge();
-}
-
-function nextSuitChallenge() {
-  const state = gameState;
-  const content = $("gameContent");
-  content.replaceChildren();
-
-  if (state.deck.length === 0) {
-    showGameMessage(
-      "Desafio concluído! Você acertou " +
-      state.score + " cartas."
-    );
-    return;
-  }
-
-  const card = state.deck.pop();
-  const suit = SUITS[Math.floor(Math.random() * SUITS.length)];
-
-  state.target = {
-    card,
-    suit
-  };
-
-  const prompt = document.createElement("p");
-  prompt.textContent =
-    "A carta sorteada é " + card.label + card.suit +
-    ". Qual é o seu naipe?";
-  content.appendChild(prompt);
-
-  const cardDisplay = document.createElement("div");
-  cardDisplay.className = "playing-area";
-
-  const visualCard = cardElement(card);
-  cardDisplay.appendChild(visualCard);
-  content.appendChild(cardDisplay);
-
-  const options = document.createElement("div");
-  options.className = "game-toolbar";
-
-  const shuffledSuits = shuffle(SUITS);
-
-  shuffledSuits.forEach(option => {
-    const button = document.createElement("button");
-
-    button.type = "button";
-    button.className = "button dark";
-    button.textContent = option.symbol + " " + option.name;
-
-    button.addEventListener("click", () => {
-      const correct = option.symbol === card.suit;
-
-      state.attempts++;
-
-      if (correct) {
-        state.score++;
-        showGameMessage("Acertou! Você identificou o naipe correto.");
-      } else {
-        showGameMessage(
-          "Quase! O naipe correto era " + card.suitName + "."
+        showGameResult(
+          "❌ Não foi dessa vez. Tente novamente!"
         );
+
+        gameState.level = 1;
+
+        document.getElementById("sequenceLevel").textContent =
+          "1";
+
+        gameState.answer = "";
+      }
+    }
+
+    /* ======================================================
+       JOGO 3 — DESAFIO DAS CARTAS
+       ====================================================== */
+
+    function renderCardsGame() {
+      gameTitle.textContent = "🃏 Desafio das Cartas";
+
+      gameContent.innerHTML = `
+        <p>
+          Retire duas cartas e veja qual possui o maior valor.
+        </p>
+
+        <div class="cards-row" id="cardsRow">
+          <div class="playing-card">?</div>
+          <div class="playing-card">?</div>
+        </div>
+
+        <div class="game-controls">
+          <button class="button button-gold" onclick="drawCards()">
+            Tirar cartas
+          </button>
+        </div>
+
+        <p class="muted" style="margin-top:15px;">
+          A = 1, J = 11, Q = 12, K = 13.
+        </p>
+      `;
+
+      clearGameResult();
+    }
+
+    function drawCards() {
+      if (currentGame !== "cards") return;
+
+      const deck = [
+        { name: "A", value: 1 },
+        { name: "2", value: 2 },
+        { name: "3", value: 3 },
+        { name: "4", value: 4 },
+        { name: "5", value: 5 },
+        { name: "6", value: 6 },
+        { name: "7", value: 7 },
+        { name: "8", value: 8 },
+        { name: "9", value: 9 },
+        { name: "10", value: 10 },
+        { name: "J", value: 11 },
+        { name: "Q", value: 12 },
+        { name: "K", value: 13 }
+      ];
+
+      const suits = ["♠", "♥", "♦", "♣"];
+
+      function randomCard() {
+        const card = deck[
+          Math.floor(Math.random() * deck.length)
+        ];
+
+        const suit = suits[
+          Math.floor(Math.random() * suits.length)
+        ];
+
+        return {
+          name: card.name,
+          value: card.value,
+          suit: suit
+        };
       }
 
-      $("gameScore").textContent =
-        "Acertos: " + state.score +
-        " | Cartas respondidas: " + state.attempts;
+      const first = randomCard();
+      const second = randomCard();
 
-      options.querySelectorAll("button").forEach(btn => {
-        btn.disabled = true;
+      const row = document.getElementById("cardsRow");
+
+      row.innerHTML = "";
+
+      [first, second].forEach(function (card) {
+        const div = document.createElement("div");
+
+        div.className =
+          "playing-card" +
+          (card.suit === "♥" || card.suit === "♦"
+            ? " red-suit"
+            : "");
+
+        div.textContent = card.name + card.suit;
+
+        row.appendChild(div);
       });
 
-      const nextButton = document.createElement("button");
-      nextButton.type = "button";
-      nextButton.className = "button gold";
-      nextButton.textContent = "Próxima carta";
-      nextButton.style.marginTop = "12px";
+      if (first.value > second.value) {
+        showGameResult("A primeira carta tem o maior valor!");
+      } else if (second.value > first.value) {
+        showGameResult("A segunda carta tem o maior valor!");
+      } else {
+        showGameResult("Empate! As duas cartas têm o mesmo valor.");
+      }
+    }
 
-      nextButton.addEventListener("click", nextSuitChallenge);
+    /* ======================================================
+       JOGO 4 — BATALHA MITOLÓGICA
+       ====================================================== */
 
-      content.appendChild(nextButton);
-    });
+    function renderBattleGame() {
+      gameTitle.textContent = "🛡️ Batalha Mitológica";
 
-    options.appendChild(button);
-  });
+      gameContent.innerHTML = `
+        <p>Escolha seu personagem para começar o desafio.</p>
 
-  content.appendChild(options);
+        <div class="game-controls">
 
-  $("gameScore").textContent =
-    "Acertos: " + state.score +
-    " | Cartas respondidas: " + state.attempts;
-}
+          <button
+            class="choice-button"
+            onclick="battleChoice('zeus')"
+            aria-label="Escolher Zeus"
+          >
+            ⚡
+            <br>
+            <span style="font-size:0.75rem;">Zeus</span>
+          </button>
 
-/* =========================================================
-   INICIALIZAÇÃO
-========================================================= */
+          <button
+            class="choice-button"
+            onclick="battleChoice('athena')"
+            aria-label="Escolher Atena"
+          >
+            🛡️
+            <br>
+            <span style="font-size:0.75rem;">Atena</span>
+          </button>
 
-initializeAuth();
-</script>
+          <button
+            class="choice-button"
+            onclick="battleChoice('dragon')"
+            aria-label="Escolher Dragão"
+          >
+            🐉
+            <br>
+            <span style="font-size:0.75rem;">Dragão</span>
+          </button>
+
+        </div>
+
+        <div id="battleDisplay" style="margin-top:22px;"></div>
+      `;
+
+      clearGameResult();
+    }
+
+    function battleChoice(choice) {
+      if (currentGame !== "battle") return;
+
+      const characters = {
+        zeus: {
+          name: "Zeus",
+          emoji: "⚡"
+        },
+
+        athena: {
+          name: "Atena",
+          emoji: "🛡️"
+        },
+
+        dragon: {
+          name: "Dragão",
+          emoji: "🐉"
+        }
+      };
+
+      const keys = Object.keys(characters);
+
+      const opponentKey =
+        keys[Math.floor(Math.random() * keys.length)];
+
+      const player = characters[choice];
+      const opponent = characters[opponentKey];
+
+      const display =
+        document.getElementById("battleDisplay");
+
+      display.innerHTML = "";
+
+      const matchup = document.createElement("p");
+
+      matchup.style.fontSize = "1.4rem";
+      matchup.textContent =
+        player.emoji + " " + player.name +
+        "  VS  " +
+        opponent.emoji + " " + opponent.name;
+
+      display.appendChild(matchup);
+
+      if (choice === opponentKey) {
+        showGameResult("🤝 Empate! Tente outra rodada.");
+      } else if (
+        (choice === "zeus" && opponentKey === "dragon") ||
+        (choice === "dragon" && opponentKey === "athena") ||
+        (choice === "athena" && opponentKey === "zeus")
+      ) {
+        showGameResult("🏆 Você venceu este desafio!");
+      } else {
+        showGameResult("O adversário venceu desta vez. Tente novamente!");
+      }
+    }
+
+    /* ======================================================
+       JOGO 5 — DESAFIO DOS NAIPES
+       ====================================================== */
+
+    function renderSuitsGame() {
+      gameTitle.textContent = "♠️ Desafio dos Naipes";
+
+      gameState.suitScore = 0;
+      gameState.suitAnswer = "";
+
+      gameContent.innerHTML = `
+        <p>
+          Identifique corretamente o naipe da carta.
+        </p>
+
+        <p>
+          Acertos:
+          <strong id="suitScore">0</strong>
+        </p>
+
+        <div class="cards-row">
+          <div class="playing-card" id="suitCard">?</div>
+        </div>
+
+        <div class="game-controls">
+
+          <button
+            class="choice-button"
+            onclick="checkSuit('♠')"
+          >
+            ♠
+          </button>
+
+          <button
+            class="choice-button"
+            onclick="checkSuit('♥')"
+          >
+            ♥
+          </button>
+
+          <button
+            class="choice-button"
+            onclick="checkSuit('♦')"
+          >
+            ♦
+          </button>
+
+          <button
+            class="choice-button"
+            onclick="checkSuit('♣')"
+          >
+            ♣
+          </button>
+
+        </div>
+
+        <div class="game-controls">
+          <button class="button button-outline" onclick="nextSuitCard()">
+            Próxima carta
+          </button>
+        </div>
+      `;
+
+      nextSuitCard();
+      clearGameResult();
+    }
+
+    function nextSuitCard() {
+      if (currentGame !== "suits") return;
+
+      const values = [
+        "A", "2", "3", "4", "5", "6", "7",
+        "8", "9", "10", "J", "Q", "K"
+      ];
+
+      const suits = ["♠", "♥", "♦", "♣"];
+
+      const value =
+        values[Math.floor(Math.random() * values.length)];
+
+      const suit =
+        suits[Math.floor(Math.random() * suits.length)];
+
+      gameState.suitAnswer = suit;
+
+      const card = document.getElementById("suitCard");
+
+      card.textContent = value + suit;
+
+      card.className =
+        "playing-card" +
+        (suit === "♥" || suit === "♦"
+          ? " red-suit"
+          : "");
+
+      showGameResult("Qual é o naipe desta carta?");
+    }
+
+    function checkSuit(suit) {
+      if (currentGame !== "suits") return;
+
+      if (suit === gameState.suitAnswer) {
+        gameState.suitScore++;
+
+        document.getElementById("suitScore").textContent =
+          gameState.suitScore;
+
+        showGameResult("✅ Acertou! Clique em Próxima carta.");
+
+      } else {
+        showGameResult("❌ Não foi dessa vez. Tente novamente.");
+      }
+    }
+
+    /* ======================================================
+       JOGO 6 — DESAFIO DO DRAGÃO
+       ====================================================== */
+
+    function renderQuizGame() {
+      gameTitle.textContent = "🐉 Desafio do Dragão";
+
+      gameState.quizIndex = 0;
+      gameState.quizScore = 0;
+
+      gameState.questions = [
+        {
+          question: "Qual é o maior planeta do Sistema Solar?",
+          answers: ["Marte", "Júpiter", "Vênus"],
+          correct: 1
+        },
+        {
+          question: "Quantos lados tem um hexágono?",
+          answers: ["Cinco", "Seis", "Oito"],
+          correct: 1
+        },
+        {
+          question: "Qual é o satélite natural da Terra?",
+          answers: ["Lua", "Sol", "Marte"],
+          correct: 0
+        },
+        {
+          question: "Qual é o resultado de 7 × 8?",
+          answers: ["54", "56", "64"],
+          correct: 1
+        }
+      ];
+
+      showQuizQuestion();
+    }
+
+    function showQuizQuestion() {
+      if (currentGame !== "quiz") return;
+
+      const index = gameState.quizIndex;
+      const questions = gameState.questions;
+
+      if (index >= questions.length) {
+        gameContent.innerHTML = `
+          <h3 style="color:var(--gold);margin-bottom:15px;">
+            Desafio concluído!
+          </h3>
+
+          <p>
+            Você acertou ${gameState.quizScore} de
+            ${questions.length} perguntas.
+          </p>
+
+          <div class="game-controls">
+            <button class="button button-gold" onclick="renderQuizGame()">
+              Jogar novamente
+            </button>
+          </div>
+        `;
+
+        showGameResult("🏆 Parabéns por completar o desafio!");
+        return;
+      }
+
+      const item = questions[index];
+
+      gameContent.innerHTML = `
+        <p>
+          Pergunta ${index + 1} de ${questions.length}
+        </p>
+
+        <h3 style="margin:18px 0;color:var(--gold-light);">
+          ${item.question}
+        </h3>
+
+        <div
+          class="game-controls"
+          id="quizAnswers"
+          style="flex-direction:column;max-width:360px;margin:20px auto;"
+        ></div>
+      `;
+
+      const answers =
+        document.getElementById("quizAnswers");
+
+      item.answers.forEach(function (answer, answerIndex) {
+        const button = document.createElement("button");
+
+        button.className = "button button-outline";
+        button.style.width = "100%";
+        button.textContent = answer;
+
+        button.addEventListener("click", function () {
+          if (currentGame !== "quiz") return;
+
+          if (answerIndex === item.correct) {
+            gameState.quizScore++;
+
+            showGameResult("✅ Resposta correta!");
+          } else {
+            showGameResult("❌ Resposta incorreta.");
+          }
+
+          answers.querySelectorAll("button").forEach(function (b) {
+            b.disabled = true;
+          });
+
+          const nextButton = document.createElement("button");
+
+          nextButton.className = "button button-gold";
+          nextButton.style.marginTop = "10px";
+          nextButton.textContent =
+            index === questions.length - 1
+              ? "Ver resultado"
+              : "Próxima pergunta";
+
+          nextButton.addEventListener("click", function () {
+            gameState.quizIndex++;
+            showQuizQuestion();
+          });
+
+          answers.appendChild(nextButton);
+        });
+
+        answers.appendChild(button);
+      });
+
+      clearGameResult();
+    }
+
+    /* ======================================================
+       INICIALIZAÇÃO
+       ====================================================== */
+
+    async function initializeApp() {
+      try {
+        const {
+          data: { session },
+          error
+        } = await supabaseClient.auth.getSession();
+
+        if (error) {
+          throw error;
+        }
+
+        updateAccountUI(session ? session.user : null);
+
+      } catch (error) {
+        updateAccountUI(null);
+
+        showAuthMessage(
+          "Não foi possível verificar sua conta. Atualize a página e tente novamente."
+        );
+      }
+    }
+
+    initializeApp();
+  </script>
+
 </body>
 </html>
