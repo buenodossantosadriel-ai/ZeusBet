@@ -41,11 +41,19 @@ module.exports = async function handler(req, res) {
       }
     );
 
-    if (!authResponse.ok) {
-      return res.status(401).json({
-        error: "Sessão inválida."
-      });
-    }
+ if (!authResponse.ok) {
+  const detalhe = await authResponse.text();
+
+  console.error(
+    "ERRO SUPABASE AUTH:",
+    authResponse.status,
+    detalhe
+  );
+
+  return res.status(401).json({
+    error: "Sessão inválida."
+  });
+}
 
     const user = await authResponse.json();
 
