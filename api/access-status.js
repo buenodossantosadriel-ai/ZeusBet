@@ -20,6 +20,28 @@ module.exports = async function handler(req, res) {
 
   try {
     const authorization = req.headers.authorization || "";
+    let tokenIssuer = "não identificado";
+
+try {
+  const token = authorization.startsWith("Bearer ")
+    ? authorization.slice(7)
+    : "";
+
+  const payload = JSON.parse(
+    Buffer.from(token.split(".")[1], "base64url").toString()
+  );
+
+  tokenIssuer = payload.iss || "sem issuer";
+} catch (error) {
+  tokenIssuer = "token não pôde ser analisado";
+}
+
+console.error("DIAGNÓSTICO SUPABASE:", {
+  servidorSupabase: SUPABASE_URL
+    ? new URL(SUPABASE_URL).host
+    : "URL não configurada",
+  emissorDoToken: tokenIssuer
+});
     const token = authorization.startsWith("Bearer ")
       ? authorization.slice(7)
       : "";
