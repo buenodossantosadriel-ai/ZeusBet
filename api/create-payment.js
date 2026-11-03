@@ -100,11 +100,7 @@ if (!authResponse.ok) {
 
     const accessRows = await accessResponse.json();
 
-    if (accessRows.some(row => row.lifetime_access === true)) {
-      return res.status(409).json({
-        error: "Este usuário já possui acesso vitalício."
-      });
-    }
+
 
     // O valor e a descrição são definidos exclusivamente no servidor.
     const paymentResponse = await fetch(
@@ -117,8 +113,8 @@ if (!authResponse.ok) {
           "X-Idempotency-Key": randomUUID()
         },
         body: JSON.stringify({
-          transaction_amount: 20,
-          description: "ZeusBet - Acesso vitalício às experiências demonstrativas",
+          transaction_amount: 19.90,
+          description: "ZeusBet - Cameras-RS - Acesso mensal de 30 dias - 5 cameras ao vivo",
           payment_method_id: "pix",
           payer: {
             email: user.email
