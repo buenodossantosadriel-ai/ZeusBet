@@ -2,63 +2,63 @@ export default async function handler(req, res) {
   const { id } = req.query;
   if (!id) return res.status(400).json({ error: 'id required' });
 
-  // Lista de bases pra tentar - porque você não me mandou o link de todas
-  const BASES = ['010', '011', '012', '013', '014'];
-  
-  // Mapeamento de IDs alternativos que o DAER usa
-  const ALT_IDS = {
-    'ptz_caxias': ['ptz_caxias', 'ptz_caxias_do_sul'],
-    'ptz_caxias_do_sul': ['ptz_caxias_do_sul', 'ptz_caxias'],
-    'Serafina_Correa': ['Serafina_Correa', 'serafina_correa'],
-    'Sananduva': ['Sananduva', 'sananduva'],
+  const FTP_MAP = {
+    'ptz_passo_fundo': 'Passo_Fundo',
+    'Passo_Fundo': 'Passo_Fundo',
+    'Serafina_Correa': 'Serafina_Correa',
+    'Sananduva': 'Sananduva',
+    'serafina_correa': 'Serafina_Correa',
+    'sananduva': 'Sananduva',
   };
 
-  const tryIds = ALT_IDS[id] || [id];
-  
-  // 1. Se for tipo FTP (as 3 PHP)
-  const isFTP = ['Passo_Fundo', 'Serafina_Correa', 'Sananduva', 'ptz_passo_fundo', 'ptz_passo'].some(x => id.toLowerCase().includes(x.toLowerCase().replace('ptz_',''))) || id.toLowerCase().includes('serafina') || id.toLowerCase().includes('sananduva');
+  try {
+    let imageUrl;
 
-  if (isFTP) {
-    // Tenta FTP direto
-    for (const tryId of tryIds) {
-      const cleanId = tryId.replace('ptz_', '');
-      // Tenta com primeira letra maiúscula igual você mandou
-      const ftpIds = [cleanId, cleanId.charAt(0).toUpperCase() + cleanId.slice(1), tryId];
-      for (const fId of ftpIds) {
+    if (FTP_MAP[id]) {
+      imageUrl = `https://daer.kopp.com.br/ftp/imagem.php?id=${FTP_MAP[id]}&t=${Date.now()}&r=${Math.random()}`;
+    } else {
+      const BASES = ['010','011','012','013'];
+      for (const base of BASES) {
         try {
-          const url = `https://daer.kopp.com.br/ftp/imagem.php?id=${fId}&t=${Date.now()}`;
+          const url = `https://daer.kopp.com.br/sistrak-base-${base}/rs/importacao/camera-importador-operacao-registro/codigo-camera/${id}?t=${Date.now()}`;
           const r = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' }, cache: 'no-store' });
-          if (r.ok && r.headers.get('content-type')?.includes('image')) {
+          if (r.ok) {
             const buf = Buffer.from(await r.arrayBuffer());
-            if (buf.length > 5000) { // é imagem de verdade
+            if (buf.length > 5000) {
               res.setHeader('Content-Type', 'image/jpeg');
-              res.setHeader('Cache-Control', 'no-store');
+              res.setHeader('Cache-Control', 'no-store, no-cache');
               return res.send(buf);
             }
           }
         } catch {}
       }
-    }
-  }
-
-  // 2. Tenta SISTRAK em todas as bases
-  for (const base of BASES) {
-    for (const tryId of tryIds) {
-      try {
-        const url = `https://daer.kopp.com.br/sistrak-base-${base}/rs/importacao/camera-importador-operacao-registro/codigo-camera/${tryId}?t=${Date.now()}`;
-        const r = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' }, cache: 'no-store' });
-        if (r.ok) {
-          const buf = Buffer.from(await r.arrayBuffer());
-          // Se retornou imagem (>5kb) e não é JSON de erro
-          if (buf.length > 5000) {
-            res.setHeader('Content-Type', 'image/jpeg');
-            res.setHeader('Cache-Control', 'no-store');
-            return res.send(buf);
-          }
+      if (id === 'ptz_caxias') {
+        for (const base of BASES) {
+          try {
+            const url = `https://daer.kopp.com.br/sistrak-base-${base}/rs/importacao/camera-importador-operacao-registro/codigo-camera/ptz_caxias_do_sul?t=${Date.now()}`;
+            const r = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } });
+            if (r.ok) {
+              const buf = Buffer.from(await r.arrayBuffer());
+              if (buf.length > 5000) {
+                res.setHeader('Content-Type', 'image/jpeg');
+                res.setHeader('Cache-Control', 'no-store');
+                return res.send(buf);
+              }
+            }
+          } catch {}
         }
-      } catch {}
+      }
+      throw new Error('camera not found');
     }
-  }
 
-  return res.status(404).json({ error: `camera ${id} not found in any base` });
+    const r = await fetch(imageUrl, { headers: { 'User-Agent': 'Mozilla/5.0', 'Cache-Control': 'no-cache' }, cache: 'no-store' });
+    if (!r.ok) throw new Error('ftp failed ' + r.status);
+    const buffer = Buffer.from(await r.arrayBuffer());
+    res.setHeader('Content-Type', 'image/jpeg');
+    res.setHeader('Cache-Control', 'no-store, no-cache');
+    return res.send(buffer);
+
+  } catch (e) {
+    return res.status(500).json({ error: e.message, id });
+  }
 }
