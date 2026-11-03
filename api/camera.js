@@ -1,21 +1,23 @@
-// api/camera.js - proxy das cameras DAER
-export default async function handler(req, res){
-  const cam = req.query.cam
-  const mapas = {
-    ptz_santa_maria: "http://177.17.64.44:8090/cgi-bin/snapshot.cgi?chn=0&u=admin&p=",
-    ptz_passo_fundo: "http://177.17.64.43:8090/cgi-bin/snapshot.cgi?chn=0&u=admin&p=",
-    ptz_ijui: "http://177.17.64.42:8090/cgi-bin/snapshot.cgi?chn=0&u=admin&p=",
-    ptz_caxias: "http://177.17.64.41:8090/cgi-bin/snapshot.cgi?chn=0&u=admin&p="
+export default async function handler(req, res) {
+  const cam = req.query.cam || 'ptz_santa_maria';
+  let url;
+  if (cam === 'ptz_passo_fundo') {
+    url = 'https://daer.kopp.com.br/ftp/imagem.php?id=Passo_Fundo';
+  } else {
+    url = `https://daer.kopp.com.br/sistrak-base-010/rs/importacao/camera-importador-operacao-registro/codigo-camera/${cam}`;
   }
-  const url = mapas[cam] || mapas.ptz_santa_maria
-  try{
-    const r = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0" } })
-    const buf = Buffer.from(await r.arrayBuffer())
-    res.setHeader("Content-Type", "image/jpeg")
-    res.setHeader("Cache-Control", "no-cache")
-    res.setHeader("Access-Control-Allow-Origin", "*")
-    res.send(buf)
-  }catch(e){
-    res.status(500).send("erro camera")
+  try {
+    const r = await fetch(url, {
+      headers: {
+        'Referer': 'https://www.daer.rs.gov.br/cameras-de-monitoramento',
+        'User-Agent': 'Mozilla/5.0'
+      }
+    });
+    const buffer = Buffer.from(await r.arrayBuffer());
+    res.setHeader('Content-Type', 'image/jpeg');
+    res.setHeader('Cache-Control', 'no-store');
+    res.send(buffer);
+  } catch (e) {
+    res.status(500).send('erro camera');
   }
 }
