@@ -1,4 +1,3 @@
-
 <!DOCTYPE html> 
 <html lang="pt-BR">
 <head>
@@ -84,69 +83,95 @@ function setAuthMode(m){
 }
 $("switchAuth").onclick=()=>setAuthMode(authMode==="login"?"register":"login");
 $("forgotPassword").onclick=()=>setAuthMode("reset");
-$("authForm").onsubmit=async e=>{  http://e.preventDefault();  setMessage($("authMessage"),"Aguarde...");
- const email= $("email").value.trim(),pwd=$("password").value,nome= $("name").value.trim();  try{   if(authMode==="register"){    if(pwd.length<8)throw new Error("Senha min 8 caracteres");    const{data,error}=await http://supabaseClient.auth.signUp({email,password:pwd,options:{data:{full_name:nome}}});    if(error)throw error;    if(data.session){currentUser=data.user;await refreshAccessStatus()}    else{setMessage($("authMessage"),"Confirme seu e-mail e entre");setAuthMode("login")}
-  }else if(authMode==="login"){
-   const{data,error}=await http://supabaseClient.auth.signInWithPassword({email,password:pwd});
+$("authForm").onsubmit=async e=>{
+ e.preventDefault();
+ setMessage($("authMessage"),"Aguarde...");
+ const email=$("email").value.trim(),pwd=$("password").value,nome=$("name").value.trim();
+ try{
+  if(authMode==="register"){
+   if(pwd.length<8)throw new Error("Senha min 8 caracteres");
+   const{data,error}=await supabaseClient.auth.signUp({email,password:pwd,options:{data:{full_name:nome}}});
    if(error)throw error;
-   currentUser=data.user;setMessage( $("authMessage"),"Login ok, verificando...");await refreshAccessStatus();   }else{    const{error}=await http://supabaseClient.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin});    if(error)throw error;setMessage($("authMessage"),"Se o e-mail existir, receberá instruções.");
+   if(data.session){currentUser=data.user;await refreshAccessStatus()}
+   else{setMessage($("authMessage"),"Confirme seu e-mail e entre");setAuthMode("login")}
+  }else if(authMode==="login"){
+   const{data,error}=await supabaseClient.auth.signInWithPassword({email,password:pwd});
+   if(error)throw error;
+   currentUser=data.user;setMessage($("authMessage"),"Login ok, verificando...");await refreshAccessStatus();
+  }else{
+   const{error}=await supabaseClient.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin});
+   if(error)throw error;setMessage($("authMessage"),"Se o e-mail existir, receberá instruções.");
   }
- }catch(err){setMessage( $("authMessage"),err.message)} }; async function getSession(){const{data}=await http://supabaseClient.auth.getSession();return http://data.session} async function loadCamerasSecure(){  const grid=$("cameraGrid");
- http://grid.innerHTML="";
+ }catch(err){setMessage($("authMessage"),err.message)}
+};
+async function getSession(){const{data}=await supabaseClient.auth.getSession();return data.session}
+async function loadCamerasSecure(){
+ const grid=$("cameraGrid");
+ grid.innerHTML="";
  const session=await getSession();
  if(!session){setMessage($("accessMessage"),"Sessão expirou, entre novamente");return}
  const token=session.access_token;
  for(const c of CAMERAS){
   const div=document.createElement("div");
-  http://div.className="card";
-  http://div.innerHTML=`<img id="img-${c.id}" alt="${c.nome}" src=""><div class="info"><b>${c.nome}</b><br><span style="font-size:.9rem;color:#c3b5d4">${c.desc}</span><br><span class="badge">🔴 AO VIVO 24H</span></div>`;
-  http://grid.appendChild(div);
+  div.className="card";
+  div.innerHTML=`<img id="img-${c.id}" alt="${c.nome}" src=""><div class="info"><b>${c.nome}</b><br><span style="font-size:.9rem;color:#c3b5d4">${c.desc}</span><br><span class="badge">🔴 AO VIVO 24H</span></div>`;
+  grid.appendChild(div);
  }
  async function fetchOne(camId){
   try{
    const r=await fetch(`/api/camera?id=${camId}&cam=${camId}&t=${Date.now()}`,{headers:{Authorization:"Bearer "+token},cache:"no-store"});
    if(!r.ok)throw new Error("sem acesso");
-   const blob=await http://r.blob();
+   const blob=await r.blob();
    const url=URL.createObjectURL(blob);
    const img=document.getElementById(`img-${camId}`);
    if(img){if(img.src.startsWith("blob:"))URL.revokeObjectURL(img.src);img.src=url}
   }catch(e){console.log("erro cam",camId,e.message)}
  }
- http://CAMERAS.forEach(c=>fetchOne(c.id));
+ CAMERAS.forEach(c=>fetchOne(c.id));
  if(cameraInterval)clearInterval(cameraInterval);
  cameraInterval=setInterval(()=>{CAMERAS.forEach(c=>fetchOne(c.id))},3000);
 }
 async function refreshAccessStatus(){
- $("accessMessage").textContent="Verificando acesso...";  try{   const session=await getSession();   if(!session){$("acesso").classList.add("hidden");$("experiencias").classList.add("hidden");setAuthMode("login");return}
+ $("accessMessage").textContent="Verificando acesso...";
+ try{
+  const session=await getSession();
+  if(!session){$("acesso").classList.add("hidden");$("experiencias").classList.add("hidden");setAuthMode("login");return}
   currentUser=session.user;
   $("acesso").classList.remove("hidden");
   const r=await fetch("/api/access-status",{headers:{Authorization:"Bearer "+session.access_token}});
-  const j=await http://r.json();
+  const j=await r.json();
   if(j.hasLifetimeAccess){
    $("acesso").classList.add("hidden");
-   $("experiencias").classList.remove("hidden");    setMessage($("authMessage"),"Acesso vitalício liberado! 5 câmeras 24h");
+   $("experiencias").classList.remove("hidden");
+   setMessage($("authMessage"),"Acesso vitalício liberado! 5 câmeras 24h");
    await loadCamerasSecure();
    $("experiencias").scrollIntoView({behavior:"smooth"});
   }else{
-   $("experiencias").classList.add("hidden");    if(cameraInterval)clearInterval(cameraInterval);    setMessage($("accessMessage"),"Conta autenticada, mas ainda sem pagamento de R$20. Se já pagou, clique verificar.");
+   $("experiencias").classList.add("hidden");
+   if(cameraInterval)clearInterval(cameraInterval);
+   setMessage($("accessMessage"),"Conta autenticada, mas ainda sem pagamento de R$20. Se já pagou, clique verificar.");
   }
  }catch(e){setMessage($("accessMessage"),"Erro ao verificar: "+e.message)}
 }
-$("createPix").onclick=async()=>{  setMessage($("paymentMessage"),"Gerando Pix R$20...");
+$("createPix").onclick=async()=>{
+ setMessage($("paymentMessage"),"Gerando Pix R$20...");
  try{
   const session=await getSession();
   if(!session)throw new Error("Entre novamente");
   const r=await fetch("/api/create-payment",{method:"POST",headers:{Authorization:"Bearer "+session.access_token,"Content-Type":"application/json"},body:JSON.stringify({})});
-  const j=await http://r.json();
+  const j=await r.json();
   if(!r.ok)throw new Error(j.error||"Erro ao gerar Pix");
-  $("pixArea").classList.remove("hidden");   if(j.qr_code_base64){$("pixImage").src=j.qr_code_base64.startsWith("data:")?j.qr_code_base64:"data:image/png;base64,"+j.qr_code_base64;$("pixImage").classList.remove("hidden")}
-  $("pixCode").value=j.qr_code||"";   if(j.ticket_url){$("ticketLink").href=j.ticket_url; $("ticketLink").classList.remove("hidden")}   setMessage($("paymentMessage"),"Pix gerado. Pague e clique em Já paguei");
+  $("pixArea").classList.remove("hidden");
+  if(j.qr_code_base64){$("pixImage").src=j.qr_code_base64.startsWith("data:")?j.qr_code_base64:"data:image/png;base64,"+j.qr_code_base64;$("pixImage").classList.remove("hidden")}
+  $("pixCode").value=j.qr_code||"";
+  if(j.ticket_url){$("ticketLink").href=j.ticket_url; $("ticketLink").classList.remove("hidden")}
+  setMessage($("paymentMessage"),"Pix gerado. Pague e clique em Já paguei");
  }catch(e){setMessage($("paymentMessage"),e.message)}
 };
-$("copyPix").onclick=async()=>{try{await http://navigator.clipboard.writeText($("pixCode").value);setMessage($("paymentMessage"),"Código copiado!")}catch{}};
+$("copyPix").onclick=async()=>{try{await navigator.clipboard.writeText($("pixCode").value);setMessage($("paymentMessage"),"Código copiado!")}catch{}};
 $("checkPayment").onclick=refreshAccessStatus;
 $("refreshCameras").onclick=loadCamerasSecure;
-$("logoutBtn").onclick=async()=>{await http://supabaseClient.auth.signOut();location.reload()};
+$("logoutBtn").onclick=async()=>{await supabaseClient.auth.signOut();location.reload()};
 setAuthMode("login");
 (async()=>{const s=await getSession();if(s)await refreshAccessStatus()})();
 </script>
