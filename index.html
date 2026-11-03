@@ -51,7 +51,7 @@ const CAMERAS=[
 {id:"ptz_santa_maria",nome:"Santa Maria",desc:"Ao Vivo"},
 {id:"ptz_passo_fundo",nome:"Passo Fundo - NOVO!",desc:"Ao Vivo"},
 {id:"ptz_ijui",nome:"Ijuí",desc:"Ao Vivo"},
-{id:"ptz_caxias_do_sul",nome:"Caxias do Sul",desc:"Ao Vivo"},
+{id:"ptz_caxias",nome:"Caxias do Sul",desc:"Ao Vivo"},
 {id:"ptz_montenegro",nome:"Montenegro",desc:"Ao Vivo"}
 ];
 function setMessage(el,msg){el.textContent=msg}
@@ -119,18 +119,12 @@ async function loadCamerasSecure(){
  }
  async function fetchOne(camId){
   try{
-   const img=document.getElementById(`img-${camId}`);
-   if(!img) return;
-   if(camId==="ptz_caxias_do_sul"){
-     img.src=`https://daer-ao-vivo.vercel.app/camera.php?cam=ptz_caxias_do_sul&t=${Date.now()}`;
-     return;
-   }
    const r=await fetch(`/api/camera?cam=${camId}&t=${Date.now()}`,{headers:{Authorization:"Bearer "+token},cache:"no-store"});
    if(!r.ok)throw new Error("sem acesso");
    const blob=await r.blob();
    const url=URL.createObjectURL(blob);
-   if(img.src.startsWith("blob:"))URL.revokeObjectURL(img.src);
-   img.src=url;
+   const img=document.getElementById(`img-${camId}`);
+   if(img){if(img.src.startsWith("blob:"))URL.revokeObjectURL(img.src);img.src=url}
   }catch(e){console.log("erro cam",camId,e.message)}
  }
  CAMERAS.forEach(c=>fetchOne(c.id));
