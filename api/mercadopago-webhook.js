@@ -100,7 +100,7 @@ module.exports = async function handler(req, res) {
     // Só libera acesso para pagamento aprovado e com os dados esperados.
     if (
       payment.status !== "approved" ||
-      payment.transaction_amount !== 20 ||
+      payment.transaction_amount !== 19.90 ||
       payment.currency_id !== "BRL" ||
       !payment.external_reference
     ) {
