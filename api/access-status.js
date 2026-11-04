@@ -53,23 +53,33 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ authenticated: true, hasLifetimeAccess: false, hasAccess: false, paidAt: null, expiresAt: null });
     }
 
-    // Calcula acesso por paid_at (30 dias)
+    // CORRIGIDO: respeita expires_at do banco + paid_at + vitalício
+    const isLifetime = record.lifetime_access === true;
+
     let hasAccess = false;
-    if (record.lifetime_access === true) hasAccess = true;
-    
+    if (isLifetime) hasAccess = true;
+
+    // 1. Se tem expires_at no futuro, libera
+    if (record.expires_at && new Date(record.expires_at).getTime() > Date.now()) {
+      hasAccess = true;
+    }
+
+    // 2. Fallback: paid_at de menos de 32 dias também libera
     if (record.paid_at) {
       const diffDays = (Date.now() - new Date(record.paid_at).getTime()) / 86400000;
       if (diffDays < 32) hasAccess = true;
     }
 
-    // Cria expiresAt fictício: paid_at + 30 dias (pra mostrar no front)
-    const expiresAt = record.paid_at 
-      ? new Date(new Date(record.paid_at).getTime() + 30 * 24 * 60 * 60 * 1000).toISOString() 
-      : null;
+    // Usa expires_at real do banco, se tiver. Se não, calcula paid_at + 30 dias
+    const expiresAt = record.expires_at
+      ? new Date(record.expires_at).toISOString()
+      : record.paid_at
+        ? new Date(new Date(record.paid_at).getTime() + 30 * 24 * 60 * 60 * 1000).toISOString()
+        : null;
 
     return res.status(200).json({
       authenticated: true,
-      hasLifetimeAccess: hasAccess,
+      hasLifetimeAccess: isLifetime,
       hasAccess: hasAccess,
       paidAt: record.paid_at || null,
       expiresAt: expiresAt
