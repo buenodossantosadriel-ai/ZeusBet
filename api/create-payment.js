@@ -35,7 +35,11 @@ export default async function handler(req, res) {
     const mpData = await mpRes.json()
 
     if (!mpRes.ok) {
-      return res.status(200).json({ debug_mp_error: mpData, token_tipo: token.substring(0,7) })
+      return res.status(200).json({ 
+        qr_code: "ERRO MP: " + JSON.stringify(mpData).substring(0,800), 
+        qr_code_base64: "", 
+        token_tipo: token.substring(0,7) 
+      })
     }
 
     return res.status(200).json({
@@ -46,6 +50,6 @@ export default async function handler(req, res) {
     })
 
   } catch (e) {
-    return res.status(200).json({ error_catch: e?.message })
+    return res.status(200).json({ qr_code: "ERRO CATCH: " + e?.message, qr_code_base64: "" })
   }
 }
