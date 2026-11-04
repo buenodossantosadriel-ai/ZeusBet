@@ -20,7 +20,7 @@ export default async function handler(req, res) {
         'X-Idempotency-Key': `zeus-${Date.now()}`
       },
       body: JSON.stringify({
-        transaction_amount: 19.90,
+        transaction_amount: 19.9,
         description: 'ZeusBet Acesso 30 dias',
         payment_method_id: 'pix',
         payer: {
