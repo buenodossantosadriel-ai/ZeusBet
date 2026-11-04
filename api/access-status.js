@@ -33,7 +33,7 @@ module.exports = async function handler(req, res) {
     const user = await authResponse.json();
 
     const accessResponse = await fetch(
-      `${SUPABASE_URL}/rest/v1/user_access?user_id=eq.${encodeURIComponent(user.id)}&select=*&limit=1`,
+      `${SUPABASE_URL}/rest/v1/user_access?user_id=eq.${encodeURIComponent(user.id)}&select=*&order=expires_at.desc.nullslast&limit=1`,
       {
         headers: {
           apikey: SUPABASE_SERVICE_ROLE_KEY,
@@ -70,12 +70,32 @@ module.exports = async function handler(req, res) {
       if (diffDays < 32) hasAccess = true;
     }
 
-    // Usa expires_at real do banco, se tiver. Se não, calcula paid_at + 30 dias
-    const expiresAt = record.expires_at
+    // 3. NOVO - FALTAVA ISSO: se ainda não liberou, checa assinaturas por email
+    let expiresAt = record.expires_at
       ? new Date(record.expires_at).toISOString()
       : record.paid_at
         ? new Date(new Date(record.paid_at).getTime() + 30 * 24 * 60 * 60 * 1000).toISOString()
         : null;
+
+    if (!hasAccess && user.email) {
+      const subResponse = await fetch(
+        `${SUPABASE_URL}/rest/v1/assinaturas?email=eq.${encodeURIComponent(user.email)}&status=eq.active&select=*&order=expira_em.desc&limit=1`,
+        {
+          headers: {
+            apikey: SUPABASE_SERVICE_ROLE_KEY,
+            Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`
+          }
+        }
+      );
+      if (subResponse.ok) {
+        const subs = await subResponse.json();
+        const sub = subs[0];
+        if (sub && sub.expira_em && new Date(sub.expira_em).getTime() > Date.now()) {
+          hasAccess = true;
+          expiresAt = new Date(sub.expira_em).toISOString();
+        }
+      }
+    }
 
     return res.status(200).json({
       authenticated: true,
