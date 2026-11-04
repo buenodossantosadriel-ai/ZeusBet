@@ -1,4 +1,4 @@
-const { randomUUID } = require("crypto");
+4const { randomUUID } = require("crypto");
 
 const SUPABASE_URL =
   process.env.ZEUS_SUPABASE_URL ||
@@ -121,7 +121,7 @@ if (!authResponse.ok) {
           },
           external_reference: user.id,
           notification_url:
-            "https://zeusbet.vercel.app/api/mercadopago-webhook"
+  "https://rodovias-rs-ao-vivo.vercel.app/api/mercadopago-webhook"
         })
       }
     );
