@@ -1,5 +1,5 @@
 const SUPABASE_URL = process.env.SUPABASE_CAM_URL || process.env.SUPABASE_URL;
-const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_CAM_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_CAMERA_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_CAM_PUBLISHABLE_KEY || process.env.SUPABASE_ANON_KEY;
 
 module.exports = async function handler(req, res) {
