@@ -1,6 +1,5 @@
 const SUPABASE_URL = process.env.SUPABASE_CAM_URL || process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_CAMERA_SERVICE_ROLE_KEY;
-const SUPABASE_ANON_KEY = process.env.SUPABASE_CAM_PUBLISHABLE_KEY || process.env.SUPABASE_ANON_KEY;
 
 module.exports = async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
@@ -18,15 +17,22 @@ module.exports = async function handler(req, res) {
       return res.status(401).json({ error: "Faça login para consultar o acesso." });
     }
 
+    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+      console.error("ENV FALTANDO - URL:", !!SUPABASE_URL, "SERVICE_ROLE:", !!SUPABASE_SERVICE_ROLE_KEY);
+      return res.status(500).json({ error: "Configuração do servidor incompleta." });
+    }
+
+    // Usa SÓ a SERVICE_ROLE para validar o token - não depende mais da publishable
     const authResponse = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
       headers: {
-        apikey: SUPABASE_ANON_KEY,
+        apikey: SUPABASE_SERVICE_ROLE_KEY,
         Authorization: `Bearer ${token}`
       }
     });
 
     if (!authResponse.ok) {
       console.error("ERRO AUTH:", await authResponse.text());
+      console.error("URL usada:", SUPABASE_URL);
       return res.status(401).json({ error: "Sessão inválida." });
     }
 
