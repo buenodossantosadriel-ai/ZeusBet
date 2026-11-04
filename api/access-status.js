@@ -50,7 +50,7 @@ module.exports = async function handler(req, res) {
     const record = rows[0];
 
     if (!record) {
-      return res.status(200).json({ authenticated: true, hasLifetimeAccess: false, paidAt: null });
+      return res.status(200).json({ authenticated: true, hasLifetimeAccess: false, hasAccess: false, paidAt: null, expiresAt: null });
     }
 
     let hasAccess = false;
@@ -65,7 +65,9 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({
       authenticated: true,
       hasLifetimeAccess: hasAccess,
-      paidAt: record.paid_at || null
+      hasAccess: hasAccess,
+      paidAt: record.paid_at || null,
+      expiresAt: record.plan_expires_at || record.expires_at || null
     });
 
   } catch (error) {
