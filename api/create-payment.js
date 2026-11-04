@@ -7,11 +7,10 @@ export default async function handler(req, res) {
 
   try {
     const token = process.env.MERCADOPAGO_ACCESS_TOKEN
-    if (!token) {
-      return res.status(500).json({ error: 'Falta MERCADOPAGO_ACCESS_TOKEN na Vercel' })
-    }
+    if (!token) return res.status(500).json({ error: 'Falta token na Vercel' })
 
-    console.log('Criando pagamento...')
+    const body = req.body || {}
+    const email = body.email || `cliente${Date.now()}@gmail.com`
 
     const mpRes = await fetch('https://api.mercadopago.com/v1/payments', {
       method: 'POST',
@@ -21,19 +20,22 @@ export default async function handler(req, res) {
         'X-Idempotency-Key': `zeus-${Date.now()}`
       },
       body: JSON.stringify({
-        transaction_amount: 19.9,
-        description: 'ZeusBet Lifetime',
+        transaction_amount: 19.90,
+        description: 'ZeusBet Acesso 30 dias',
         payment_method_id: 'pix',
-        payer: { email: 'cliente@teste.com', first_name: 'Cliente' },
-        external_reference: 'zeusbet-teste'
+        payer: {
+          email: email,
+          first_name: 'Cliente',
+          last_name: 'ZeusBet'
+        },
+        external_reference: email
       })
     })
 
     const mpData = await mpRes.json()
-    console.log('Resposta MP:', JSON.stringify(mpData).slice(0, 1000))
 
     if (!mpRes.ok) {
-      return res.status(400).json({ mp_error: mpData })
+      return res.status(200).json({ debug_mp_error: mpData, token_tipo: token.substring(0,7) })
     }
 
     return res.status(200).json({
@@ -44,7 +46,6 @@ export default async function handler(req, res) {
     })
 
   } catch (e) {
-    console.log('ERRO FATAL:', e?.message)
-    return res.status(500).json({ error: 'Erro interno', details: e?.message })
+    return res.status(200).json({ error_catch: e?.message })
   }
 }
