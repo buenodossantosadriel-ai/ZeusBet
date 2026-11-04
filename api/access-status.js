@@ -53,21 +53,26 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ authenticated: true, hasLifetimeAccess: false, hasAccess: false, paidAt: null, expiresAt: null });
     }
 
+    // Calcula acesso por paid_at (30 dias)
     let hasAccess = false;
     if (record.lifetime_access === true) hasAccess = true;
+    
     if (record.paid_at) {
       const diffDays = (Date.now() - new Date(record.paid_at).getTime()) / 86400000;
       if (diffDays < 32) hasAccess = true;
     }
-    const exp = record.plan_expires_at || record.expires_at;
-    if (exp && new Date(exp) > new Date()) hasAccess = true;
+
+    // Cria expiresAt fictício: paid_at + 30 dias (pra mostrar no front)
+    const expiresAt = record.paid_at 
+      ? new Date(new Date(record.paid_at).getTime() + 30 * 24 * 60 * 60 * 1000).toISOString() 
+      : null;
 
     return res.status(200).json({
       authenticated: true,
       hasLifetimeAccess: hasAccess,
       hasAccess: hasAccess,
       paidAt: record.paid_at || null,
-      expiresAt: record.plan_expires_at || record.expires_at || null
+      expiresAt: expiresAt
     });
 
   } catch (error) {
