@@ -36,6 +36,34 @@ function assinaturaOk(req, paymentId) {
   } catch { return false; }
 }
 
+// --- ÚNICA PARTE ALTERADA ---
+function isUUID(v) {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(v || ""));
+}
+
+async function resolveUserId(rawValue, payment) {
+  const candidate = String(rawValue || "").trim();
+  // Já é UUID, usa direto
+  if (isUUID(candidate)) return candidate;
+
+  // Se for e-mail, busca o UUID no Auth
+  const email = candidate.includes("@") ? candidate : (payment.payer?.email || payment.metadata?.user_id || "");
+  if (!email || !email.includes("@")) return null;
+
+  const res = await fetch(`${SUPABASE_URL}/auth/v1/admin/users?email=${encodeURIComponent(email)}`, {
+    headers: {
+      apikey: SUPABASE_SERVICE_ROLE_KEY,
+      Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+    }
+  });
+  if (!res.ok) return null;
+  const data = await res.json();
+  const user = data?.users?.[0] || data?.[0] || data?.user || null;
+  const id = user?.id || null;
+  return isUUID(id) ? String(id) : null;
+}
+// --- FIM DA ALTERAÇÃO ---
+
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end();
   if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY || !MP_TOKEN) return res.status(500).end();
@@ -54,7 +82,9 @@ module.exports = async function handler(req, res) {
     const payment = await mpRes.json();
     if (payment.status !== "approved") return res.status(200).json({ received: true });
 
-    const userId = payment.external_reference || payment.payer?.email || payment.metadata?.user_id;
+    // ALTERADO: resolve UUID antes de salvar
+    const rawUserId = payment.external_reference || payment.metadata?.user_id || payment.payer?.email;
+    const userId = await resolveUserId(rawUserId, payment);
     if (!userId) return res.status(200).json({ received: true });
 
     // Acesso de 30 dias a partir de agora
