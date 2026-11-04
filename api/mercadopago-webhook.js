@@ -80,7 +80,6 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    // Busca os dados reais do pagamento no Mercado Pago.
     const mpResponse = await fetch(
       `https://api.mercadopago.com/v1/payments/${encodeURIComponent(paymentId)}`,
       {
@@ -97,7 +96,6 @@ module.exports = async function handler(req, res) {
 
     const payment = await mpResponse.json();
 
-    // Só libera acesso para pagamento aprovado e com os dados esperados.
     if (
       payment.status !== "approved" ||
       payment.transaction_amount !== 19.9 ||
@@ -112,7 +110,6 @@ module.exports = async function handler(req, res) {
 
     const userId = payment.external_reference;
 
-    // Confere o formato do identificador do usuário.
     if (
       !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(userId)
     ) {
@@ -122,7 +119,9 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    // Registra o acesso no Supabase usando credencial exclusiva do servidor.
+    // --- CORRIGIDO: AGORA EXPIRA EM 30 DIAS ---
+    const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+
     const dbResponse = await fetch(
       `${SUPABASE_URL}/rest/v1/user_access?on_conflict=user_id`,
       {
@@ -135,7 +134,8 @@ module.exports = async function handler(req, res) {
         },
         body: JSON.stringify({
           user_id: userId,
-          lifetime_access: true,
+          lifetime_access: false,
+          expires_at: expiresAt,
           payment_id: String(payment.id),
           paid_at: payment.date_approved || new Date().toISOString()
         })
