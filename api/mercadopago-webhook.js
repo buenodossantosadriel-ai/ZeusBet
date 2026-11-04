@@ -44,8 +44,6 @@ module.exports = async function handler(req, res) {
     const paymentId = getPaymentId(req);
     if (!paymentId) return res.status(200).json({ received: true });
 
-    // Se a assinatura falhar, a gente ainda tenta buscar o pagamento no MP.
-    // Se o MP devolver o pagamento, é porque é verdadeiro. Isso garante que libere.
     const sigOk = assinaturaOk(req, paymentId);
 
     const mpRes = await fetch(`https://api.mercadopago.com/v1/payments/${encodeURIComponent(paymentId)}`, {
@@ -56,9 +54,11 @@ module.exports = async function handler(req, res) {
     const payment = await mpRes.json();
     if (payment.status !== "approved") return res.status(200).json({ received: true });
 
-    // Pega o usuário de onde vier: external_reference ou email do pagador
     const userId = payment.external_reference || payment.payer?.email || payment.metadata?.user_id;
     if (!userId) return res.status(200).json({ received: true });
+
+    // Acesso de 30 dias a partir de agora
+    const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
 
     const dbRes = await fetch(`${SUPABASE_URL}/rest/v1/user_access?on_conflict=user_id`, {
       method: "POST",
@@ -70,7 +70,8 @@ module.exports = async function handler(req, res) {
       },
       body: JSON.stringify({
         user_id: String(userId),
-        lifetime_access: true,
+        lifetime_access: false,
+        expires_at: expiresAt,
         payment_id: String(payment.id),
         paid_at: payment.date_approved || new Date().toISOString()
       })
