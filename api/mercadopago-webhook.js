@@ -4,7 +4,7 @@ const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY =
   process.env.SUPABASE_SERVICE_ROLE_KEY;
 const MERCADOPAGO_ACCESS_TOKEN =
-  process.env.MERCADOPAGO_ACCESS_TOKEN;
+  process.env.MP_TOKEN;
 const MERCADOPAGO_WEBHOOK_SECRET =
   process.env.MERCADOPAGO_WEBHOOK_SECRET;
 
@@ -61,7 +61,7 @@ module.exports = async function handler(req, res) {
   if (
     !SUPABASE_URL ||
     !SUPABASE_SERVICE_ROLE_KEY ||
-    !MERCADOPAGO_ACCESS_TOKEN ||
+    !MP_TOKEN ||
     !MERCADOPAGO_WEBHOOK_SECRET
   ) {
     console.error("Configuração do webhook incompleta.");
@@ -85,7 +85,7 @@ module.exports = async function handler(req, res) {
       `https://api.mercadopago.com/v1/payments/${encodeURIComponent(paymentId)}`,
       {
         headers: {
-          Authorization: `Bearer ${MERCADOPAGO_ACCESS_TOKEN}`
+          Authorization: `Bearer ${MP_TOKEN}`
         }
       }
     );
