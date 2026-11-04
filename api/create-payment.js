@@ -28,7 +28,7 @@ export default async function handler(req, res) {
           first_name: 'Cliente',
           last_name: 'ZeusBet'
         },
-        external_reference: email
+        external_reference: body.user_id || email
       })
     })
 
