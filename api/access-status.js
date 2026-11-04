@@ -1,5 +1,5 @@
 const SUPABASE_URL = process.env.SUPABASE_CAM_URL || process.env.SUPABASE_URL;
-const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_CAMERA_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_CAMERA_SERVICE_ROLE_KEY;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_CAM_PUBLISHABLE_KEY || process.env.SUPABASE_ANON_KEY;
 
 module.exports = async function handler(req, res) {
@@ -53,24 +53,20 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ authenticated: true, hasLifetimeAccess: false, hasAccess: false, paidAt: null, expiresAt: null });
     }
 
-    // CORRIGIDO: respeita expires_at do banco + paid_at + vitalício
     const isLifetime = record.lifetime_access === true;
 
     let hasAccess = false;
     if (isLifetime) hasAccess = true;
 
-    // 1. Se tem expires_at no futuro, libera
     if (record.expires_at && new Date(record.expires_at).getTime() > Date.now()) {
       hasAccess = true;
     }
 
-    // 2. Fallback: paid_at de menos de 32 dias também libera
     if (record.paid_at) {
       const diffDays = (Date.now() - new Date(record.paid_at).getTime()) / 86400000;
       if (diffDays < 32) hasAccess = true;
     }
 
-    // 3. NOVO - FALTAVA ISSO: se ainda não liberou, checa assinaturas por email
     let expiresAt = record.expires_at
       ? new Date(record.expires_at).toISOString()
       : record.paid_at
