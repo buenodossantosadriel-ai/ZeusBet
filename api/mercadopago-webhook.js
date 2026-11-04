@@ -3,7 +3,7 @@ const crypto = require("crypto");
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY =
   process.env.SUPABASE_SERVICE_ROLE_KEY;
-const MERCADOPAGO_ACCESS_TOKEN =
+const MP_TOKEN =
   process.env.MP_TOKEN;
 const MERCADOPAGO_WEBHOOK_SECRET =
   process.env.MERCADOPAGO_WEBHOOK_SECRET;
