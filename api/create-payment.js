@@ -1,4 +1,4 @@
-export default async function handler(req: any, res: any) {
+export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
@@ -11,9 +11,6 @@ export default async function handler(req: any, res: any) {
       return res.status(500).json({ error: 'Falta MERCADOPAGO_ACCESS_TOKEN na Vercel' })
     }
 
-    const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body
-    const auth = req.headers.authorization || ''
-    
     console.log('Criando pagamento...')
 
     const mpRes = await fetch('https://api.mercadopago.com/v1/payments', {
@@ -36,7 +33,7 @@ export default async function handler(req: any, res: any) {
     console.log('Resposta MP:', JSON.stringify(mpData).slice(0, 1000))
 
     if (!mpRes.ok) {
-      return res.status(400).json({ mp_error: mpData, dica: 'Se for collector same as payer, use email diferente do MP' })
+      return res.status(400).json({ mp_error: mpData })
     }
 
     return res.status(200).json({
@@ -46,8 +43,8 @@ export default async function handler(req: any, res: any) {
       qr_code_base64: mpData.point_of_interaction?.transaction_data?.qr_code_base64,
     })
 
-  } catch (e: any) {
-    console.log('ERRO FATAL:', e?.message, e?.stack)
+  } catch (e) {
+    console.log('ERRO FATAL:', e?.message)
     return res.status(500).json({ error: 'Erro interno', details: e?.message })
   }
 }
