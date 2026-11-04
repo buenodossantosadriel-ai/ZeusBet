@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Use POST' })
 
   try {
-    const token = process.env.MERCADOPAGO_ACCESS_TOKEN
+    const token = process.env.MP_TOKEN
     if (!token) return res.status(500).json({ error: 'Falta token na Vercel' })
 
     const body = req.body || {}
