@@ -1,12 +1,12 @@
 const crypto = require("crypto");
 
-const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_URL = process.env.SUPABASE_CAM_URL || process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY =
-  process.env.SUPABASE_SERVICE_ROLE_KEY;
+  process.env.SUPABASE_CAM_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
 const MP_TOKEN =
   process.env.MP_TOKEN;
 const MERCADOPAGO_WEBHOOK_SECRET =
-  process.env.MERCADOPAGO_WEBHOOK_SECRET;
+  process.env.MP_WEBHOOK_SECRET || process.env.MERCADOPAGO_WEBHOOK_SECRET;
 
 function validarAssinatura(req, paymentId) {
   const signature = req.headers["x-signature"];
