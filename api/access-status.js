@@ -55,33 +55,34 @@ module.exports = async function handler(req, res) {
     const rows = await accessResponse.json();
     const record = rows[0];
 
-    if (!record) {
-      return res.status(200).json({ authenticated: true, hasLifetimeAccess: false, hasAccess: false, paidAt: null, expiresAt: null });
-    }
-
-    const isLifetime = record.lifetime_access === true;
-
     let hasAccess = false;
-    if (isLifetime) hasAccess = true;
+    let expiresAt = null;
+    let isLifetime = false;
 
-    if (record.expires_at && new Date(record.expires_at).getTime() > Date.now()) {
-      hasAccess = true;
+    if (record) {
+      isLifetime = record.lifetime_access === true;
+      if (isLifetime) hasAccess = true;
+
+      if (record.expires_at && new Date(record.expires_at).getTime() > Date.now()) {
+        hasAccess = true;
+      }
+
+      if (record.paid_at) {
+        const diffDays = (Date.now() - new Date(record.paid_at).getTime()) / 86400000;
+        if (diffDays < 32) hasAccess = true;
+      }
+
+      expiresAt = record.expires_at
+        ? new Date(record.expires_at).toISOString()
+        : record.paid_at
+          ? new Date(new Date(record.paid_at).getTime() + 30 * 24 * 60 * 60 * 1000).toISOString()
+          : null;
     }
 
-    if (record.paid_at) {
-      const diffDays = (Date.now() - new Date(record.paid_at).getTime()) / 86400000;
-      if (diffDays < 32) hasAccess = true;
-    }
-
-    let expiresAt = record.expires_at
-      ? new Date(record.expires_at).toISOString()
-      : record.paid_at
-        ? new Date(new Date(record.paid_at).getTime() + 30 * 24 * 60 * 60 * 1000).toISOString()
-        : null;
-
+    // >>> CORREÇÃO TRIAL 24H - procura em assinaturas por trial OU active <<<
     if (!hasAccess && user.email) {
       const subResponse = await fetch(
-        `${SUPABASE_URL}/rest/v1/assinaturas?email=eq.${encodeURIComponent(user.email)}&status=eq.active&select=*&order=expira_em.desc&limit=1`,
+        `${SUPABASE_URL}/rest/v1/assinaturas?email=eq.${encodeURIComponent(user.email)}&select=*&order=expires_at.desc.nullslast&limit=5`,
         {
           headers: {
             apikey: SUPABASE_SERVICE_ROLE_KEY,
@@ -91,10 +92,17 @@ module.exports = async function handler(req, res) {
       );
       if (subResponse.ok) {
         const subs = await subResponse.json();
-        const sub = subs[0];
-        if (sub && sub.expira_em && new Date(sub.expira_em).getTime() > Date.now()) {
-          hasAccess = true;
-          expiresAt = new Date(sub.expira_em).toISOString();
+        for (const sub of subs) {
+          // aceita trial, active, ativo
+          const st = (sub.status || '').toLowerCase();
+          if (!['trial', 'active', 'ativo', 'paid', 'aprovado'].includes(st)) continue;
+          // aceita expires_at OU expira_em (suas duas colunas)
+          const expRaw = sub.expires_at || sub.expira_em;
+          if (expRaw && new Date(expRaw).getTime() > Date.now()) {
+            hasAccess = true;
+            expiresAt = new Date(expRaw).toISOString();
+            break;
+          }
         }
       }
     }
@@ -103,7 +111,7 @@ module.exports = async function handler(req, res) {
       authenticated: true,
       hasLifetimeAccess: isLifetime,
       hasAccess: hasAccess,
-      paidAt: record.paid_at || null,
+      paidAt: record?.paid_at || null,
       expiresAt: expiresAt
     });
 
