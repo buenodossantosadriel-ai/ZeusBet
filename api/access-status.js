@@ -93,11 +93,16 @@ module.exports = async function handler(req, res) {
       if (subResponse.ok) {
         const subs = await subResponse.json();
         for (const sub of subs) {
-          // aceita trial, active, ativo
+          // aceita trial, active, ativo + pending como trial de 24h
           const st = (sub.status || '').toLowerCase();
-          if (!['trial', 'active', 'ativo', 'paid', 'aprovado'].includes(st)) continue;
+          if (!['trial', 'active', 'ativo', 'paid', 'aprovado', 'pending'].includes(st)) continue;
           // aceita expires_at OU expira_em (suas duas colunas)
-          const expRaw = sub.expires_at || sub.expira_em;
+          // se for pending sem expiração, usa created_at + 24h
+          let expRaw = sub.expires_at || sub.expira_em;
+          if (!expRaw && st === 'pending') {
+            const createdRaw = sub.created_at || sub.criado_em;
+            if (createdRaw) expRaw = new Date(new Date(createdRaw).getTime() + 24 * 60 * 60 * 1000).toISOString();
+          }
           if (expRaw && new Date(expRaw).getTime() > Date.now()) {
             hasAccess = true;
             expiresAt = new Date(expRaw).toISOString();
