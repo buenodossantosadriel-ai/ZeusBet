@@ -107,6 +107,18 @@ module.exports = async function handler(req, res) {
     const userId = await resolveUserId(rawUserId, payment);
     if (!userId) return res.status(200).json({ received: true });
 
+    // --- ÚNICA MUDANÇA: pesquisa o UUID na assinaturas antes de criar na user_access ---
+    const assRes = await fetch(`${SUPABASE_URL}/rest/v1/assinaturas?id=eq.${encodeURIComponent(String(userId))}&select=id`, {
+      headers: {
+        apikey: SUPABASE_SERVICE_ROLE_KEY,
+        Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+      }
+    });
+    if (!assRes.ok) return res.status(200).json({ received: true });
+    const assData = await assRes.json();
+    if (!assData || assData.length === 0) return res.status(200).json({ received: true, reason: "nao_achado_em_assinaturas" });
+    // --- FIM DA MUDANÇA ---
+
     const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
 
     const dbRes = await fetch(`${SUPABASE_URL}/rest/v1/user_access?on_conflict=user_id`, {
