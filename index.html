@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>13 Câmeras Ao Vivo RS - R$19,90/mês</title>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -38,95 +39,7 @@ section{padding:20px 0}
 #camFullscreen{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;display:none;justify-content:center;align-items:center;flex-direction:column;padding:14px}
 #camFullscreen.active{display:flex}
 #camFullscreen img{width:min(1100px,95vw);max-height:82vh;object-fit:contain;border:3px solid var(--rs-yellow);border-radius:14px;background:#000}
-
-/* PAINEL METEOROLÓGICO */
-#weatherPanel{
-  padding:16px;
-  margin:20px 0;
-  background:#101b16;
-  border:1px solid #294536;
-  border-radius:14px;
-}
-
-#weatherPanel h2{
-  color:#FFCC29;
-  text-align:center;
-  font-size:21px;
-  margin-bottom:12px;
-}
-
-#weatherGrid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:12px;
-}
-
-.weather-card{
-  background:#182820;
-  border:1px solid #345440;
-  border-radius:12px;
-  padding:15px;
-  color:#fff;
-  min-width:0;
-}
-
-.weather-city{
-  color:#FFCC29;
-  font-size:17px;
-  font-weight:bold;
-  margin-bottom:8px;
-}
-
-.weather-temp{
-  font-size:32px;
-  font-weight:bold;
-  margin:8px 0;
-}
-
-.weather-condition{
-  color:#d5e5d9;
-  margin-bottom:12px;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  min-height:45px;
-}
-
-.weather-condition img{
-  width:48px;
-  height:48px;
-  object-fit:contain;
-}
-
-.weather-detail{
-  font-size:13px;
-  color:#c8d5c3;
-  margin-top:7px;
-}
-
-.weather-updated{
-  font-size:11px;
-  color:#9caf9f;
-  margin-top:12px;
-  border-top:1px solid #345440;
-  padding-top:8px;
-}
-
-.weather-error{
-  color:#ff9999;
-  font-size:13px;
-  margin-top:8px;
-}
-
-@media(max-width:700px){
-  .grid{grid-template-columns:1fr}
-  #mapRS{height:420px}
-}
-
-@media(max-width:600px){
-  #weatherPanel{padding:10px}
-  #weatherGrid{grid-template-columns:1fr}
-}
+@media(max-width:700px){.grid{grid-template-columns:1fr}#mapRS{height:420px}}
 </style>
 </head>
 
@@ -143,16 +56,16 @@ section{padding:20px 0}
 <section>
 <div class="hero">
 <h1>Rodovias do RS <span>ao vivo 24h</span></h1>
-
 <p style="margin:12px 0;color:#e9ddff">
-Suas 13 câmeras: Passo Fundo, Caxias, Farroupilha, Gramado, Igrejinha, Portão, Montenegro, Itati, Serafina, Sananduva, Santa Maria, Ijuí, Restinga Seca. Imagens 24h. <b>Acesso por R$19,90/mês.</b>
+Suas 13 câmeras: Passo Fundo, Caxias, Farroupilha, Gramado, Igrejinha, Portão, Montenegro, Itati, Serafina, Sananduva, Santa Maria, Ijuí, Restinga Seca. Imagens 24h.
+<b>Acesso por R$19,90/mês.</b>
 </p>
 
-<div style="text-align:left; margin:10px 0 14px;">
-<div style="display:inline-block; background:#22c55e; color:#fff; font-weight:900; font-size:15px; padding:10px 18px; border-radius:999px; box-shadow:0 4px 14px rgba(34,197,94,.35);">
+<div style="text-align:left;margin:10px 0 14px;">
+<div style="display:inline-block;background:#22c55e;color:#fff;font-weight:900;font-size:15px;padding:10px 18px;border-radius:999px;box-shadow:0 4px 14px rgba(34,197,94,.35);">
 🎁 24 HORAS GRÁTIS - ACESSE AGORA!
 </div>
-<div style="font-size:12px; color:#c8d5c3; margin-top:6px;">
+<div style="font-size:12px;color:#c8d5c3;margin-top:6px;">
 Teste todas as câmeras sem pagar nada. Sem cartão.
 </div>
 </div>
@@ -166,7 +79,6 @@ Liberar acesso R$19,90/mês ⚡
 <section id="conta">
 <div class="auth-box">
 <h2 id="authTitle">Entre para acessar</h2>
-
 <p id="authDesc" style="color:var(--muted);margin:8px 0 14px">
 Entre ou crie conta para liberar as 13 câmeras.
 </p>
@@ -215,21 +127,11 @@ Gerar Pix - R$19,90/mês
 <h3>Pagamento via Pix</h3>
 <img id="pixImage" style="width:220px;margin:10px auto;display:block" class="hidden">
 <textarea id="pixCode" readonly></textarea>
-
-<button id="copyPix" class="btn btn-gold" style="margin-top:8px">
-Copiar código Pix
-</button>
-
-<button id="checkPayment" class="btn btn-gold" style="margin-top:8px">
-Já paguei — verificar acesso
-</button>
-
-<a id="ticketLink" class="hidden" target="_blank" style="display:block;text-align:center;margin-top:8px;color:#0a7a2e">
-Abrir pagamento
-</a>
+<button id="copyPix" class="btn btn-gold" style="margin-top:8px">Copiar código Pix</button>
+<button id="checkPayment" class="btn btn-gold" style="margin-top:8px">Já paguei — verificar acesso</button>
+<a id="ticketLink" class="hidden" target="_blank" style="display:block;text-align:center;margin-top:8px;color:#0a7a2e">Abrir pagamento</a>
 </div>
 </div>
-
 <div id="accessMessage" style="text-align:center;margin-top:12px"></div>
 </section>
 
@@ -250,39 +152,32 @@ Clique para tela cheia - Atualiza a cada 3s
 
 <div id="mapRS"></div>
 
-<!-- PAINEL METEOROLÓGICO -->
 <div id="weatherPanel" style="margin:20px 0">
-
-<h2>🌦️ Condições meteorológicas nas rodovias</h2>
+<h2 style="color:#FFCC29;text-align:center">
+🌦️ Condições meteorológicas nas rodovias
+</h2>
 
 <p id="weatherStatus" style="text-align:center;color:#c8d5c3;margin:10px">
 Carregando informações meteorológicas...
 </p>
 
-<div id="weatherGrid"></div>
+<div id="weatherGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px"></div>
 
 <p style="font-size:11px;color:#c8d5c3;margin-top:12px;text-align:center">
 Fonte: WeatherAPI. Condições meteorológicas atuais, não medições oficiais do INMET.
 </p>
-
 </div>
 
 <div class="grid" id="cameraGrid"></div>
 
-<button id="refreshCameras" class="btn btn-outline" style="margin-top:14px">
-🔄 Atualizar
-</button>
-
-<button id="logoutBtn" class="btn btn-outline" style="margin-top:14px;margin-left:8px">
-Sair
-</button>
+<button id="refreshCameras" class="btn btn-outline" style="margin-top:14px">🔄 Atualizar</button>
+<button id="logoutBtn" class="btn btn-outline" style="margin-top:14px;margin-left:8px">Sair</button>
 
 </section>
 </main>
 
 <div id="camFullscreen" onclick="closeFullscreen()">
 <img id="fsImg" src="">
-
 <div style="display:flex;gap:10px;margin-top:12px;align-items:center;color:#fff">
 <b id="fsTitle" style="color:var(--rs-yellow)">Câmera</b>
 <span>AO VIVO</span>
@@ -297,14 +192,8 @@ const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
 const $=id=>document.getElementById(id);
 
-let authMode="login";
-let currentUser=null;
-let cameraInterval=null;
-let fsInterval=null;
-let currentFsId=null;
-let weatherInterval=null;
+let authMode="login",currentUser=null,cameraInterval=null,fsInterval=null,currentFsId=null;
 
-/* CÂMERAS */
 const CAMERAS=[
 {id:"ptz_caxias",nome:"Caxias do Sul",desc:"RSC-453 km 142 - Santa Fé",lat:-29.1678,lng:-51.1794},
 {id:"ptz_farroupilha",nome:"Farroupilha",desc:"RSC-453 km 121 - Farroupilha",lat:-29.2247,lng:-51.3454},
@@ -321,338 +210,491 @@ const CAMERAS=[
 {id:"Sananduva",nome:"Sananduva",desc:"ERS-126 km 78 - Sananduva - PHP",lat:-27.948,lng:-51.808}
 ];
 
-/* AUTENTICAÇÃO */
 function setMessage(el,msg){
-  el.textContent=msg;
+el.textContent=msg;
 }
 
 function setAuthMode(m){
-  authMode=m;
-  $("authForm").reset();
+authMode=m;
+$("authForm").reset();
 
-  if(m==="login"){
-    $("authTitle").textContent="Entre para ver as câmeras";
-    $("authSubmit").textContent="Entrar";
-    $("switchAuth").textContent="Criar conta";
-    $("nameGroup").classList.add("hidden");
-    $("passwordGroup").classList.remove("hidden");
-    $("password").required=true;
-  }else if(m==="register"){
-    $("authTitle").textContent="Criar conta - R$19,90/mês";
-    $("authSubmit").textContent="Criar conta";
-    $("switchAuth").textContent="Já tenho conta";
-    $("nameGroup").classList.remove("hidden");
-    $("passwordGroup").classList.remove("hidden");
-    $("password").required=true;
-  }else{
-    $("authTitle").textContent="Recuperar senha";
-    $("authSubmit").textContent="Enviar";
-    $("switchAuth").textContent="Voltar ao login";
-    $("nameGroup").classList.add("hidden");
-    $("passwordGroup").classList.add("hidden");
-    $("password").required=false;
-  }
+if(m==="login"){
+$("authTitle").textContent="Entre para ver as câmeras";
+$("authSubmit").textContent="Entrar";
+$("switchAuth").textContent="Criar conta";
+$("nameGroup").classList.add("hidden");
+$("passwordGroup").classList.remove("hidden");
+$("password").required=true;
+}else if(m==="register"){
+$("authTitle").textContent="Criar conta - R$19,90/mês";
+$("authSubmit").textContent="Criar conta";
+$("switchAuth").textContent="Já tenho conta";
+$("nameGroup").classList.remove("hidden");
+$("passwordGroup").classList.remove("hidden");
+$("password").required=true;
+}else{
+$("authTitle").textContent="Recuperar senha";
+$("authSubmit").textContent="Enviar";
+$("switchAuth").textContent="Voltar ao login";
+$("nameGroup").classList.add("hidden");
+$("passwordGroup").classList.add("hidden");
+$("password").required=false;
+}
 }
 
 $("switchAuth").onclick=()=>setAuthMode(authMode==="login"?"register":"login");
 $("forgotPassword").onclick=()=>setAuthMode("reset");
 
 $("authForm").onsubmit=async e=>{
-  e.preventDefault();
-  setMessage($("authMessage"),"Aguarde...");
+e.preventDefault();
+setMessage($("authMessage"),"Aguarde...");
 
-  const email=$("email").value.trim();
-  const pwd=$("password").value;
-  const nome=$("name").value.trim();
+const email=$("email").value.trim();
+const pwd=$("password").value;
+const nome=$("name").value.trim();
 
-  try{
-    if(authMode==="register"){
-      if(pwd.length<8)throw new Error("Senha min 8 caracteres");
+try{
+if(authMode==="register"){
+if(pwd.length<8)throw new Error("Senha min 8 caracteres");
 
-      const{data,error}=await supabaseClient.auth.signUp({
-        email,
-        password:pwd,
-        options:{data:{full_name:nome}}
-      });
+const{data,error}=await supabaseClient.auth.signUp({
+email,
+password:pwd,
+options:{data:{full_name:nome}}
+});
 
-      if(error)throw error;
+if(error)throw error;
 
-      const _exp=new Date(Date.now()+24*60*60*1000).toISOString();
+const _exp=new Date(Date.now()+24*60*60*1000).toISOString();
 
-      try{
-        await supabaseClient.from("assinaturas").insert({
-          email:email,
-          status:"trial",
-          expires_at:_exp,
-          expira_em:_exp
-        });
-      }catch(_e){}
+try{
+await supabaseClient.from("assinaturas").insert({
+email:email,
+status:"trial",
+expires_at:_exp,
+expira_em:_exp
+});
+}catch(_e){}
 
-      if(data.session){
-        currentUser=data.user;
-        await refreshAccessStatus();
-      }else{
-        setMessage($("authMessage"),"Confirme seu e-mail e entre");
-        setAuthMode("login");
-      }
+if(data.session){
+currentUser=data.user;
+await refreshAccessStatus();
+}else{
+setMessage($("authMessage"),"Confirme seu e-mail e entre");
+setAuthMode("login");
+}
 
-    }else if(authMode==="login"){
-      const{data,error}=await supabaseClient.auth.signInWithPassword({
-        email,
-        password:pwd
-      });
+}else if(authMode==="login"){
+const{data,error}=await supabaseClient.auth.signInWithPassword({
+email,
+password:pwd
+});
 
-      if(error)throw error;
+if(error)throw error;
 
-      currentUser=data.user;
-      setMessage($("authMessage"),"Login ok, verificando...");
-      await refreshAccessStatus();
+currentUser=data.user;
+setMessage($("authMessage"),"Login ok, verificando...");
+await refreshAccessStatus();
 
-    }else{
-      const{error}=await supabaseClient.auth.resetPasswordForEmail(email,{
-        redirectTo:window.location.origin
-      });
+}else{
+const{error}=await supabaseClient.auth.resetPasswordForEmail(email,{
+redirectTo:window.location.origin
+});
 
-      if(error)throw error;
+if(error)throw error;
 
-      setMessage($("authMessage"),"Se o e-mail existir, receberá instruções.");
-    }
+setMessage($("authMessage"),"Se o e-mail existir, receberá instruções.");
+}
 
-  }catch(err){
-    setMessage($("authMessage"),err.message);
-  }
+}catch(err){
+setMessage($("authMessage"),err.message);
+}
 };
 
 async function getSession(){
-  const{data}=await supabaseClient.auth.getSession();
-  return data.session;
+const{data}=await supabaseClient.auth.getSession();
+return data.session;
 }
 
-/* TELA CHEIA DAS CÂMERAS */
 function openFullscreen(camId,nome){
-  currentFsId=camId;
-  $("fsTitle").textContent=nome||camId;
-  $("camFullscreen").classList.add("active");
+currentFsId=camId;
+$("fsTitle").textContent=nome||camId;
+$("camFullscreen").classList.add("active");
 
-  const thumb=document.getElementById(`img-${camId}`);
+const thumb=document.getElementById(`img-${camId}`);
 
-  if(thumb&&thumb.src)$("fsImg").src=thumb.src;
+if(thumb&&thumb.src)$("fsImg").src=thumb.src;
 
-  fetchFullscreen();
+fetchFullscreen();
 
-  if(fsInterval)clearInterval(fsInterval);
-
-  fsInterval=setInterval(fetchFullscreen,3000);
+if(fsInterval)clearInterval(fsInterval);
+fsInterval=setInterval(fetchFullscreen,3000);
 }
 
 function closeFullscreen(){
-  $("camFullscreen").classList.remove("active");
+$("camFullscreen").classList.remove("active");
 
-  if(fsInterval)clearInterval(fsInterval);
+if(fsInterval)clearInterval(fsInterval);
 
-  currentFsId=null;
+currentFsId=null;
 }
 
 async function fetchFullscreen(){
-  if(!currentFsId)return;
+if(!currentFsId)return;
 
-  const session=await getSession();
+const session=await getSession();
+if(!session)return;
 
-  if(!session)return;
+try{
+const r=await fetch(`/api/camera?id=${currentFsId}&cam=${currentFsId}&t=${Date.now()}`,{
+headers:{Authorization:"Bearer "+session.access_token},
+cache:"no-store"
+});
 
-  try{
-    const r=await fetch(`/api/camera?id=${currentFsId}&cam=${currentFsId}&t=${Date.now()}`,{
-      headers:{Authorization:"Bearer "+session.access_token},
-      cache:"no-store"
-    });
+if(!r.ok)return;
 
-    if(!r.ok)return;
+const blob=await r.blob();
+const url=URL.createObjectURL(blob);
 
-    const blob=await r.blob();
-    const url=URL.createObjectURL(blob);
-
-    if($("fsImg").src.startsWith("blob:")){
-      URL.revokeObjectURL($("fsImg").src);
-    }
-
-    $("fsImg").src=url;
-
-  }catch(e){}
+if($("fsImg").src.startsWith("blob:")){
+URL.revokeObjectURL($("fsImg").src);
 }
 
-/* MAPA */
+$("fsImg").src=url;
+
+}catch(e){}
+}
+
 let mapInitialized=false;
 
 function initMap(){
-  if(mapInitialized)return;
+if(mapInitialized)return;
 
-  mapInitialized=true;
+mapInitialized=true;
 
-  const map=L.map('mapRS').setView([-28.9,-52.5],7.2);
+const map=L.map('mapRS').setView([-28.9,-52.5],7.2);
 
-  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{
-    attribution:'Esri Satellite'
-  }).addTo(map);
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{
+attribution:'Esri Satellite'
+}).addTo(map);
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png').addTo(map);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png').addTo(map);
 
-  CAMERAS.forEach(c=>{
-    const icon=L.divIcon({
-      html:`<div class="rs-pin">📷 ${c.nome}</div>`,
-      className:''
-    });
+CAMERAS.forEach(c=>{
+const icon=L.divIcon({
+html:`<div class="rs-pin">📷 ${c.nome}</div>`,
+className:''
+});
 
-    const marker=L.marker([c.lat,c.lng],{icon}).addTo(map);
+const marker=L.marker([c.lat,c.lng],{icon}).addTo(map);
 
-    marker.bindPopup(`
-      <div style="font-family:Arial">
-        <b>${c.nome}</b><br>
-        <small>${c.desc}</small><br>
-        <a href="#" style="color:#009739;font-weight:bold">▶ Tela cheia</a>
-      </div>
-    `);
+marker.bindPopup(`
+<div style="font-family:Arial">
+<b>${c.nome}</b><br>
+<small>${c.desc}</small><br>
+<a href="#" style="color:#009739;font-weight:bold">▶ Tela cheia</a>
+</div>
+`);
 
-    marker.on('click',()=>{
-      setTimeout(()=>openFullscreen(c.id,c.nome),150);
-    });
+marker.on('click',()=>{
+setTimeout(()=>openFullscreen(c.id,c.nome),150);
+});
 
-    marker.on('popupopen',(e)=>{
-      const link=e.popup.getElement().querySelector('a');
+marker.on('popupopen',(e)=>{
+const link=e.popup.getElement().querySelector('a');
 
-      if(link){
-        link.onclick=(ev)=>{
-          ev.preventDefault();
-          openFullscreen(c.id,c.nome);
-        };
-      }
-    });
-  });
+if(link){
+link.onclick=(ev)=>{
+ev.preventDefault();
+openFullscreen(c.id,c.nome);
+};
+}
+});
+});
 }
 
-/* PAINEL METEOROLÓGICO */
-function addWeatherDetail(card,label,value){
-  const p=document.createElement("p");
-  p.className="weather-detail";
-  p.textContent=label+": "+value;
-  card.appendChild(p);
+async function loadCamerasSecure(){
+const grid=$("cameraGrid");
+grid.innerHTML="";
+
+const session=await getSession();
+
+if(!session){
+setMessage($("accessMessage"),"Sessão expirou, entre novamente");
+return;
 }
 
-function createWeatherCard(item){
-  const card=document.createElement("div");
-  card.className="weather-card";
+const token=session.access_token;
 
-  const city=document.createElement("div");
-  city.className="weather-city";
-  city.textContent="📍 "+(item.localidade||"Localidade");
-  card.appendChild(city);
+for(const c of CAMERAS){
+const div=document.createElement("div");
+div.className="card";
 
-  if(!item.success){
-    const error=document.createElement("p");
-    error.className="weather-error";
-    error.textContent=item.error||"Não foi possível consultar esta localidade.";
-    card.appendChild(error);
-    return card;
-  }
+div.onclick=()=>openFullscreen(c.id,c.nome);
 
-  const condition=document.createElement("div");
-  condition.className="weather-condition";
+div.innerHTML=`
+<img id="img-${c.id}" alt="${c.nome}" src="">
+<div class="info">
+<b>${c.nome}</b><br>
+<span style="font-size:.9rem;color:#c8d5c3">${c.desc}</span><br>
+<span class="badge">🔴 AO VIVO 24H</span><br>
+<small style="color:#FFCC29">Clique para tela cheia ⛶</small>
+</div>
+`;
 
-  if(item.icone){
-    const icon=document.createElement("img");
-    icon.alt="Condição do tempo";
-    icon.src=item.icone.startsWith("//")
-      ?"https:"+item.icone
-      :item.icone;
-    condition.appendChild(icon);
-  }
-
-  const conditionText=document.createElement("span");
-  conditionText.textContent=item.condicao||"Condição não informada";
-  condition.appendChild(conditionText);
-  card.appendChild(condition);
-
-  const temp=document.createElement("div");
-  temp.className="weather-temp";
-  temp.textContent=Number(item.temperatura_c).toFixed(1)+" °C";
-  card.appendChild(temp);
-
-  addWeatherDetail(
-    card,
-    "Sensação térmica",
-    Number(item.sensacao_termica_c).toFixed(1)+" °C"
-  );
-
-  addWeatherDetail(
-    card,
-    "Umidade",
-    item.umidade_pct+"%"
-  );
-
-  addWeatherDetail(
-    card,
-    "Vento",
-    Number(item.vento_kmh).toFixed(1)+" km/h"
-  );
-
-  addWeatherDetail(
-    card,
-    "Rajadas",
-    Number(item.rajada_kmh).toFixed(1)+" km/h"
-  );
-
-  addWeatherDetail(
-    card,
-    "Chuva",
-    Number(item.chuva_mm).toFixed(1)+" mm"
-  );
-
-  const updated=document.createElement("p");
-  updated.className="weather-updated";
-  updated.textContent="Atualizado: "+(item.atualizado_em||"Horário indisponível");
-  card.appendChild(updated);
-
-  return card;
+grid.appendChild(div);
 }
 
+async function fetchOne(camId){
+try{
+const r=await fetch(`/api/camera?id=${camId}&cam=${camId}&t=${Date.now()}`,{
+headers:{Authorization:"Bearer "+token},
+cache:"no-store"
+});
+
+if(!r.ok)throw new Error("sem acesso");
+
+const blob=await r.blob();
+const url=URL.createObjectURL(blob);
+const img=document.getElementById(`img-${camId}`);
+
+if(img){
+if(img.src.startsWith("blob:"))URL.revokeObjectURL(img.src);
+img.src=url;
+}
+
+}catch(e){
+console.log("erro cam",camId,e.message);
+}
+}
+
+CAMERAS.forEach(c=>fetchOne(c.id));
+
+if(cameraInterval)clearInterval(cameraInterval);
+
+cameraInterval=setInterval(()=>{
+CAMERAS.forEach(c=>fetchOne(c.id));
+if(currentFsId)fetchFullscreen();
+},3000);
+
+initMap();
+}
+
+// --- WEATHERAPI: CARREGAMENTO DAS 13 LOCALIDADES ---
 async function loadWeather(){
-  const status=$("weatherStatus");
-  const grid=$("weatherGrid");
+const status=$("weatherStatus");
+const grid=$("weatherGrid");
 
-  if(!status||!grid)return;
+if(!status||!grid)return;
 
-  status.textContent="Consultando condições meteorológicas...";
+try{
+status.textContent="Atualizando condições meteorológicas...";
 
-  try{
-    const response=await fetch("/api/weather-latest",{
-      method:"GET",
-      cache:"no-store"
-    });
+const response=await fetch("/api/weather-latest",{
+cache:"no-store"
+});
 
-    const data=await response.json();
+const data=await response.json();
 
-    if(!response.ok){
-      throw new Error(data.error||"Erro ao consultar o serviço meteorológico.");
-    }
+if(!response.ok||!data.success){
+throw new Error(data.error||"Não foi possível consultar o clima.");
+}
 
-    if(!Array.isArray(data.localidades)){
-      throw new Error(data.error||"Resposta meteorológica inválida.");
-    }
+grid.innerHTML="";
 
-    grid.innerHTML="";
+data.localidades.forEach(local=>{
+const card=document.createElement("div");
 
-    data.localidades.forEach(item=>{
-      grid.appendChild(createWeatherCard(item));
-    });
+card.style.cssText=
+"background:#102a18;border:1px solid rgba(255,204,41,.25);"+
+"border-radius:14px;padding:14px;color:#fff8eb;";
 
-    const sucessos=data.consultadas_com_sucesso||0;
-    const total=data.total_localidades||data.localidades.length;
-    const horario=data.consultado_em
-      ?new Date(data.consultado_em).toLocaleString("pt-BR")
-      :"Horário indisponível";
+if(!local.success){
+card.innerHTML=`
+<b style="color:#FFCC29">${local.localidade}</b>
+<p style="color:#f87171;margin-top:8px">Dados indisponíveis</p>
+`;
+}else{
+const iconUrl=local.icone||"";
 
-    if(sucessos===total){
-      status.textContent=`✓ ${sucessos} de ${total} localidades atualizadas. Consulta: ${horario}`;
-    }else if(sucessos>0){
-      status.textContent=`⚠ ${sucessos} de ${total} localidades consultadas com sucesso. Consulta: ${horario}`;
-    }else{
-      status.t
+card.innerHTML=`
+<b style="color:#FFCC29">${local.localidade}</b>
+<div style="display:flex;align-items:center;gap:10px;margin:10px 0">
+${iconUrl?`<img src="${iconUrl}" alt="" style="width:48px;height:48px;object-fit:contain">`:""}
+<strong style="font-size:26px">${local.temperatura_c ?? "--"}°C</strong>
+</div>
+<p>${local.condicao||"Condição não informada"}</p>
+<p style="margin-top:8px;font-size:13px;color:#c8d5c3">
+Sensação: ${local.sensacao_termica_c ?? "--"}°C<br>
+Umidade: ${local.umidade_pct ?? "--"}%<br>
+Vento: ${local.vento_kmh ?? "--"} km/h<br>
+Rajadas: ${local.rajada_kmh ?? "--"} km/h<br>
+Chuva: ${local.chuva_mm ?? "--"} mm
+</p>
+<small style="display:block;margin-top:8px;color:#9ca3af">
+Atualizado: ${local.atualizado_em||"—"}
+</small>
+`;
+}
+
+grid.appendChild(card);
+});
+
+status.textContent=
+`${data.consultadas_com_sucesso} de ${data.total_localidades} localidades atualizadas. Fonte: WeatherAPI.`;
+
+}catch(error){
+status.textContent="Erro ao carregar meteorologia: "+error.message;
+}
+}
+
+async function refreshAccessStatus(){
+$("accessMessage").textContent="Verificando acesso...";
+
+try{
+const session=await getSession();
+
+if(!session){
+$("acesso").classList.add("hidden");
+$("experiencias").classList.add("hidden");
+$("conta").classList.remove("hidden");
+setAuthMode("login");
+return;
+}
+
+currentUser=session.user;
+
+$("conta").classList.add("hidden");
+$("acesso").classList.add("hidden");
+$("experiencias").classList.add("hidden");
+
+const r=await fetch("/api/access-status",{
+headers:{Authorization:"Bearer "+session.access_token}
+});
+
+const j=await r.json();
+
+if(!r.ok){
+$("acesso").classList.remove("hidden");
+setMessage($("accessMessage"),"Erro ao verificar: "+(j.error||r.status));
+return;
+}
+
+if(j.hasLifetimeAccess||j.hasAccess){
+$("acesso").classList.add("hidden");
+$("experiencias").classList.remove("hidden");
+
+const exp=j.expiresAt?new Date(j.expiresAt).toLocaleDateString('pt-BR'):'';
+
+if(exp)$("expiresInfo").textContent=`Válido até ${exp}`;
+
+setMessage($("authMessage"),`Acesso liberado! Válido até ${exp}`);
+
+await loadCamerasSecure();
+await loadWeather();
+
+$("experiencias").scrollIntoView({behavior:"smooth"});
+
+}else{
+$("experiencias").classList.add("hidden");
+$("acesso").classList.remove("hidden");
+
+if(cameraInterval)clearInterval(cameraInterval);
+
+setMessage($("accessMessage"),"Conta autenticada, mas sem pagamento ativo de R$19,90. Gere o Pix abaixo.");
+}
+
+}catch(e){
+$("acesso").classList.remove("hidden");
+setMessage($("accessMessage"),"Erro ao verificar: "+e.message);
+}
+}
+
+// --- PAGAMENTO PIX ---
+$("createPix").onclick=async()=>{
+setMessage($("paymentMessage"),"Gerando Pix R$19,90...");
+
+try{
+const session=await getSession();
+
+if(!session)throw new Error("Entre novamente");
+
+const r=await fetch("/api/create-payment",{
+method:"POST",
+headers:{
+Authorization:"Bearer "+session.access_token,
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+user_id:session.user.id,
+email:session.user.email,
+amount:19.9
+})
+});
+
+const j=await r.json();
+
+if(!r.ok)throw new Error(j.error||"Erro ao gerar Pix");
+
+$("pixArea").classList.remove("hidden");
+
+if(j.qr_code_base64){
+$("pixImage").src=j.qr_code_base64.startsWith("data:")
+?j.qr_code_base64
+:"data:image/png;base64,"+j.qr_code_base64;
+
+$("pixImage").classList.remove("hidden");
+}
+
+$("pixCode").value=j.qr_code||"";
+
+if(j.ticket_url){
+$("ticketLink").href=j.ticket_url;
+$("ticketLink").classList.remove("hidden");
+}
+
+setMessage($("paymentMessage"),"Pix de R$19,90 gerado. Valido por 30 dias após pagar.");
+
+}catch(e){
+setMessage($("paymentMessage"),e.message);
+}
+};
+
+$("copyPix").onclick=async()=>{
+try{
+await navigator.clipboard.writeText($("pixCode").value);
+setMessage($("paymentMessage"),"Código copiado!");
+}catch{}
+};
+
+$("checkPayment").onclick=refreshAccessStatus;
+
+$("refreshCameras").onclick=loadCamerasSecure;
+
+$("logoutBtn").onclick=async()=>{
+await supabaseClient.auth.signOut();
+location.reload();
+};
+
+// Inicialização
+setAuthMode("login");
+
+(async()=>{
+const s=await getSession();
+
+if(s){
+await refreshAccessStatus();
+}
+})();
+
+// Atualização meteorológica automática a cada 10 minutos
+setInterval(()=>{
+if(!$("experiencias").classList.contains("hidden")){
+loadWeather();
+}
+},600000);
+
+</script>
+
+</body>
+</html>
