@@ -5,7 +5,7 @@ const SUPABASE_URL =
 const SERVICE_KEY =
   process.env.SUPABASE_CAMERA_SERVICE_ROLE_KEY;
 
-module.exports = async function handler(req, res) {
+module.exports = async function handler(req, res) { 
   res.setHeader("Cache-Control", "no-store");
 
   if (req.method !== "GET") {
