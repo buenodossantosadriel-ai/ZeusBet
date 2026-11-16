@@ -5,7 +5,6 @@ const SUPABASE_SERVICE_ROLE_KEY = (process.env.SUPABASE_CAMERA_SERVICE_ROLE_KEY 
 const MP_TOKEN = (process.env.MP_TOKEN || "").trim();
 const WEBHOOK_SECRET = (process.env.MP_WEBHOOK_SECRET || process.env.MERCADOPAGO_WEBHOOK_SECRET || "").trim();
 const PLAN_PRICE = 19.90;
-const PLAN_DAYS = 30;
 
 function getEvent(req) {
   const body = typeof req.body === "string"
@@ -147,57 +146,40 @@ module.exports = async function handler(req, res) {
     const userId = await resolveUserId(userReference, payerEmail);
     if (!userId) return res.status(200).json({ received: true, accessGranted: false, reason: "Usuário do pagamento não identificado." });
 
-    // Idempotência: se este pagamento já é o pagamento registrado no acesso atual,
-    // a repetição do webhook não renova o prazo novamente.
-    const currentResponse = await fetch(
-      `${SUPABASE_URL}/rest/v1/user_access?user_id=eq.${encodeURIComponent(userId)}&select=expires_at,payment_id&limit=1`,
-      {
-        headers: {
-          apikey: SUPABASE_SERVICE_ROLE_KEY,
-          Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`
-        }
-      }
-    );
-    if (!currentResponse.ok) return res.status(502).json({ received: false, reason: "Não foi possível consultar o acesso atual." });
-    const currentRows = await currentResponse.json();
-    const current = currentRows[0] || null;
-
-    if (current?.payment_id && String(current.payment_id) === paymentId) {
-      return res.status(200).json({ received: true, accessGranted: true, alreadyProcessed: true });
-    }
-
     const paidAtDate = approvedAt && Number.isFinite(new Date(approvedAt).getTime())
       ? new Date(approvedAt)
       : new Date();
-    const currentExpiry = current?.expires_at ? new Date(current.expires_at) : null;
-    const baseDate = currentExpiry && Number.isFinite(currentExpiry.getTime()) && currentExpiry > paidAtDate
-      ? currentExpiry
-      : paidAtDate;
-    const expiresAt = new Date(baseDate.getTime() + PLAN_DAYS * 24 * 60 * 60 * 1000).toISOString();
 
-    const dbResponse = await fetch(`${SUPABASE_URL}/rest/v1/user_access?on_conflict=user_id`, {
+    // A função SQL registra o pagamento e renova o acesso numa única transação.
+    const dbResponse = await fetch(`${SUPABASE_URL}/rest/v1/rpc/apply_zeusbet_payment`, {
       method: "POST",
       headers: {
         apikey: SUPABASE_SERVICE_ROLE_KEY,
         Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
-        "Content-Type": "application/json",
-        Prefer: "resolution=merge-duplicates,return=minimal"
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        user_id: userId,
-        lifetime_access: false,
-        expires_at: expiresAt,
-        payment_id: paymentId,
-        paid_at: paidAtDate.toISOString()
+        p_payment_id: paymentId,
+        p_user_id: userId,
+        p_paid_at: paidAtDate.toISOString(),
+        p_amount: paidAmount,
+        p_currency: currency
       })
     });
 
+    const dbResult = await dbResponse.json().catch(() => ({}));
     if (!dbResponse.ok) {
-      console.error("Falha ao gravar user_access:", await dbResponse.text());
+      console.error("Falha ao registrar pagamento e liberar user_access:", dbResult);
       return res.status(502).json({ received: false, reason: "Não foi possível liberar o plano no banco de dados." });
     }
 
-    return res.status(200).json({ received: true, accessGranted: true, expiresAt });
+    return res.status(200).json({
+      received: true,
+      accessGranted: dbResult.accessGranted === true,
+      alreadyProcessed: dbResult.alreadyProcessed === true,
+      lifetimeAccess: dbResult.lifetimeAccess === true,
+      expiresAt: dbResult.expiresAt || null
+    });
   } catch (error) {
     console.error("Erro no webhook Mercado Pago:", error);
     return res.status(500).json({ received: false, error: "Erro interno ao processar pagamento." });
