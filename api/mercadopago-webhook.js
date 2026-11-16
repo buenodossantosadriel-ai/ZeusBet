@@ -4,124 +4,178 @@ const SUPABASE_URL = (process.env.SUPABASE_CAM_URL || process.env.SUPABASE_URL |
 const SUPABASE_SERVICE_ROLE_KEY = (process.env.SUPABASE_CAMERA_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || "").trim();
 const MP_TOKEN = (process.env.MP_TOKEN || "").trim();
 const WEBHOOK_SECRET = (process.env.MP_WEBHOOK_SECRET || process.env.MERCADOPAGO_WEBHOOK_SECRET || "").trim();
+const PLAN_PRICE = 19.90;
+const PLAN_DAYS = 30;
 
 function getEvent(req) {
-  const body = typeof req.body === "string" ? (() => { try { return JSON.parse(req.body); } catch { return {}; } })() : (req.body || {});
-  const type = (body.type || body.topic || req.query?.type || req.query?.topic || "").toLowerCase();
+  const body = typeof req.body === "string"
+    ? (() => { try { return JSON.parse(req.body); } catch { return {}; } })()
+    : (req.body || {});
+  const type = String(body.type || body.topic || req.query?.type || req.query?.topic || "").toLowerCase();
   const id = body.data?.id || body.data?.ID || req.query?.["data.id"] || req.query?.id || null;
-  return { type, id: id ? String(id) : null, body };
+  return { type, id: id ? String(id) : null };
 }
 
-function assinaturaOk(req, eventId) {
+function validSignature(req, eventId) {
   try {
     const signature = req.headers["x-signature"];
     const requestId = req.headers["x-request-id"];
     if (!signature || !requestId || !eventId || !WEBHOOK_SECRET) return false;
+
     const parts = {};
     for (const item of signature.split(",")) {
-      const [k, ...v] = item.trim().split("=");
-      if (k && v.length) parts[k] = v.join("=");
+      const [key, ...value] = item.trim().split("=");
+      if (key && value.length) parts[key] = value.join("=");
     }
-    if (!parts.ts || !parts.v1) return false;
+    if (!parts.ts || !parts.v1 || !/^[a-f0-9]{64}$/i.test(parts.v1)) return false;
+
     const manifest = `id:${String(eventId).toLowerCase()};request-id:${requestId};ts:${parts.ts};`;
     const expected = crypto.createHmac("sha256", WEBHOOK_SECRET).update(manifest).digest("hex");
-    return crypto.timingSafeEqual(Buffer.from(expected, "hex"), Buffer.from(parts.v1, "hex"));
-  } catch { return false; }
+    const received = Buffer.from(parts.v1, "hex");
+    const calculated = Buffer.from(expected, "hex");
+    return received.length === calculated.length && crypto.timingSafeEqual(received, calculated);
+  } catch {
+    return false;
+  }
 }
 
-function isUUID(v) {
-  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(v || ""));
+function isUUID(value) {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(value || ""));
 }
 
-async function resolveUserId(rawValue, payment) {
+async function resolveUserId(rawValue, payerEmail) {
   const candidate = String(rawValue || "").trim();
   if (isUUID(candidate)) return candidate;
-  const email = candidate.includes("@") ? candidate : (payment.payer?.email || payment.metadata?.user_id || "");
-  if (!email || !email.includes("@")) return null;
-  const res = await fetch(`${SUPABASE_URL}/auth/v1/admin/users?email=${encodeURIComponent(email)}`, {
+
+  const email = candidate.includes("@") ? candidate : String(payerEmail || "");
+  if (!email.includes("@")) return null;
+
+  const response = await fetch(`${SUPABASE_URL}/auth/v1/admin/users?email=${encodeURIComponent(email)}`, {
     headers: {
       apikey: SUPABASE_SERVICE_ROLE_KEY,
-      Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+      Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`
     }
   });
-  if (!res.ok) return null;
-  const data = await res.json();
+  if (!response.ok) return null;
+
+  const data = await response.json();
   const user = data?.users?.[0] || data?.[0] || data?.user || null;
-  const id = user?.id || null;
-  return isUUID(id) ? String(id) : null;
+  return isUUID(user?.id) ? String(user.id) : null;
 }
 
 module.exports = async function handler(req, res) {
-  if (req.method !== "POST") return res.status(405).end();
-  if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY || !MP_TOKEN) return res.status(500).end();
+  if (req.method !== "POST") return res.status(405).json({ error: "Método não permitido." });
+  if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY || !MP_TOKEN) {
+    return res.status(500).json({ error: "Configuração de pagamento incompleta no servidor." });
+  }
+  if (!WEBHOOK_SECRET) {
+    console.error("MP_WEBHOOK_SECRET não configurado.");
+    return res.status(500).json({ error: "Segredo do webhook não configurado." });
+  }
 
   try {
     const { type, id: eventId } = getEvent(req);
-    if (!eventId) return res.status(200).json({ received: true });
+    if (!eventId) return res.status(400).json({ error: "Notificação sem ID do recurso." });
+    if (!validSignature(req, eventId)) return res.status(401).json({ error: "Assinatura do webhook inválida." });
 
-    const sigOk = assinaturaOk(req, eventId);
-    // Se quiser, loga sigOk pra debug, mas não bloqueia se a assinatura falhar por enquanto
-
-    let payment = null;
+    let userReference = null;
+    let payerEmail = "";
     let paymentId = null;
+    let paidAmount = 0;
+    let currency = "";
+    let paymentStatus = "";
+    let approvedAt = null;
 
-    // --- CASO 1: Veio aviso de ORDER (seu caso atual) ---
     if (type === "order") {
-      const orderRes = await fetch(`https://api.mercadopago.com/v1/orders/${encodeURIComponent(eventId)}`, {
+      const response = await fetch(`https://api.mercadopago.com/v1/orders/${encodeURIComponent(eventId)}`, {
         headers: { Authorization: `Bearer ${MP_TOKEN}` }
       });
-      if (!orderRes.ok) return res.status(200).json({ received: true, reason: "order_not_found" });
-      const order = await orderRes.json();
+      if (!response.ok) return res.status(502).json({ received: false, reason: "Não foi possível consultar o pedido no Mercado Pago." });
 
-      // Order pode vir como paid / processed / etc
-      // Pega o pagamento de dentro do Order
-      const orderPayment = order.payments?.[0] || order.transactions?.[0] || null;
-      paymentId = orderPayment?.id ? String(orderPayment.id) : null;
+      const order = await response.json();
+      const orderStatus = String(order.status || "").toLowerCase();
+      const payments = order.transactions?.payments || order.payments || [];
+      const paidPayment = payments.find(item =>
+        ["processed", "approved", "accredited"].includes(String(item.status || "").toLowerCase())
+      );
 
-      // Se o Order ainda não tem pagamento ou não está pago, espera o próximo aviso
-      if (!paymentId) return res.status(200).json({ received: true, reason: "no_payment_yet" });
-      if (order.status && !["paid", "processed", "approved"].includes(String(order.status).toLowerCase())) {
-        // Ainda pode estar pending, não libera
-        // Mas tenta buscar o pagamento mesmo assim pra confirmar
+      if (!["processed", "approved", "paid"].includes(orderStatus) || !paidPayment) {
+        return res.status(200).json({ received: true, accessGranted: false, reason: "Pedido ainda não confirmado como pago." });
       }
 
-      const mpRes = await fetch(`https://api.mercadopago.com/v1/payments/${encodeURIComponent(paymentId)}`, {
+      paymentStatus = String(paidPayment.status || orderStatus).toLowerCase();
+      paymentId = paidPayment.id ? String(paidPayment.id) : eventId;
+      paidAmount = Number(paidPayment.paid_amount ?? paidPayment.amount ?? order.total_paid_amount ?? 0);
+      currency = String(paidPayment.currency_id || order.currency_id || "");
+      userReference = order.external_reference || order.metadata?.user_id || null;
+      payerEmail = order.payer?.email || "";
+      approvedAt = order.date_approved || order.last_updated || order.date_created || null;
+
+      const methodId = String(paidPayment.payment_method?.id || "").toLowerCase();
+      const methodType = String(paidPayment.payment_method?.type || "").toLowerCase();
+      if (methodId !== "pix" && methodType !== "bank_transfer") {
+        return res.status(200).json({ received: true, accessGranted: false, reason: "Meio de pagamento não corresponde ao Pix." });
+      }
+    } else if (type === "payment") {
+      const response = await fetch(`https://api.mercadopago.com/v1/payments/${encodeURIComponent(eventId)}`, {
         headers: { Authorization: `Bearer ${MP_TOKEN}` }
       });
-      if (!mpRes.ok) return res.status(200).json({ received: true, reason: "payment_not_found" });
-      payment = await mpRes.json();
-    } 
-    // --- CASO 2: Veio aviso de PAYMENT legacy (compatibilidade) ---
-    else {
-      paymentId = eventId;
-      const mpRes = await fetch(`https://api.mercadopago.com/v1/payments/${encodeURIComponent(paymentId)}`, {
-        headers: { Authorization: `Bearer ${MP_TOKEN}` }
-      });
-      if (!mpRes.ok) return res.status(200).json({ received: true });
-      payment = await mpRes.json();
+      if (!response.ok) return res.status(502).json({ received: false, reason: "Não foi possível consultar o pagamento." });
+
+      const payment = await response.json();
+      paymentStatus = String(payment.status || "").toLowerCase();
+      if (paymentStatus !== "approved") {
+        return res.status(200).json({ received: true, accessGranted: false, reason: "Pagamento ainda não aprovado." });
+      }
+      paymentId = String(payment.id || eventId);
+      paidAmount = Number(payment.transaction_amount || 0);
+      currency = String(payment.currency_id || "");
+      userReference = payment.external_reference || payment.metadata?.user_id || null;
+      payerEmail = payment.payer?.email || "";
+      approvedAt = payment.date_approved || payment.date_created || null;
+      if (String(payment.payment_method_id || "").toLowerCase() !== "pix") {
+        return res.status(200).json({ received: true, accessGranted: false, reason: "Meio de pagamento não corresponde ao Pix." });
+      }
+    } else {
+      return res.status(200).json({ received: true, ignored: true, reason: "Tipo de evento não utilizado." });
     }
 
-    if (payment.status !== "approved") return res.status(200).json({ received: true });
+    if (currency !== "BRL" || !Number.isFinite(paidAmount) || paidAmount < PLAN_PRICE) {
+      return res.status(200).json({ received: true, accessGranted: false, reason: "Valor ou moeda do pagamento não confere com o plano." });
+    }
 
-    const rawUserId = payment.external_reference || payment.metadata?.user_id || payment.payer?.email;
-    const userId = await resolveUserId(rawUserId, payment);
-    if (!userId) return res.status(200).json({ received: true });
+    const userId = await resolveUserId(userReference, payerEmail);
+    if (!userId) return res.status(200).json({ received: true, accessGranted: false, reason: "Usuário do pagamento não identificado." });
 
-    // --- ÚNICA MUDANÇA: pesquisa o UUID na assinaturas antes de criar na user_access ---
-    const assRes = await fetch(`${SUPABASE_URL}/rest/v1/assinaturas?id=eq.${encodeURIComponent(String(userId))}&select=id`, {
-      headers: {
-        apikey: SUPABASE_SERVICE_ROLE_KEY,
-        Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+    // Idempotência: se este pagamento já é o pagamento registrado no acesso atual,
+    // a repetição do webhook não renova o prazo novamente.
+    const currentResponse = await fetch(
+      `${SUPABASE_URL}/rest/v1/user_access?user_id=eq.${encodeURIComponent(userId)}&select=expires_at,payment_id&limit=1`,
+      {
+        headers: {
+          apikey: SUPABASE_SERVICE_ROLE_KEY,
+          Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`
+        }
       }
-    });
-    if (!assRes.ok) return res.status(200).json({ received: true });
-    const assData = await assRes.json();
-    if (!assData || assData.length === 0) return res.status(200).json({ received: true, reason: "nao_achado_em_assinaturas" });
-    // --- FIM DA MUDANÇA ---
+    );
+    if (!currentResponse.ok) return res.status(502).json({ received: false, reason: "Não foi possível consultar o acesso atual." });
+    const currentRows = await currentResponse.json();
+    const current = currentRows[0] || null;
 
-    const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+    if (current?.payment_id && String(current.payment_id) === paymentId) {
+      return res.status(200).json({ received: true, accessGranted: true, alreadyProcessed: true });
+    }
 
-    const dbRes = await fetch(`${SUPABASE_URL}/rest/v1/user_access?on_conflict=user_id`, {
+    const paidAtDate = approvedAt && Number.isFinite(new Date(approvedAt).getTime())
+      ? new Date(approvedAt)
+      : new Date();
+    const currentExpiry = current?.expires_at ? new Date(current.expires_at) : null;
+    const baseDate = currentExpiry && Number.isFinite(currentExpiry.getTime()) && currentExpiry > paidAtDate
+      ? currentExpiry
+      : paidAtDate;
+    const expiresAt = new Date(baseDate.getTime() + PLAN_DAYS * 24 * 60 * 60 * 1000).toISOString();
+
+    const dbResponse = await fetch(`${SUPABASE_URL}/rest/v1/user_access?on_conflict=user_id`, {
       method: "POST",
       headers: {
         apikey: SUPABASE_SERVICE_ROLE_KEY,
@@ -130,19 +184,22 @@ module.exports = async function handler(req, res) {
         Prefer: "resolution=merge-duplicates,return=minimal"
       },
       body: JSON.stringify({
-        user_id: String(userId),
+        user_id: userId,
         lifetime_access: false,
         expires_at: expiresAt,
-        payment_id: String(payment.id),
-        paid_at: payment.date_approved || new Date().toISOString()
+        payment_id: paymentId,
+        paid_at: paidAtDate.toISOString()
       })
     });
 
-    if (!dbRes.ok) return res.status(200).json({ received: true });
+    if (!dbResponse.ok) {
+      console.error("Falha ao gravar user_access:", await dbResponse.text());
+      return res.status(502).json({ received: false, reason: "Não foi possível liberar o plano no banco de dados." });
+    }
 
-    return res.status(200).json({ received: true, accessGranted: true });
-  } catch (e) {
-    console.error("webhook error", e);
-    return res.status(200).json({ received: true });
+    return res.status(200).json({ received: true, accessGranted: true, expiresAt });
+  } catch (error) {
+    console.error("Erro no webhook Mercado Pago:", error);
+    return res.status(500).json({ received: false, error: "Erro interno ao processar pagamento." });
   }
 };
