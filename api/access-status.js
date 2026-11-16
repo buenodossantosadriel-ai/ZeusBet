@@ -1,5 +1,5 @@
 const SUPABASE_URL = process.env.SUPABASE_CAM_URL || process.env.SUPABASE_URL;
-const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_CAMERA_SERVICE_ROLE_KEY;
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_CAMERA_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 module.exports = async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
@@ -67,16 +67,16 @@ module.exports = async function handler(req, res) {
         hasAccess = true;
       }
 
-      if (record.paid_at) {
-        const diffDays = (Date.now() - new Date(record.paid_at).getTime()) / 86400000;
-        if (diffDays < 32) hasAccess = true;
-      }
-
-      expiresAt = record.expires_at
-        ? new Date(record.expires_at).toISOString()
+      const effectiveExpiry = record.expires_at
+        ? new Date(record.expires_at)
         : record.paid_at
-          ? new Date(new Date(record.paid_at).getTime() + 30 * 24 * 60 * 60 * 1000).toISOString()
+          ? new Date(new Date(record.paid_at).getTime() + 30 * 24 * 60 * 60 * 1000)
           : null;
+
+      if (effectiveExpiry && Number.isFinite(effectiveExpiry.getTime()) && effectiveExpiry.getTime() > Date.now()) {
+        hasAccess = true;
+        expiresAt = effectiveExpiry.toISOString();
+      }
     }
 
     // >>> CORREÇÃO TRIAL 24H - procura em assinaturas por trial OU active <<<
