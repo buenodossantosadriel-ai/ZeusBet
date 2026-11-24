@@ -267,7 +267,7 @@ if(pwd.length<8)throw new Error("Senha min 8 caracteres");
 const{data,error}=await supabaseClient.auth.signUp({
 email,
 password:pwd,
-options:{data:{full_name:nome}}
+options:{data:{full_name:nome},emailRedirectTo:window.location.origin}
 });
 
 if(error)throw error;
