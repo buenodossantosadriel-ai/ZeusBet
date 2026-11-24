@@ -272,22 +272,14 @@ options:{data:{full_name:nome}}
 
 if(error)throw error;
 
-const _exp=new Date(Date.now()+24*60*60*1000).toISOString();
-
-try{
-await supabaseClient.from("assinaturas").insert({
-email:email,
-status:"trial",
-expires_at:_exp,
-expira_em:_exp
-});
-}catch(_e){}
-
+// O período de teste é criado automaticamente no banco pelo gatilho
+// de auth.users. Assim, não depende de INSERT público na tabela assinaturas.
 if(data.session){
 currentUser=data.user;
+setMessage($("authMessage"),"Conta criada! Seu teste gratuito de 24 horas foi ativado.");
 await refreshAccessStatus();
 }else{
-setMessage($("authMessage"),"Confirme seu e-mail e entre");
+setMessage($("authMessage"),"Conta criada! Confirme seu e-mail. As 24 horas gratuitas começam no cadastro; depois, entre para acessar as câmeras.");
 setAuthMode("login");
 }
 
